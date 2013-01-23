@@ -3,6 +3,8 @@ package emcscanner.kth.se;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -10,11 +12,17 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 public class SettingsPanel extends JPanel{
+	/* User selected values */
+	public static float frequency;
+	
+	/* Global values used by the program */
 	public static int step = 1;
 	public static SettingsSubPanel frequencyPanel;
 	public static SettingsSubPanel areaPanel;
 	public static SettingsSubPanel scanDensityPanel;
 	public static SettingsSubPanel fileNamePanel;
+	
+
 	
 	public SettingsPanel() {
 		this.setLayout(new BorderLayout());
@@ -46,6 +54,12 @@ public class SettingsPanel extends JPanel{
 		backButton.setOpaque(false);
 		backButton.setContentAreaFilled(false);
 		backButton.setBorderPainted(false);
+		backButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				MainPanel.setStages(Program.startControlPanel, Program.manualPanel);
+			}
+		});
 		
 		
 		JPanel continer  = 	new JPanel();

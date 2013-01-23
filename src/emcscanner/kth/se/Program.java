@@ -18,13 +18,34 @@ public class Program {
 	public static DimentionPanel dimentionPanel;
 	public static ConclutionPanel conclutionPanel;
 	public static ImageScannedPanel imageScannedPanel;
+	public static StartControlPanel startControlPanel;
+	public static ManualPanel manualPanel;
+	
 	/**
 	 * This is the main method
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		
+    	cameraPanel = new CameraPanel();
+    	settingsPanel = new SettingsPanel();
+    	dimentionPanel = new DimentionPanel();
+    	conclutionPanel = new ConclutionPanel();
+    	imageScannedPanel = new ImageScannedPanel();
+    	startControlPanel = new StartControlPanel();
+    	manualPanel = new ManualPanel();
+    	
+    	ArrayList<JComponent> queue = new ArrayList<JComponent>();
+    	queue.add(cameraPanel);
+    	queue.add(settingsPanel);
+    	queue.add(dimentionPanel);
+    	queue.add(conclutionPanel);
+    	queue.add(imageScannedPanel);
+    	queue.add(startControlPanel);
+    	queue.add(manualPanel);
+    	
     	final MainFrame frame = new MainFrame();
-		if (Toolkit.getDefaultToolkit().isFrameStateSupported(Frame.MAXIMIZED_BOTH))
+    	if (Toolkit.getDefaultToolkit().isFrameStateSupported(Frame.MAXIMIZED_BOTH))
 			frame.setExtendedState(Frame.MAXIMIZED_BOTH);
 		else
 		{
@@ -71,22 +92,6 @@ public class Program {
 				//Nothing is spouse to happen here;
 			}
     	});
-    	cameraPanel = new CameraPanel();
-    	settingsPanel = new SettingsPanel();
-    	dimentionPanel = new DimentionPanel();
-    	conclutionPanel = new ConclutionPanel();
-    	imageScannedPanel = new ImageScannedPanel();
-    	//startControlPanel = new StartControlPanel();
-    	//manualPanel = new ManualPanel();
-    	
-    	ArrayList<JComponent> queue = new ArrayList<JComponent>();
-    	queue.add(cameraPanel);
-    	queue.add(settingsPanel);
-    	queue.add(dimentionPanel);
-    	queue.add(conclutionPanel);
-    	queue.add(imageScannedPanel);
-    	//queue.add(startControlPanel);
-    	//queue.add(manualPanel);
     	
     	for (Component subcomp : frame.getComponents())
     		if (subcomp instanceof JComponent)
@@ -99,6 +104,7 @@ public class Program {
     				queue.add((JComponent)subcomp);
     		comp.addKeyListener(l);
     	}
+    	
 		//Show it the frame
 		frame.setVisible(true);
     	GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(frame);

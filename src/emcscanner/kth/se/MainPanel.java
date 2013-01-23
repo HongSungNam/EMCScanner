@@ -14,7 +14,8 @@ public class MainPanel extends JPanel   {
 	
 	public MainPanel(){	
 		this.split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false);
-		setStages(new StartControlPanel(), new ManualPanel());
+		System.out.println("Set stages");
+		setStages(Program.startControlPanel, Program.manualPanel);
 		
 		this.setLayout(new BorderLayout());
 		this.add(this.split, BorderLayout.CENTER);

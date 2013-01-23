@@ -25,15 +25,16 @@ import javax.swing.event.DocumentListener;
  * Used for deciding the scanners settings before scanning.
  */
 public class SettingsSubPanel extends JPanel{
-	/* User selected values */
-	public float frequency;
-	
 	/* Global values used by the program */
 	public ImageIcon stepHeaderEnabledImageIcon;
 	public ImageIcon stepHeaderDisabledImageIcon;
+	public ImageIcon stepHeaderEnabledPrestImageIcon;
 	public JButton header;
 	public Border border;
 	public JPanel continerHeaderAndPanel;
+	public JPanel continerStep;
+	
+	public boolean frequencySelected = false;
 	
 	/** 
 	 * SettingsSubPanel
@@ -42,36 +43,46 @@ public class SettingsSubPanel extends JPanel{
 	 * @param String panelInformation
 	 * @param int panelNumber
 	 */
-	public SettingsSubPanel(String stepText, String panelInformation, int panelNumber){
+	public SettingsSubPanel(String stepText, final String panelInformation, final int panelNumber){
 		this.setLayout(new FlowLayout());
-		this.setMinimumSize(new Dimension(400, 230));
+		this.setMinimumSize(new Dimension(400, 100));
+		
+		final JTextField floatInputTextField = new JTextField(4);
+		final JPanel frequencyPanel = new JPanel();
+		final JButton nextButton = new JButton();
+		final JLabel text2 = new JLabel("<html> 0.1 ≤ </html>");
+		final JLabel text3 = new JLabel("<html><font color = rgb(100,150,255)>MHz</font>"+" ≤ 6000 </html>");
+		final JLabel text = new JLabel("<html> <font color = rgb(255, 0, 0)> Note</font>: The signal generator’s " + "<br>"+
+									   " Intervall is 0.1 – 6000 MHz. </html>");
+		final JLabel frequencyLabel = new JLabel();
 		
 		/* Header for the different sub settings panels. */
 		header = new JButton();
 		if (SettingsPanel.step == panelNumber ){
 			if (panelNumber == 1){
-				this.stepHeaderEnabledImageIcon = new ImageIcon("image/PanelBlueFrequency.png");
-				this.stepHeaderDisabledImageIcon = new ImageIcon("image/PanelGrayFrequency.png");
-				this.header.setEnabled(true);
+				this.stepHeaderEnabledImageIcon = new ImageIcon("image/PanelGreenFrequency.png");
+				this.stepHeaderDisabledImageIcon = new ImageIcon("image/PanelBlueFrequency.png");
+				this.stepHeaderEnabledPrestImageIcon = new ImageIcon("image/PanelGreenFrequencyPrest.png");
+				this.header.setEnabled(false);
 			}
 			this.border = BorderFactory.createLineBorder(new Color(100,150,255));
 		}
 		else {
 			if (panelNumber == 2)
 			{
-				this.stepHeaderEnabledImageIcon = new ImageIcon("image/PanelBlueArea.png");
+				this.stepHeaderEnabledImageIcon = new ImageIcon("image/PanelGreenArea.png");
 				this.stepHeaderDisabledImageIcon = new ImageIcon("image/PanelGrayArea.png");
 				this.header.setEnabled(false);
 			}
 			else if (panelNumber == 3)
 			{
-				this.stepHeaderEnabledImageIcon = new ImageIcon("image/PanelBlueDensity.png");
+				this.stepHeaderEnabledImageIcon = new ImageIcon("image/PanelGreenDensity.png");
 				this.stepHeaderDisabledImageIcon = new ImageIcon("image/PanelGrayDensity.png");
 				this.header.setEnabled(false);
 			}
 			else if (panelNumber == 4)
 			{
-				this.stepHeaderEnabledImageIcon = new ImageIcon("image/PanelBlueFileName.png");
+				this.stepHeaderEnabledImageIcon = new ImageIcon("image/PanelGreenFileName.png");
 				this.stepHeaderDisabledImageIcon = new ImageIcon("image/PanelGrayFileName.png");
 				this.header.setEnabled(false);
 			}
@@ -84,6 +95,35 @@ public class SettingsSubPanel extends JPanel{
 		this.header.setBorderPainted(false);
 		this.header.setIcon(stepHeaderEnabledImageIcon);
 		this.header.setDisabledIcon(stepHeaderDisabledImageIcon);
+		this.header.setPressedIcon(stepHeaderEnabledPrestImageIcon);
+		this.header.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (frequencySelected &&  panelNumber == 1 ){
+					ImageIcon blueBar = new ImageIcon("image/PanelBlueFrequency.png");
+		    		header.setIcon(blueBar);
+					header.setToolTipText(panelInformation);
+					header.setEnabled(false);
+					
+		    		Border blueBorder = BorderFactory.createLineBorder(new Color(100,150,255));
+					frequencyPanel.setBorder(blueBorder);
+					
+					floatInputTextField.setVisible(true);
+					text.setVisible(true);
+					text2.setVisible(true);
+					text3.setVisible(true);
+					nextButton.setVisible(true);
+					
+					frequencyPanel.setPreferredSize(new Dimension(50, 140));
+					continerHeaderAndPanel.setPreferredSize(new Dimension(322, 180));
+					continerStep.setPreferredSize(new Dimension(50, 180));
+
+					frequencyLabel.setVisible(false);
+					frequencySelected = false;
+				}
+			}
+		});
+		
 		
 		/* Creates a Label for the step numbers. */
 		JLabel step = new JLabel(stepText);
@@ -92,46 +132,50 @@ public class SettingsSubPanel extends JPanel{
 		
 		/* Container to make it possible for the step label to be to 
 		   the south and north of the header and the settings panels */
-		JPanel continerStep = new JPanel();
+		continerStep = new JPanel();
 		continerStep.setLayout(new BorderLayout());
 		continerStep.add(step, BorderLayout.NORTH );
-		continerStep.setPreferredSize(new Dimension(50, 180));
+		continerStep.setPreferredSize(new Dimension(50, 40));
 		this.add(continerStep, BorderLayout.WEST);
 		
 		/* A panel for the Header and the sup settings panels. */
 		continerHeaderAndPanel = new JPanel();
 		continerHeaderAndPanel.setLayout(new BorderLayout());
 		continerHeaderAndPanel.add(header, BorderLayout.NORTH );
-		continerHeaderAndPanel.setPreferredSize(new Dimension(322, 180));
+		continerHeaderAndPanel.setPreferredSize(new Dimension(322, 40));
 		
 		/* Adds the frequency panel to the container */
 		if ( panelNumber == 1 ){
-			continerHeaderAndPanel.add(FrequencyPanel(), BorderLayout.NORTH);
+			continerHeaderAndPanel.add(FrequencyPanel(floatInputTextField, frequencyPanel, 
+									   nextButton, text, text2, text3, frequencyLabel), 
+										BorderLayout.SOUTH);
 		}
 		
-		this.add(continerHeaderAndPanel, BorderLayout.EAST);
+		JPanel continer = new JPanel();
+		continer.setLayout(new BorderLayout());
+		continer.add(continerHeaderAndPanel, BorderLayout.NORTH);
+		
+		this.add(continer, BorderLayout.EAST);
 	}
 
-	private JPanel FrequencyPanel(){
-		final JPanel frequencyPanel = new JPanel();
+	private JPanel FrequencyPanel(final JTextField floatInputTextField, final JPanel frequencyPanel, 
+								  final JButton nextButton, final JLabel text, final JLabel text2, 
+								  final JLabel text3, final JLabel frequencyLabel){
+		
 		frequencyPanel.setLayout(new BorderLayout());
-		frequencyPanel.setPreferredSize(new Dimension(50, 50));
+		frequencyPanel.setPreferredSize(new Dimension(50, 140));
+		
+		continerHeaderAndPanel.setPreferredSize(new Dimension(322, 180));
+		continerStep.setPreferredSize(new Dimension(50, 180));
 		
 		/* Constants for the FrequencyPanel */
 		int frequencyInputLimit = 6;
-		boolean nextButtonEnebeld = false;
-		
-		final JTextField floatInputTextField = new JTextField(4);
 		
 		/* Boundary explanatory labels */
-		final JLabel text2 = new JLabel("<html> 0.1 ≤ </html>");
-		final JLabel text3 = new JLabel("<html><font color = rgb(100,150,255)>MHz</font>"+" ≤ 6000 </html>");
 		text2.setHorizontalAlignment( SwingConstants.CENTER );
 		text3.setHorizontalAlignment( SwingConstants.CENTER );
 		
 		/* Warning Label with text centered */
-		final JLabel text = new JLabel("<html> <font color = rgb(255, 0, 0)> Note</font>: The signal generator’s " + "<br>"+
-								" Intervall is 0.1 – 6000 MHz. </html>");
 		text.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		/* Imports the different images for the different button stages. */
@@ -141,7 +185,6 @@ public class SettingsSubPanel extends JPanel{
 		ImageIcon nextButtonGrayNextPrestIcon = new ImageIcon("image/ButtonGrayNextPrest.png");
 		
 		/* Next JButton */
-		final JButton nextButton = new JButton();
 		nextButton.setOpaque(false);
 		nextButton.setContentAreaFilled(false);
 		nextButton.setBorderPainted(false);
@@ -155,12 +198,15 @@ public class SettingsSubPanel extends JPanel{
 		nextButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				SettingsPanel.frequency = Float.valueOf(floatInputTextField.getText());
+				
 				ImageIcon greenBar = new ImageIcon("image/PanelGreenFrequency.png");
 	    		header.setIcon(greenBar);
+				header.setToolTipText("Press to reselect The frequency");
+				header.setEnabled(true);
 
 	    		Border greenBorder = BorderFactory.createLineBorder(new Color(150,255,80));
 				frequencyPanel.setBorder(greenBorder);
-				frequencyPanel.setPreferredSize(new Dimension(20, 20));
 				
 				floatInputTextField.setVisible(false);
 				text.setVisible(false);
@@ -168,7 +214,16 @@ public class SettingsSubPanel extends JPanel{
 				text3.setVisible(false);
 				nextButton.setVisible(false);
 				
-				continerHeaderAndPanel.setPreferredSize(new Dimension(322, 100));
+				frequencyPanel.setPreferredSize(new Dimension(322, 40));
+				continerHeaderAndPanel.setPreferredSize(new Dimension(322, 80));
+				continerStep.setPreferredSize(new Dimension(50, 80));
+				
+				frequencyLabel.setText("<html>Selected frequency: "+SettingsPanel.frequency+" MHz</html>");
+				frequencyLabel.setVisible(true);
+
+				frequencyPanel.add(frequencyLabel, BorderLayout.EAST);
+				
+				frequencySelected = true;
 			}
 		});
 		
@@ -206,14 +261,15 @@ public class SettingsSubPanel extends JPanel{
 	        }
 	        public void checkFloat(){
 	        	try{
-	        		float value = Float.valueOf(floatInputTextField.getText());;
+	        		float value = Float.valueOf(floatInputTextField.getText());
 		        	
 					if ((0.1 <= value) && (value <= 6000))
 			    	{
 			    		nextButton.setEnabled(true);
-			    		
 			    		ImageIcon blueBar = new ImageIcon("image/PanelBlueFrequency.png");
-			    		header.setIcon(blueBar);
+			    		header.setDisabledIcon(blueBar);
+			    		header.setEnabled(false);
+			    		
 			    		Border blueBorder = BorderFactory.createLineBorder(new Color(100,150,255));
 						frequencyPanel.setBorder(blueBorder);
 						floatInputTextField.setBorder(blueBorder);
@@ -223,7 +279,8 @@ public class SettingsSubPanel extends JPanel{
 					else{
 						nextButton.setEnabled(false);
 			    		ImageIcon redBar = new ImageIcon("image/PanelRedFrequency.png");
-			    		header.setIcon(redBar);
+			    		header.setDisabledIcon(redBar);
+			    		header.setEnabled(false);
 						Border redBorder = BorderFactory.createLineBorder(new Color(255,0,0));
 						frequencyPanel.setBorder(redBorder);
 						floatInputTextField.setBorder(redBorder);
@@ -239,17 +296,14 @@ public class SettingsSubPanel extends JPanel{
 	        	} catch (Exception e) {
 	        		nextButton.setEnabled(false);
 		    		ImageIcon redBar = new ImageIcon("image/PanelRedFrequency.png");
-		    		header.setIcon(redBar);
+		    		header.setDisabledIcon(redBar);
+		    		header.setEnabled(false);
 					Border redBorder = BorderFactory.createLineBorder(new Color(255,0,0));
 					frequencyPanel.setBorder(redBorder);
 					floatInputTextField.setBorder(redBorder);
 	        	}
 	        }
 	    });
-		
-		/* Sets containers sizes */
-		//continer2.setPreferredSize(new Dimension(200,50));
-		//continer3.setPreferredSize(new Dimension(50,30));
 		
 		/* Sets container backgrounds to white instead of gray for contrast */
 		continer5.setBackground(Color.WHITE);
