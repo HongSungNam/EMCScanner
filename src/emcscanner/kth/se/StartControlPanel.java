@@ -15,7 +15,6 @@ import javax.swing.JPanel;
  */
 public class StartControlPanel extends JPanel {
 	public StartControlPanel() {	
-		
 		this.setLayout(new BorderLayout());
 		this.setPreferredSize(new Dimension((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth()/2), 0));
 			

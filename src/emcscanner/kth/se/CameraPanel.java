@@ -15,7 +15,7 @@ import com.googlecode.javacv.cpp.opencv_core.IplImage;
 
 public class CameraPanel extends JPanel{
 	BufferedImage buffImg = null;
-	public FrameGrabber grabber;
+	public static FrameGrabber grabber;
 	
 	public CameraPanel() {
 		this.setLayout(new BorderLayout());
@@ -30,8 +30,7 @@ public class CameraPanel extends JPanel{
         	
         	/* Sets the grabbers resolution */
         	grabber.setImageHeight(1080);
-        	grabber.setImageWidth(1480);
-        	
+        	grabber.setImageWidth(1920);
         	
         	grabber.start();
             final ColorPanel camerapanel;

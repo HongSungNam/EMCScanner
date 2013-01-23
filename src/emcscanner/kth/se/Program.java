@@ -18,8 +18,6 @@ public class Program {
 	public static DimentionPanel dimentionPanel;
 	public static ConclutionPanel conclutionPanel;
 	public static ImageScannedPanel imageScannedPanel;
-	//public static StartControlPanel startControlPanel;
-	//public static ManualPanel manualPanel;
 	/**
 	 * This is the main method
 	 * @param args
@@ -56,14 +54,13 @@ public class Program {
 				}
 				else if (e.getExtendedKeyCode() == KeyEvent.VK_ESCAPE)
 				{ 
-					System.exit(0);
 					try {
 						cameraPanel.grabber.stop();
 					} catch (Exception e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-					
+					System.exit(0);
 				}
 				else
 					return;
