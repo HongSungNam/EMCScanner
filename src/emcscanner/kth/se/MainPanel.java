@@ -1,7 +1,6 @@
 package emcscanner.kth.se;
 
 import java.awt.*;
-import java.awt.event.KeyListener;
 
 import javax.swing.*;
 
@@ -14,11 +13,13 @@ public class MainPanel extends JPanel   {
 	
 	public MainPanel(){	
 		this.split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false);
-		System.out.println("Set stages");
 		setStages(Program.startControlPanel, Program.manualPanel);
 		
 		this.setLayout(new BorderLayout());
 		this.add(this.split, BorderLayout.CENTER);
+		
+
+		
 	}
 	public static void setLeftStage(JPanel left){
 		split.setLeftComponent(left);
@@ -29,5 +30,6 @@ public class MainPanel extends JPanel   {
 	public static void setStages(JPanel left, JPanel right){
 		split.setRightComponent(right);
 		split.setLeftComponent(left);
+
 	}
 }

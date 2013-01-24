@@ -22,7 +22,6 @@ public class StartControlPanel extends JPanel {
 		this.setLayout(new BorderLayout());
 		this.setPreferredSize(new Dimension((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth()/2), 0));
 		
-		
 		/* Imports the different images for the different button stages. */
 		ImageIcon nextButtonEnabledIcon = new ImageIcon("image/ButtonBlueNext.png");
 		ImageIcon nextButtonBlueNextPrestIcon = new ImageIcon("image/ButtonBlueNextPrest.png");

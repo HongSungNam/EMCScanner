@@ -17,27 +17,27 @@ public class ManualPanel extends JPanel {
 		this.setLayout(new BorderLayout());
 		this.setPreferredSize(new Dimension(0, 0));
 
-		// PDF Location
+		/* PDF File Location */
 		String filePath = "F:/ElectromagneticScanner/Electromagnetic Scanner/PDF Manual/GroupAssignment.pdf";
 		
-		// build a component controller
+		/* build a component controller */
         SwingController controller = new SwingController();
 
         SwingViewBuilder factory = new SwingViewBuilder(controller);
 
         JPanel viewerComponentPanel = factory.buildViewerPanel();
 
-        // add copy keyboard command
+        /* add copy keyboard command */
         ComponentKeyBinding.install(controller, viewerComponentPanel);
 
-        // add interactive mouse link annotation support via callback
+        /* add interactive mouse link annotation support via callback */
         controller.getDocumentViewController().setAnnotationCallback(
                 new org.icepdf.ri.common.MyAnnotationCallback(
                         controller.getDocumentViewController()));
         
-        this.add(viewerComponentPanel, BorderLayout.CENTER);
-
-        //Opening a PDF
+        /*Opening a PDF */
         controller.openDocument(filePath);
+        
+        this.add(viewerComponentPanel, BorderLayout.CENTER);
 	}
 }

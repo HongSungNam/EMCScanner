@@ -33,6 +33,7 @@ public class SettingsSubPanel extends JPanel{
 	public Border border;
 	public JPanel continerHeaderAndPanel;
 	public JPanel continerStep;
+	public int panelNumber;
 	
 	public boolean frequencySelected = false;
 	
@@ -47,6 +48,9 @@ public class SettingsSubPanel extends JPanel{
 		this.setLayout(new FlowLayout());
 		this.setMinimumSize(new Dimension(400, 100));
 		
+		this.panelNumber = panelNumber;
+		
+		/* FrequencySelction */
 		final JTextField floatInputTextField = new JTextField(4);
 		final JPanel frequencyPanel = new JPanel();
 		final JButton nextButton = new JButton();
@@ -55,6 +59,16 @@ public class SettingsSubPanel extends JPanel{
 		final JLabel text = new JLabel("<html> <font color = rgb(255, 0, 0)> Note</font>: The signal generator’s " + "<br>"+
 									   " Intervall is 0.1 – 6000 MHz. </html>");
 		final JLabel frequencyLabel = new JLabel();
+		frequencyLabel.setVisible(false);
+		
+		/* AreaSelction */
+		final JPanel areaPanel = new JPanel();
+		final JButton nextAreaButton = new JButton();
+		final JLabel textAraeSelectedLabel = new JLabel();
+		textAraeSelectedLabel.setVisible(false);
+		nextAreaButton.setVisible(false);
+		
+		
 		
 		/* Header for the different sub settings panels. */
 		header = new JButton();
@@ -117,9 +131,16 @@ public class SettingsSubPanel extends JPanel{
 					frequencyPanel.setPreferredSize(new Dimension(50, 140));
 					continerHeaderAndPanel.setPreferredSize(new Dimension(322, 180));
 					continerStep.setPreferredSize(new Dimension(50, 180));
-
+					
 					frequencyLabel.setVisible(false);
 					frequencySelected = false;
+					
+					
+					/* Area */
+					//textAraeSelectedLabel.setVisible(false);
+					//nextButtonArea.setVisible(false);
+					
+					
 				}
 			}
 		});
@@ -147,7 +168,8 @@ public class SettingsSubPanel extends JPanel{
 		/* Adds the frequency panel to the container */
 		if ( panelNumber == 1 ){
 			continerHeaderAndPanel.add(FrequencyPanel(floatInputTextField, frequencyPanel, 
-									   nextButton, text, text2, text3, frequencyLabel), 
+									   nextButton, text, text2, text3, frequencyLabel, 
+									   areaPanel, nextAreaButton, textAraeSelectedLabel), 
 										BorderLayout.SOUTH);
 		}
 		
@@ -157,14 +179,24 @@ public class SettingsSubPanel extends JPanel{
 		
 		this.add(continer, BorderLayout.EAST);
 	}
-
+	/**
+	 * 
+	 * @param floatInputTextField
+	 * @param frequencyPanel
+	 * @param nextButton
+	 * @param text
+	 * @param text2
+	 * @param text3
+	 * @param frequencyLabel
+	 * @return
+	 */
 	private JPanel FrequencyPanel(final JTextField floatInputTextField, final JPanel frequencyPanel, 
 								  final JButton nextButton, final JLabel text, final JLabel text2, 
-								  final JLabel text3, final JLabel frequencyLabel){
+								  final JLabel text3, final JLabel frequencyLabel,
+								  final JPanel areaPanel, final JButton nextAreaButton, final JLabel textAraeSelectedLabel){
 		
 		frequencyPanel.setLayout(new BorderLayout());
 		frequencyPanel.setPreferredSize(new Dimension(50, 140));
-		
 		continerHeaderAndPanel.setPreferredSize(new Dimension(322, 180));
 		continerStep.setPreferredSize(new Dimension(50, 180));
 		
@@ -224,6 +256,11 @@ public class SettingsSubPanel extends JPanel{
 				frequencyPanel.add(frequencyLabel, BorderLayout.EAST);
 				
 				frequencySelected = true;
+				
+				if ( panelNumber == 2 ){
+					continerHeaderAndPanel.add(areaPanel(areaPanel, nextAreaButton, textAraeSelectedLabel), 
+												BorderLayout.SOUTH);
+				}
 			}
 		});
 		
@@ -331,13 +368,78 @@ public class SettingsSubPanel extends JPanel{
 		return frequencyPanel;
 	}
 	
-	//nextButton.setDisabledSelectedIcon(disabledSelectedIcon);
-	//nextButton.setRolloverIcon(rolloverIcon);
-	//nextButton.setRolloverSelectedIcon(rolloverSelectedIcon);
-	//nextButton.setSelectedIcon(selectedIcon);
-	
-	//setRolloverEnabled
-	//setIcon
-	//setEnabled
-			
+	/**
+	 * 
+	 * @param areaPanel
+	 * @param nextButtonArea
+	 * @param textAraeSelectedLabel
+	 * @return
+	 */
+	private JPanel areaPanel(final JPanel areaPanel, final JButton nextAreaButton, final JLabel textAraeSelectedLabel){
+		areaPanel.setLayout(new BorderLayout());
+		areaPanel.setPreferredSize(new Dimension(50, 140));
+		
+		continerHeaderAndPanel.setPreferredSize(new Dimension(322, 180));
+		continerStep.setPreferredSize(new Dimension(50, 180));
+		
+		nextAreaButton.setVisible(true);
+		
+		/* Imports the different images for the different button stages. */
+		ImageIcon nextButtonEnabledIcon = new ImageIcon("image/ButtonBlueNext.png");
+		ImageIcon nextButtonDisabledIcon = new ImageIcon("image/ButtonGrayNext.png");
+		ImageIcon nextButtonBlueNextPrestIcon = new ImageIcon("image/ButtonBlueNextPrest.png");
+		ImageIcon nextButtonGrayNextPrestIcon = new ImageIcon("image/ButtonGrayNextPrest.png");
+		
+		/* Next JButton */
+		nextAreaButton.setOpaque(false);
+		nextAreaButton.setContentAreaFilled(false);
+		nextAreaButton.setBorderPainted(false);
+		nextAreaButton.setToolTipText("You need to select an area before you can continue ");
+		nextAreaButton.setPreferredSize(new Dimension(90, 50));
+		nextAreaButton.setEnabled(false);
+		nextAreaButton.setIcon(nextButtonEnabledIcon);
+		nextAreaButton.setDisabledIcon(nextButtonDisabledIcon);
+		nextAreaButton.setPressedIcon(nextButtonBlueNextPrestIcon);
+		nextAreaButton.setDisabledSelectedIcon(nextButtonGrayNextPrestIcon);
+		nextAreaButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				ImageIcon greenBar = new ImageIcon("image/PanelGreenArea.png");
+	    		header.setIcon(greenBar);
+				header.setToolTipText("Press to reselect The area");
+				header.setEnabled(true);
+
+	    		Border greenBorder = BorderFactory.createLineBorder(new Color(150,255,80));
+	    		areaPanel.setBorder(greenBorder);
+				
+	    		nextAreaButton.setVisible(false);
+				
+				areaPanel.setPreferredSize(new Dimension(322, 40));
+				continerHeaderAndPanel.setPreferredSize(new Dimension(322, 80));
+				continerStep.setPreferredSize(new Dimension(50, 80));
+				
+				textAraeSelectedLabel.setText("<html>Selected area: "+SettingsPanel.areaSelected+" MHz</html>");
+				areaPanel.setVisible(true);
+
+				areaPanel.add(textAraeSelectedLabel, BorderLayout.EAST);
+			}
+		});
+
+		/* Adds Buttons and labels to containers and adds containers
+		   to containers and in the ends the containers to the panel */
+
+		/* Containers for setting up GUI */
+		JPanel continer  = 	new JPanel();
+		
+		/* Setting containers Layouts for the right GUI look. */
+		continer.setLayout(new BorderLayout());
+		
+		continer.setBackground(Color.WHITE);
+		continer.add(nextAreaButton, BorderLayout.EAST);
+		areaPanel.add(continer, BorderLayout.SOUTH);
+		areaPanel.setBorder(border);
+		
+		return areaPanel;
+	}
 }
