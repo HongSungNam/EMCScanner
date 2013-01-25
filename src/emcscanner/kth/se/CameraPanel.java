@@ -24,8 +24,10 @@ import com.googlecode.javacv.cpp.opencv_core.IplImage;
  */
 public class CameraPanel extends JPanel{
 	BufferedImage buffImg = null;
+	static Thread threadDisplayCamera;
+	
 	public FrameGrabber grabber;
-	public Dimension cameraViewBounderys;
+	public Dimension CAMERA_VIEW_BOUNDERYS_DIMENSION;
 	
 	public CameraPanel() {
 		this.setLayout(new BorderLayout());
@@ -47,7 +49,7 @@ public class CameraPanel extends JPanel{
             final ColorPanel colorCameraPanel;
             this.add(colorCameraPanel = new ColorPanel(buffImg));
             
-            Thread threadDisplay = new Thread("threadDisplay"){
+            threadDisplayCamera = new Thread("threadDisplay"){
             	public void run(){
 		            while (true) {
 		            	IplImage grabbedImage;
@@ -76,7 +78,7 @@ public class CameraPanel extends JPanel{
 		                    Dimension newImagebunderys = getScaledDimension(imgSize, boundary);
 
 		                    /* Camera view dimension is being updated all the time so when we chose an area we will know where on the table we have chosen*/ 
-		                    cameraViewBounderys = newImagebunderys;
+		                    CAMERA_VIEW_BOUNDERYS_DIMENSION = newImagebunderys;
 		                    
 		                    if((widthFrame > 0) || (heightFrame > 0))
 		                    {
@@ -93,21 +95,12 @@ public class CameraPanel extends JPanel{
 		                	/* Show image on window */
 		                    colorCameraPanel.repaint();
 		                	//cvSaveImage((i++)+"-aa.jpg", img);
-		                }   
-		                try {
-							Thread.sleep(100);
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+		                }
 		            }
             	}
             };
-            threadDisplay.setDaemon(true);
-            threadDisplay.start();
-            
-
-            colorCameraPanel.setBackground(Color.BLACK);
+            threadDisplayCamera.setDaemon(true);
+            threadDisplayCamera.start();
         } catch (Exception e) {
         }
 	}
@@ -119,7 +112,7 @@ public class CameraPanel extends JPanel{
 	 * @param img_height
 	 * @return
 	 */
-	private static BufferedImage resizeImage(BufferedImage originalImage, int type, Integer img_width, Integer img_height){
+	public static BufferedImage resizeImage(BufferedImage originalImage, int type, Integer img_width, Integer img_height){
 		BufferedImage resizedImage = new BufferedImage(img_width, img_height, type);
 		Graphics2D g = resizedImage.createGraphics();
 		g.drawImage(originalImage, 0, 0, img_width, img_height, null);

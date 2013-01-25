@@ -16,15 +16,14 @@ import javax.swing.JPanel;
  */
 public class SettingsPanel extends JPanel{
 	/* User selected values */
-	public static float frequency;
-	public static float areaSelected;
+	public static float FREQUENCY;
+	public static float AREA_SELECTED;
 	
 	/* Global values used by the program */
-	public static int step = 1;
-	public static SettingsSubPanel frequencyPanel;
-	public static SettingsSubPanel areaPanel;
-	public static SettingsSubPanel scanDensityPanel;
-	public static SettingsSubPanel fileNamePanel;
+	public static FrequensySettingsSubPanel frequencyPanel;
+	public static AreaSettingsSubPanel areaPanel;
+	//public static SettingsSubPanel scanDensityPanel;
+	//public static SettingsSubPanel fileNamePanel;
 	
 	/**
 	 * SettingsPanel
@@ -40,24 +39,24 @@ public class SettingsPanel extends JPanel{
 		settingsContiner.setLayout(new BoxLayout(settingsContiner, BoxLayout.Y_AXIS));
 		
 		/* Creates the different sub panels for the settingsPanel */
-		frequencyPanel = new SettingsSubPanel("Step 1/4", "This is where you can shoose the desired frequency.", 1);
-		areaPanel = new SettingsSubPanel("Step 2/4", "This is where you select the area to scan.", 2);
-		scanDensityPanel = new SettingsSubPanel("Step 3/4", "This is where you select the density between eatch scanned point.", 3);
-		fileNamePanel = new SettingsSubPanel("Step 4/4", "This is where you select the file name that you want to have.", 4);
+		frequencyPanel = new FrequensySettingsSubPanel();
+		areaPanel = new AreaSettingsSubPanel();
+		//scanDensityPanel = new SettingsSubPanel("Step 3/4", "This is where you select the density between eatch scanned point.", 3);
+		//fileNamePanel = new SettingsSubPanel("Step 4/4", "This is where you select the file name that you want to have.", 4);
 		settingsContiner.add(frequencyPanel);
 		settingsContiner.add(areaPanel);
-		settingsContiner.add(scanDensityPanel);
-		settingsContiner.add(fileNamePanel);
+		//settingsContiner.add(scanDensityPanel);
+		//settingsContiner.add(fileNamePanel);
 		
 		/* Import the images for the back button */
-		ImageIcon backButtonEnabledIcon = new ImageIcon("image/ButtonBlueBack.png");
-		ImageIcon backButtonBlueNextPrestIcon = new ImageIcon("image/ButtonBlueBackPrest.png");
+		ImageIcon BACK_BUTTON_ENABLED_IMAGE_ICON = new ImageIcon("image/ButtonBlueBack.png");
+		ImageIcon BACK_BUTTON_BLUE_PREST_IMAGE_ICON = new ImageIcon("image/ButtonBlueBackPrest.png");
 		
 		/* Button made for going back to previous views */
 		final JButton backButton = new JButton();
 		backButton.setEnabled(true);
-		backButton.setIcon(backButtonEnabledIcon);
-		backButton.setPressedIcon(backButtonBlueNextPrestIcon);
+		backButton.setIcon(BACK_BUTTON_ENABLED_IMAGE_ICON);
+		backButton.setPressedIcon(BACK_BUTTON_BLUE_PREST_IMAGE_ICON);
 		backButton.setOpaque(false);
 		backButton.setContentAreaFilled(false);
 		backButton.setBorderPainted(false);

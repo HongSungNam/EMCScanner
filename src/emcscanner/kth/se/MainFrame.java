@@ -55,6 +55,7 @@ public class MainFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
+					CameraPanel.threadDisplayCamera.stop();
 					Program.cameraPanel.grabber.stop();
 				} catch (Exception e1) {
 					e1.printStackTrace();
