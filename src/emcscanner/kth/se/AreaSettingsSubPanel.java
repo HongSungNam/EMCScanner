@@ -15,6 +15,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
@@ -45,9 +46,9 @@ public class AreaSettingsSubPanel extends JPanel {
 	public JPanel continer1 = new JPanel();
 	
 	/* Buttons */
-	public JButton headerButton = new JButton();
-	public JButton nextButton = new JButton();
-	public JButton backButton = new JButton();
+	public static JButton headerButton = new JButton();
+	public static JButton nextButton = new JButton();
+	public static JButton backButton = new JButton();
 	
 	/* String */
 	public String STEP_TEXT_GRAY	 	= "<html> <font color = rgb(120,120,120)>Step 2/4</font></html>";
@@ -111,17 +112,17 @@ public class AreaSettingsSubPanel extends JPanel {
 		this.setMinimumSize(THIS_MINIMUM_DIMENSION);
 
 		/* Sets creation values for the header button */
-		this.headerButton.setEnabled(false);
-		this.headerButton.setPreferredSize(HEADER_BUTTON_DIMENSION);
-		this.headerButton.setToolTipText(PANEL_TOOL_TIP_TEXT);
-		this.headerButton.setOpaque(false);
-		this.headerButton.setContentAreaFilled(false);
-		this.headerButton.setBorderPainted(false);
-		this.headerButton.setIcon(HEADER_ENABLED_IMAGE_ICON);
-		this.headerButton.setDisabledIcon(HEADER_DISABLED_GRAY_IMAGE_ICON);
-		this.headerButton.setPressedIcon(HEADER_ENABLED_PREST_IMAGE_ICON);
-		this.headerButton.setRolloverIcon(HEADER_ENABLED_ROLLOVER_IMAGE_ICON);
-		this.headerButton.addActionListener(new ActionListener() {
+		AreaSettingsSubPanel.headerButton.setEnabled(false);
+		AreaSettingsSubPanel.headerButton.setPreferredSize(HEADER_BUTTON_DIMENSION);
+		AreaSettingsSubPanel.headerButton.setToolTipText(PANEL_TOOL_TIP_TEXT);
+		AreaSettingsSubPanel.headerButton.setOpaque(false);
+		AreaSettingsSubPanel.headerButton.setContentAreaFilled(false);
+		AreaSettingsSubPanel.headerButton.setBorderPainted(false);
+		AreaSettingsSubPanel.headerButton.setIcon(HEADER_ENABLED_IMAGE_ICON);
+		AreaSettingsSubPanel.headerButton.setDisabledIcon(HEADER_DISABLED_GRAY_IMAGE_ICON);
+		AreaSettingsSubPanel.headerButton.setPressedIcon(HEADER_ENABLED_PREST_IMAGE_ICON);
+		AreaSettingsSubPanel.headerButton.setRolloverIcon(HEADER_ENABLED_ROLLOVER_IMAGE_ICON);
+		AreaSettingsSubPanel.headerButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
@@ -189,7 +190,7 @@ public class AreaSettingsSubPanel extends JPanel {
 				SettingsPanel.frequencyPanel.textNote.setVisible(true);
 				SettingsPanel.frequencyPanel.textMoreThen.setVisible(true);
 				SettingsPanel.frequencyPanel.textLessThen.setVisible(true);
-				SettingsPanel.frequencyPanel.nextButton.setVisible(true);
+				FrequensySettingsSubPanel.nextButton.setVisible(true);
 				SettingsPanel.frequencyPanel.stepLabel.setText(SettingsPanel.frequencyPanel.STEP_TEXT_LIGHT_BLUE);
 				SettingsPanel.frequencyPanel.frequencyPanel.setPreferredSize(SettingsPanel.frequencyPanel.FREQUENCY_PANEL_DIMENSION_ON);
 				SettingsPanel.frequencyPanel.headerAndPanelContiner.setPreferredSize(SettingsPanel.frequencyPanel.HEADER_AND_PANEL_CONTINER_DIMENSION_ON);
@@ -197,7 +198,7 @@ public class AreaSettingsSubPanel extends JPanel {
 				
 				/* Turns off */
 				SettingsPanel.frequencyPanel.frequencyLabel.setVisible(false);
-				SettingsPanel.frequencyPanel.FREQUENCY_SELECTED = false;
+				FrequensySettingsSubPanel.FREQUENCY_SELECTED = false;
 				
 				/* Removing next step */
 				headerAndPanelContiner.remove(SettingsPanel.areaPanel.areaPanel);
@@ -224,7 +225,7 @@ public class AreaSettingsSubPanel extends JPanel {
 	                	{
 	                		if (DISPLAY_AREA_HELP_VIDEO)
 	                		{
-		                		System.out.println(grabber.getLengthInFrames() + " : " + grabber.getFrameNumber());
+		                		//System.out.println(grabber.getLengthInFrames() + " : " + grabber.getFrameNumber());
 		                		grabbedImage = grabber.grab();
 	                		}
 	                		else{
@@ -235,7 +236,7 @@ public class AreaSettingsSubPanel extends JPanel {
 	                	else if((grabber2.getLengthInFrames()-100) >= grabber2.getFrameNumber()) {
 	                		if (DISPLAY_AREA_HELP_VIDEO)
 	                		{
-		                		System.out.println(grabber2.getLengthInFrames() + " : " + grabber2.getFrameNumber());
+		                		//System.out.println(grabber2.getLengthInFrames() + " : " + grabber2.getFrameNumber());
 		                		grabbedImage = grabber2.grab();
 	                		}
 	                		else{
@@ -303,9 +304,10 @@ public class AreaSettingsSubPanel extends JPanel {
 		areaPanel.setBackground(Color.WHITE);
 		areaPanel.setBorder(LIGHT_BLUE_BORDER);
 		areaPanel.add(continer1, BorderLayout.SOUTH);
-		
 		areaPanel.add(colorCameraPanel, BorderLayout.CENTER);
-
+		
+		
+		
 		this.add(headerAndPanelContiner);
 	}
 }

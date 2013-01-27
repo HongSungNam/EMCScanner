@@ -40,6 +40,8 @@ public class StartControlPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				MainPanel.setStages(Program.cameraPanel, Program.settingsPanel);
+				if (FrequensySettingsSubPanel.FREQUENCY_SELECTED)
+					AreaSettingsSubPanel.DISPLAY_AREA_HELP_VIDEO = true;
 			}
 		});
 		

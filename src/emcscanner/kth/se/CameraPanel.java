@@ -23,8 +23,11 @@ import com.googlecode.javacv.cpp.opencv_core.IplImage;
  *
  */
 public class CameraPanel extends JPanel{
-	BufferedImage buffImg = null;
-	static Thread threadDisplayCamera;
+
+	public static ColorPanel colorCameraPanel;
+	
+	public static BufferedImage buffImg = null;
+	public static Thread threadDisplayCamera;
 	
 	public FrameGrabber grabber;
 	public Dimension CAMERA_VIEW_BOUNDERYS_DIMENSION;
@@ -32,7 +35,8 @@ public class CameraPanel extends JPanel{
 	public CameraPanel() {
 		this.setLayout(new BorderLayout());
 		this.setPreferredSize(new Dimension((int) (3*Toolkit.getDefaultToolkit().getScreenSize().getWidth()/4), 0));
-
+		
+		
         try {
         	/* There exists many different types of frame grabbers. 
         	   This one is the one that is working for this camera. */
@@ -46,7 +50,6 @@ public class CameraPanel extends JPanel{
         	grabber.start();
         	
         	/* Creates a ColorPanel and adds it to this camera panel */
-            final ColorPanel colorCameraPanel;
             this.add(colorCameraPanel = new ColorPanel(buffImg));
             
             threadDisplayCamera = new Thread("threadDisplay"){
@@ -76,9 +79,14 @@ public class CameraPanel extends JPanel{
 		                    
 		                    /* Changing the scaling of the grabbed camera image */
 		                    Dimension newImagebunderys = getScaledDimension(imgSize, boundary);
+		                    
 
 		                    /* Camera view dimension is being updated all the time so when we chose an area we will know where on the table we have chosen*/ 
 		                    CAMERA_VIEW_BOUNDERYS_DIMENSION = newImagebunderys;
+		                    
+		                    /* Sets glass panel size */
+		                    //if(CAMERA_VIEW_BOUNDERYS_DIMENSION.getHeight()>0 && CAMERA_VIEW_BOUNDERYS_DIMENSION.getWidth()>0)
+		                    //	Program.frame.glass.setPreferredSize(CAMERA_VIEW_BOUNDERYS_DIMENSION);
 		                    
 		                    if((widthFrame > 0) || (heightFrame > 0))
 		                    {

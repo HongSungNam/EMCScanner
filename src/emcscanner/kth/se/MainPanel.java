@@ -9,7 +9,7 @@ import javax.swing.*;
  * @param args
  */
 public class MainPanel extends JPanel   {
-	private static JSplitPane split;
+	public static JSplitPane split;
 	
 	public MainPanel(){	
 		this.split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false);
@@ -17,9 +17,6 @@ public class MainPanel extends JPanel   {
 		
 		this.setLayout(new BorderLayout());
 		this.add(this.split, BorderLayout.CENTER);
-		
-
-		
 	}
 	public static void setLeftStage(JPanel left){
 		split.setLeftComponent(left);

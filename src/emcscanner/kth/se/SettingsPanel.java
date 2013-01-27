@@ -63,6 +63,7 @@ public class SettingsPanel extends JPanel{
 		backButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				AreaSettingsSubPanel.DISPLAY_AREA_HELP_VIDEO = false;
 				MainPanel.setStages(Program.startControlPanel, Program.manualPanel);
 			}
 		});

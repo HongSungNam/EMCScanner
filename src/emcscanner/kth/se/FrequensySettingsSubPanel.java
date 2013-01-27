@@ -25,6 +25,10 @@ import com.googlecode.javacv.FrameGrabber.Exception;
  *
  */
 public class FrequensySettingsSubPanel extends JPanel{
+
+	/* Boolean */
+	public static boolean FREQUENCY_SELECTED = false;
+	
 	/* Panels */
 	public JPanel stepContiner = new JPanel();
 	public JPanel headerAndPanelContiner = new JPanel();
@@ -32,7 +36,7 @@ public class FrequensySettingsSubPanel extends JPanel{
 	
 	/* Buttons */
 	public JButton headerButton = new JButton();
-	public JButton nextButton = new JButton();
+	public static JButton nextButton = new JButton();
 	
 	/* JTextField */
 	public JTextField floatInputTextField = new JTextField(4);
@@ -63,10 +67,6 @@ public class FrequensySettingsSubPanel extends JPanel{
 
 	public JLabel frequencyLabel = new JLabel();
 	
-	
-	/* Boolean */
-	public boolean FREQUENCY_SELECTED = false;
-	
 	/* Imports the different images for the different button stages. */	
 	public ImageIcon HEADER_ENABLED_IMAGE_ICON 	 		= new ImageIcon("image/PanelGreenFrequency.png");
 	public ImageIcon HEADER_ENABLED_ROLLOVER_IMAGE_ICON = new ImageIcon("image/PanelGreenFrequencyRollover.png");
@@ -80,11 +80,11 @@ public class FrequensySettingsSubPanel extends JPanel{
 	public ImageIcon NEXT_BUTTON_GRAY_NEXT_PREST_ICON	= new ImageIcon("image/ButtonGrayNextPrest.png");
 	
 	/* Used Colors */
-	public Color LIGHT_BLUE_COLOR = new Color(100,150,255); 
-	public Color RED_COLOR = new Color(255,0,0); 
-	public Color LIGHT_GREEN_COLOR = new Color(150,255,80); 
-	public Color DARK_GREEN_COLOR = new Color(120,200,40);
-	public Color LIGHT_GRAY_COLOR = new Color(120,120,120);
+	public static Color LIGHT_BLUE_COLOR = new Color(100,150,255); 
+	public static Color RED_COLOR = new Color(255,0,0); 
+	public static Color LIGHT_GREEN_COLOR = new Color(150,255,80); 
+	public static Color DARK_GREEN_COLOR = new Color(120,200,40);
+	public static Color LIGHT_GRAY_COLOR = new Color(120,120,120);
 	
 	/* Light blue border for the float input text field */
 	public Border LIGHT_BLUE_BORDER = BorderFactory.createLineBorder(LIGHT_BLUE_COLOR);
@@ -127,7 +127,6 @@ public class FrequensySettingsSubPanel extends JPanel{
 		this.headerButton.setPressedIcon(HEADER_ENABLED_PREST_IMAGE_ICON);
 		this.headerButton.setRolloverIcon(HEADER_ENABLED_ROLLOVER_IMAGE_ICON);
 		this.headerButton.addActionListener(new ActionListener() {
-			@SuppressWarnings("deprecation")
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				/* Sets header back to blue */
@@ -240,6 +239,10 @@ public class FrequensySettingsSubPanel extends JPanel{
 				SettingsPanel.areaPanel.stepLabel.setText(SettingsPanel.areaPanel.STEP_TEXT_LIGHT_BLUE);
 
 				AreaSettingsSubPanel.DISPLAY_AREA_HELP_VIDEO = true;
+				
+				/* Glass Panel at the cameraPanel */
+				//Program.frame.glass.setVisible(true);
+				Program.frame.GET_AREA_BOOLEAN = true;
 			}
 		});
 		
