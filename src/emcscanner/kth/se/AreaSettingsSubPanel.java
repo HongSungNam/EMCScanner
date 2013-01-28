@@ -127,6 +127,9 @@ public class AreaSettingsSubPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 
 				DISPLAY_AREA_HELP_VIDEO = false;
+
+				/* Show the selected area */
+				Program.frame.GET_AREA_BOOLEAN = true;
 			}
 		});
 		
@@ -165,8 +168,12 @@ public class AreaSettingsSubPanel extends JPanel {
 		nextButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
 				DISPLAY_AREA_HELP_VIDEO = false;
+
+				/* Don´t show the selected area */
+				Program.frame.GET_AREA_BOOLEAN = false;
+				Program.frame.glass.setVisible(false);
+				Program.frame.MOUSE_RELEASED_BOOLEAN = false;
 			}
 		});
 		
@@ -206,6 +213,11 @@ public class AreaSettingsSubPanel extends JPanel {
 				stepLabel.setText(SettingsPanel.areaPanel.STEP_TEXT_GRAY);
 				
 				DISPLAY_AREA_HELP_VIDEO = false;
+
+				/* Don´t show the selected area */
+				Program.frame.GET_AREA_BOOLEAN = false;
+				Program.frame.glass.setVisible(false);
+				
 			}
 		});
 
@@ -225,7 +237,6 @@ public class AreaSettingsSubPanel extends JPanel {
 	                	{
 	                		if (DISPLAY_AREA_HELP_VIDEO)
 	                		{
-		                		//System.out.println(grabber.getLengthInFrames() + " : " + grabber.getFrameNumber());
 		                		grabbedImage = grabber.grab();
 	                		}
 	                		else{
@@ -236,7 +247,6 @@ public class AreaSettingsSubPanel extends JPanel {
 	                	else if((grabber2.getLengthInFrames()-100) >= grabber2.getFrameNumber()) {
 	                		if (DISPLAY_AREA_HELP_VIDEO)
 	                		{
-		                		//System.out.println(grabber2.getLengthInFrames() + " : " + grabber2.getFrameNumber());
 		                		grabbedImage = grabber2.grab();
 	                		}
 	                		else{

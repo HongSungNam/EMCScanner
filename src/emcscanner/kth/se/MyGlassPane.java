@@ -34,36 +34,16 @@ public class MyGlassPane extends JComponent {
 	public MainFrame frame;
 	public Point cursorPressed;
 	public Point cursorReleased;
-	public boolean mouseReleasedBoolean = false;
 	
 	public MyGlassPane(MainFrame frame, JMenuBar menuBar, JButton headerButton, final JButton backButton) {
 		this.frame = frame;
-		setOpaque(false);
 		cursorPressed = new Point();
 		cursorReleased = new Point();
 		
 	}
-	/*
-	public void eventDispatched(AWTEvent event){
-		if(event instanceof MouseEvent)
-		{
-			MouseEvent me =(MouseEvent) event;
-			if (!SwingUtilities.isDescendingFrom(me.getComponent(), frame)) { 
-                return; 
-            }
-			if (me.getID() == MouseEvent.MOUSE_EXITED && me.getComponent() == frame) 
-			{ 
-				point = null; 
-			}
-			else { 
-                MouseEvent converted = SwingUtilities.convertMouseEvent(me.getComponent(), me, frame.getGlassPane()); 
-                point = converted.getPoint(); 
-            } 
-		}
-	}*/
 	public void paint(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g; 
-		if (mouseReleasedBoolean)
+		if (Program.frame.MOUSE_RELEASED_BOOLEAN)
 			g2.setColor(FrequensySettingsSubPanel.LIGHT_GREEN_COLOR);
 		else
 			g2.setColor(FrequensySettingsSubPanel.LIGHT_BLUE_COLOR);
@@ -76,7 +56,7 @@ public class MyGlassPane extends JComponent {
         			if((cursorPressed.y < cursorReleased.y))
         			{
         				g2.drawRect(cursorPressed.x, cursorPressed.y, (cursorReleased.x-cursorPressed.x), (cursorReleased.y-cursorPressed.y));
-        				if (mouseReleasedBoolean == false)
+        				if (Program.frame.MOUSE_RELEASED_BOOLEAN == false)
         					g2.setColor(new Color(100,150,255,80));
         				else
         					g2.setColor(new Color(150,255,80,80));
@@ -85,7 +65,7 @@ public class MyGlassPane extends JComponent {
         			else
         			{
         				g2.drawRect(cursorPressed.x, cursorReleased.y, (cursorReleased.x-cursorPressed.x), (cursorPressed.y-cursorReleased.y));
-        				if (mouseReleasedBoolean == false)
+        				if (Program.frame.MOUSE_RELEASED_BOOLEAN == false)
         					g2.setColor(new Color(100,150,255,80));
         				else
         					g2.setColor(new Color(150,255,80,80));
@@ -97,7 +77,7 @@ public class MyGlassPane extends JComponent {
         			if((cursorPressed.y < cursorReleased.y))
         			{
         				g2.drawRect(cursorReleased.x, cursorPressed.y, (cursorPressed.x-cursorReleased.x), (cursorReleased.y-cursorPressed.y));
-        				if (mouseReleasedBoolean == false)
+        				if (Program.frame.MOUSE_RELEASED_BOOLEAN == false)
         					g2.setColor(new Color(100,150,255,80));
         				else
         					g2.setColor(new Color(150,255,80,80));
@@ -106,7 +86,7 @@ public class MyGlassPane extends JComponent {
         			else
         			{
         				g2.drawRect(cursorReleased.x, cursorReleased.y, (cursorPressed.x-cursorReleased.x), (cursorPressed.y-cursorReleased.y));
-        				if (mouseReleasedBoolean == false)
+        				if (Program.frame.MOUSE_RELEASED_BOOLEAN == false)
         					g2.setColor(new Color(100,150,255,80));
         				else 
         					g2.setColor(new Color(150,255,80,80));

@@ -17,7 +17,13 @@ import javax.swing.JPanel;
 public class SettingsPanel extends JPanel{
 	/* User selected values */
 	public static float FREQUENCY;
-	public static float AREA_SELECTED;
+	public static float AREA_SELECTED_START_X;
+	public static float AREA_SELECTED_START_Y;
+	public static float AREA_SELECTED_WIDTH;
+	public static float AREA_SELECTED_HIGHT;
+	public static Dimension AREA_SELECTED_CAMERA_DIMENSION;
+	
+
 	
 	/* Global values used by the program */
 	public static FrequensySettingsSubPanel frequencyPanel;

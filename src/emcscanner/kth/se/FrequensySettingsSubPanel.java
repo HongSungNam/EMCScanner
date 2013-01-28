@@ -155,6 +155,11 @@ public class FrequensySettingsSubPanel extends JPanel{
 				SettingsPanel.areaPanel.stepLabel.setText(SettingsPanel.areaPanel.STEP_TEXT_GRAY);
 				
 				AreaSettingsSubPanel.DISPLAY_AREA_HELP_VIDEO = false;
+
+				/* Don´t show the selected area */
+				Program.frame.GET_AREA_BOOLEAN = false;
+				Program.frame.glass.setVisible(false);
+				Program.frame.MOUSE_RELEASED_BOOLEAN = false;
 			}
 		});
 		
