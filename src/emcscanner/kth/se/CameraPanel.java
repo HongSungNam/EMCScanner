@@ -189,13 +189,14 @@ public class CameraPanel extends JPanel{
 			        		}
 			        		else
 			        		{
-			        			//OUT_OF_BOUNDS = true;
 			        			Program.frame.MOUSE_RELEASED_BOOLEAN = true;
 			        			Program.frame.glass.cursorReleased.x = (int) Program.cameraPanel.CAMERA_VIEW_BOUNDERYS_DIMENSION.getWidth();
 			        			Program.frame.glass.cursorReleased.y = (int) Program.cameraPanel.CAMERA_VIEW_BOUNDERYS_DIMENSION.getHeight()+ MainFrame.menuBar.getHeight();
 			        			Program.frame.glass.repaint();
 			        		}
 			        	}
+
+        				Program.settingsPanel.areaPanel.nextButton.setEnabled(true);
 		        	}
 				}
 			}

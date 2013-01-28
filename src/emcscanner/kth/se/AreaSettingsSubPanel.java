@@ -184,7 +184,6 @@ public class AreaSettingsSubPanel extends JPanel {
 		backButton.setContentAreaFilled(false);
 		backButton.setBorderPainted(false);
 		backButton.addActionListener(new ActionListener() {
-			@SuppressWarnings("deprecation")
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				/* Sets header back to blue */
@@ -217,7 +216,7 @@ public class AreaSettingsSubPanel extends JPanel {
 				/* Don´t show the selected area */
 				Program.frame.GET_AREA_BOOLEAN = false;
 				Program.frame.glass.setVisible(false);
-				
+				Program.settingsPanel.areaPanel.nextButton.setEnabled(false);
 			}
 		});
 
@@ -315,8 +314,6 @@ public class AreaSettingsSubPanel extends JPanel {
 		areaPanel.setBorder(LIGHT_BLUE_BORDER);
 		areaPanel.add(continer1, BorderLayout.SOUTH);
 		areaPanel.add(colorCameraPanel, BorderLayout.CENTER);
-		
-		
 		
 		this.add(headerAndPanelContiner);
 	}

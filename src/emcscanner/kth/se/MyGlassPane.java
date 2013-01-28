@@ -1,31 +1,13 @@
 package emcscanner.kth.se;
 
-import java.awt.AWTEvent;
-import java.awt.AlphaComposite;
-import java.awt.Button;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Toolkit;
-import java.awt.event.AWTEventListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionAdapter;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
 import javax.swing.JMenuBar;
-import javax.swing.SwingUtilities;
-import javax.swing.event.MouseInputAdapter;
 
 /**
  * Our own glass pane so that it can paint.

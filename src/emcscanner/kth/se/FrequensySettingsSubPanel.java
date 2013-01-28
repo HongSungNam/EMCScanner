@@ -160,6 +160,7 @@ public class FrequensySettingsSubPanel extends JPanel{
 				Program.frame.GET_AREA_BOOLEAN = false;
 				Program.frame.glass.setVisible(false);
 				Program.frame.MOUSE_RELEASED_BOOLEAN = false;
+				Program.settingsPanel.areaPanel.nextButton.setEnabled(false);
 			}
 		});
 		
