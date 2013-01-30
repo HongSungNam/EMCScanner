@@ -11,6 +11,8 @@ import javax.swing.*;
 public class MainPanel extends JPanel   {
 	public static JSplitPane split;
 	
+	
+	
 	public MainPanel(){	
 		this.split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false);
 		setStages(Program.startControlPanel, Program.manualPanel);
@@ -27,6 +29,5 @@ public class MainPanel extends JPanel   {
 	public static void setStages(JPanel left, JPanel right){
 		split.setRightComponent(right);
 		split.setLeftComponent(left);
-
 	}
 }

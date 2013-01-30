@@ -1,9 +1,5 @@
 package emcscanner.kth.se;
 
-import static com.googlecode.javacv.cpp.opencv_core.cvFlip;
-import static com.googlecode.javacv.cpp.opencv_imgproc.CV_GAUSSIAN;
-import static com.googlecode.javacv.cpp.opencv_imgproc.cvSmooth;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -15,7 +11,6 @@ import java.awt.image.BufferedImage;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
@@ -33,16 +28,16 @@ public class AreaSettingsSubPanel extends JPanel {
 	/* Creates a ColorPanel and adds it to this camera panel */
 	public static ColorPanel colorCameraPanel = new ColorPanel(buffImg);
 	
-	static Thread threadDisplayVideo;
+	/* Threads */
+	static Thread threadDisplayAreaSelectionVideo;
 	
 	/* Boolean */
 	public static boolean DISPLAY_AREA_HELP_VIDEO = false;
 	
-	/* Panels */
+	/* Panels- Containers for setting up GUI */
 	public JPanel stepContiner = new JPanel();
 	public JPanel headerAndPanelContiner = new JPanel();
 	public JPanel areaPanel = new JPanel();
-	/* Containers for setting up GUI */
 	public JPanel continer1 = new JPanel();
 	
 	/* Buttons */
@@ -59,10 +54,17 @@ public class AreaSettingsSubPanel extends JPanel {
 	public String NEXT_BUTTON_TOOL_TIP_TEXT = "You need to select an area before you can continue";
 
 	public String AREA_NOT_SELECTED = "<html><font color = rgb(120,120,120)>Area not selected</font></html>";
+	public String AREA_SELECTED = "<html><font color = rgb(100,150,255)>Area selected </html></font>";
+	
+	public String HEADER_BUTTON_TOOL_TIP_TEXT = "Press to reselect the area";
+	
+	public String AREA_SELECTED_LABEL = "<html><font color = rgb(120,200,40)>Selected area: Width </font>" + (int) (SettingsPanel.AREA_SELECTED_END_X - SettingsPanel.AREA_SELECTED_START_X) + " le & "
+			  + "<font color = rgb(120,200,40)> Hight </font>"+ (int) (SettingsPanel.AREA_SELECTED_END_Y - SettingsPanel.AREA_SELECTED_START_Y) + " le </html>";
 	
 	/* JLabel */
 	public JLabel stepLabel = new JLabel(STEP_TEXT_GRAY);
 	public JLabel areaNotSelectedLabel = new JLabel(AREA_NOT_SELECTED);
+	public JLabel areaLabel = new JLabel();
 
 	/* Imports the different images for the different button stages. */	
 	/* Import the images for the header button */
@@ -71,40 +73,23 @@ public class AreaSettingsSubPanel extends JPanel {
 	public ImageIcon HEADER_DISABLED_GRAY_IMAGE_ICON 	= new ImageIcon("image/PanelGrayArea.png");
 	public ImageIcon HEADER_ENABLED_PREST_IMAGE_ICON 	= new ImageIcon("image/PanelGreenAreaPrest.png");
 	public ImageIcon HEADER_DISABLED_BLUE_IMAGE_ICON 	= new ImageIcon("image/PanelBlueArea.png");
-	/* Import the images for the NEXT button */
-	public ImageIcon NEXT_BUTTON_ENABLED_IMAGE_ICON		= new ImageIcon("image/ButtonBlueNext.png");
-	public ImageIcon NEXT_BUTTON_DISABLED_IMAGE_ICON	= new ImageIcon("image/ButtonGrayNext.png");
-	public ImageIcon NEXT_BUTTON_BLUE_PREST_IMAGE_ICON 	= new ImageIcon("image/ButtonBlueNextPrest.png");
-	public ImageIcon NEXT_BUTTON_GRAY_PREST_IMAGE_ICON 	= new ImageIcon("image/ButtonGrayNextPrest.png");
-	/* Import the images for the BACK button */
-	ImageIcon BACK_BUTTON_ENABLED_IMAGE_ICON = new ImageIcon("image/ButtonBlueBack.png");
-	ImageIcon BACK_BUTTON_BLUE_PREST_IMAGE_ICON = new ImageIcon("image/ButtonBlueBackPrest.png");
-	
-	/* Used Colors */
-	public Color LIGHT_BLUE_COLOR = new Color(100,150,255); 
-	public Color RED_COLOR = new Color(255,0,0); 
-	public Color LIGHT_GREEN = new Color(150,255,80); 
-	public Color DARK_GREEN_COLOR = new Color(120,200,40);
-	public Color LIGHT_GRAY_COLOR = new Color(120,120,120);
 
-	/* Light blue border for the float input text field */
-	public Border LIGHT_BLUE_BORDER = BorderFactory.createLineBorder(LIGHT_BLUE_COLOR);
-	public Border GREEN_BORDER = BorderFactory.createLineBorder(LIGHT_GREEN);
-	
 	/* Dimensions */
 	public Dimension THIS_MINIMUM_DIMENSION = new Dimension(400, 100);
 
-	public Dimension STEP_CONTINER_DIMENSION_ON = new Dimension(50, 280);
-	public Dimension STEP_CONTINER_DIMENSION_OFF = new Dimension(50, 80);
+	public Dimension STEP_CONTINER_DIMENSION_ACTIVE = new Dimension(50, 280);
+	public Dimension STEP_CONTINER_DIMENSION_DONE = new Dimension(50, 80);
+	public Dimension STEP_CONTINER_DIMENSION_OFF = new Dimension(50, 40);
 	
-	public Dimension AREA_PANEL_DIMENSION_ON = new Dimension(322, 240);
+	public Dimension AREA_PANEL_DIMENSION_ACTIVE = new Dimension(322, 240);
+	public Dimension AREA_PANEL_DIMENSION_DONE = new Dimension(322, 40);
 	public Dimension AREA_PANEL_DIMENSION_OFF = new Dimension(322, 40);
 	
-	public Dimension HEADER_AND_PANEL_CONTINER_DIMENSION_ON = new Dimension(322, 280);
-	public Dimension HEADER_AND_PANEL_CONTINER_DIMENSION_OFF = new Dimension(322, 80);
+	public Dimension HEADER_AND_PANEL_CONTINER_DIMENSION_ACTIVE = new Dimension(322, 280);
+	public Dimension HEADER_AND_PANEL_CONTINER_DIMENSION_DONE = new Dimension(322, 80);
+	public Dimension HEADER_AND_PANEL_CONTINER_DIMENSION_OFF = new Dimension(322, 40);
 	
 	public Dimension HEADER_BUTTON_DIMENSION = new Dimension(355, 40);
-	public Dimension NEXT_BUTTON_DIMENSION = new Dimension(90, 50);
 	public Dimension STEP_LABEL_DIMENSION = new Dimension(50,40);
 	
 	public AreaSettingsSubPanel() {
@@ -112,27 +97,28 @@ public class AreaSettingsSubPanel extends JPanel {
 		this.setMinimumSize(THIS_MINIMUM_DIMENSION);
 
 		/* Sets creation values for the header button */
-		AreaSettingsSubPanel.headerButton.setEnabled(false);
-		AreaSettingsSubPanel.headerButton.setPreferredSize(HEADER_BUTTON_DIMENSION);
-		AreaSettingsSubPanel.headerButton.setToolTipText(PANEL_TOOL_TIP_TEXT);
-		AreaSettingsSubPanel.headerButton.setOpaque(false);
-		AreaSettingsSubPanel.headerButton.setContentAreaFilled(false);
-		AreaSettingsSubPanel.headerButton.setBorderPainted(false);
-		AreaSettingsSubPanel.headerButton.setIcon(HEADER_ENABLED_IMAGE_ICON);
-		AreaSettingsSubPanel.headerButton.setDisabledIcon(HEADER_DISABLED_GRAY_IMAGE_ICON);
-		AreaSettingsSubPanel.headerButton.setPressedIcon(HEADER_ENABLED_PREST_IMAGE_ICON);
-		AreaSettingsSubPanel.headerButton.setRolloverIcon(HEADER_ENABLED_ROLLOVER_IMAGE_ICON);
-		AreaSettingsSubPanel.headerButton.addActionListener(new ActionListener() {
+		headerButton.setEnabled(false);
+		headerButton.setPreferredSize(HEADER_BUTTON_DIMENSION);
+		headerButton.setToolTipText(PANEL_TOOL_TIP_TEXT);
+		headerButton.setOpaque(false);
+		headerButton.setContentAreaFilled(false);
+		headerButton.setBorderPainted(false);
+		headerButton.setIcon(HEADER_ENABLED_IMAGE_ICON);
+		headerButton.setDisabledIcon(HEADER_DISABLED_GRAY_IMAGE_ICON);
+		headerButton.setPressedIcon(HEADER_ENABLED_PREST_IMAGE_ICON);
+		headerButton.setRolloverIcon(HEADER_ENABLED_ROLLOVER_IMAGE_ICON);
+		headerButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
+				
 				DISPLAY_AREA_HELP_VIDEO = false;
 
 				/* Show the selected area */
-				Program.frame.GET_AREA_BOOLEAN = true;
+				MainFrame.GET_AREA_BOOLEAN = true;
+				
+				areaSelectionActive();
 			}
 		});
-		
 		/* Creates a Label for the step numbers. */
 		stepLabel.setPreferredSize(STEP_LABEL_DIMENSION);
 		stepLabel.setLayout(new BorderLayout());
@@ -141,93 +127,117 @@ public class AreaSettingsSubPanel extends JPanel {
 		   the south and north of the header and the settings panels */
 		stepContiner.setLayout(new BorderLayout());
 		stepContiner.add(stepLabel, BorderLayout.NORTH );
-		stepContiner.setPreferredSize(STEP_CONTINER_DIMENSION_ON);
+		stepContiner.setPreferredSize(STEP_CONTINER_DIMENSION_OFF);
 		this.add(stepContiner, BorderLayout.WEST);
 		
 		/* A panel for the Header and the sup settings panels. */
 		headerAndPanelContiner.setLayout(new BorderLayout());
 		headerAndPanelContiner.add(headerButton, BorderLayout.NORTH );
-		headerAndPanelContiner.setPreferredSize(HEADER_AND_PANEL_CONTINER_DIMENSION_ON);
+		headerAndPanelContiner.setPreferredSize(HEADER_AND_PANEL_CONTINER_DIMENSION_OFF);
 		
 		/* Panel for the frequency input */
 		areaPanel.setLayout(new BorderLayout());
-		areaPanel.setPreferredSize(AREA_PANEL_DIMENSION_ON);
+		areaPanel.setPreferredSize(AREA_PANEL_DIMENSION_OFF);
 		
+		/* Turns off area Label showing the selected area */
+		areaLabel.setVisible(false);
 		
 		/* Next JButton */
 		nextButton.setOpaque(false);
 		nextButton.setContentAreaFilled(false);
 		nextButton.setBorderPainted(false);
 		nextButton.setToolTipText(NEXT_BUTTON_TOOL_TIP_TEXT);
-		nextButton.setPreferredSize(NEXT_BUTTON_DIMENSION);
+		nextButton.setPreferredSize(Program.NEXT_BUTTON_DIMENSION);
 		nextButton.setEnabled(false);
-		nextButton.setIcon(NEXT_BUTTON_ENABLED_IMAGE_ICON);
-		nextButton.setDisabledIcon(NEXT_BUTTON_DISABLED_IMAGE_ICON);
-		nextButton.setPressedIcon(NEXT_BUTTON_BLUE_PREST_IMAGE_ICON);
-		nextButton.setDisabledSelectedIcon(NEXT_BUTTON_GRAY_PREST_IMAGE_ICON);
+		nextButton.setIcon(Program.NEXT_BUTTON_ENABLED_IMAGE_ICON);
+		nextButton.setDisabledIcon(Program.NEXT_BUTTON_DISABLED_IMAGE_ICON);
+		nextButton.setPressedIcon(Program.NEXT_BUTTON_BLUE_PREST_IMAGE_ICON);
+		nextButton.setDisabledSelectedIcon(Program.NEXT_BUTTON_GRAY_PREST_IMAGE_ICON);
 		nextButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				DISPLAY_AREA_HELP_VIDEO = false;
-
-				/* Don´t show the selected area */
-				Program.frame.GET_AREA_BOOLEAN = false;
-				Program.frame.glass.setVisible(false);
-				Program.frame.MOUSE_RELEASED_BOOLEAN = false;
+				
+				SettingsPanel.AREA_SELECTED = true;
+				
+				if((Program.frame.glass.cursorPressed.x < Program.frame.glass.cursorReleased.x) )
+	    		{
+	    			if((Program.frame.glass.cursorPressed.y < Program.frame.glass.cursorReleased.y))
+	    			{
+        				SettingsPanel.areaPanel.areaLabel.setText("<html><font color = rgb(120,200,40)>Area Selected:</font>" +
+								" Width: " + (int) (Program.frame.glass.cursorReleased.x - Program.frame.glass.cursorPressed.x) + 
+								" x Hight: " +(int) (Program.frame.glass.cursorReleased.y - Program.frame.glass.cursorPressed.y) + "</html>");
+        				
+        				SettingsPanel.AREA_SELECTED_START_X = Program.frame.glass.cursorPressed.x;
+        				SettingsPanel.AREA_SELECTED_END_X = Program.frame.glass.cursorReleased.x;
+        				SettingsPanel.AREA_SELECTED_START_Y = Program.frame.glass.cursorPressed.y;
+        				SettingsPanel.AREA_SELECTED_END_Y = Program.frame.glass.cursorReleased.y;
+        				SettingsPanel.AREA_SELECTED_CAMERA_DIMENSION = Program.cameraPanel.CAMERA_VIEW_BOUNDERYS_DIMENSION;
+	    			}
+	    			else
+    				{
+	    				SettingsPanel.areaPanel.areaLabel.setText("<html><font color = rgb(120,200,40)>Area Selected:</font>" +
+								" Width: " + (int) (Program.frame.glass.cursorReleased.x - Program.frame.glass.cursorPressed.x) + 
+								" x Hight: " +(int) (Program.frame.glass.cursorPressed.y - Program.frame.glass.cursorReleased.y) + "</font></html>");	
+	    				/* Saves area settings */
+        				SettingsPanel.AREA_SELECTED_START_X = Program.frame.glass.cursorPressed.x;
+        				SettingsPanel.AREA_SELECTED_END_X = Program.frame.glass.cursorReleased.x;
+        				SettingsPanel.AREA_SELECTED_START_Y = Program.frame.glass.cursorReleased.y;
+        				SettingsPanel.AREA_SELECTED_END_Y = Program.frame.glass.cursorPressed.y;
+    				}
+	    		}
+				else
+    			{
+					if((Program.frame.glass.cursorPressed.y < Program.frame.glass.cursorReleased.y))
+	    			{
+	    				SettingsPanel.areaPanel.areaLabel.setText("<html><font color = rgb(120,200,40)>Area Selected:</font>" +
+								" Width: " + (int) (Program.frame.glass.cursorPressed.x - Program.frame.glass.cursorReleased.x) + 
+								" x Hight: " +(int) (Program.frame.glass.cursorReleased.y - Program.frame.glass.cursorPressed.y) + "</font></html>");	
+	    				/* Saves area settings */
+        				SettingsPanel.AREA_SELECTED_START_X = Program.frame.glass.cursorReleased.x;
+        				SettingsPanel.AREA_SELECTED_END_X = Program.frame.glass.cursorPressed.x;
+        				SettingsPanel.AREA_SELECTED_START_Y = Program.frame.glass.cursorPressed.y;
+        				SettingsPanel.AREA_SELECTED_END_Y = Program.frame.glass.cursorReleased.y;
+	    			}
+					else
+	    			{
+	    				SettingsPanel.areaPanel.areaLabel.setText("<html><font color = rgb(120,200,40)>Area Selected:</font>" +
+								" Width: " + (int) (Program.frame.glass.cursorPressed.x - Program.frame.glass.cursorReleased.x) + 
+								" x Hight: " +(int) (Program.frame.glass.cursorPressed.y - Program.frame.glass.cursorReleased.y) + "</font></html>");
+	    				/* Saves area settings */
+        				SettingsPanel.AREA_SELECTED_START_X = Program.frame.glass.cursorReleased.x;
+        				SettingsPanel.AREA_SELECTED_END_X = Program.frame.glass.cursorPressed.x;
+        				SettingsPanel.AREA_SELECTED_START_Y = Program.frame.glass.cursorReleased.y;
+        				SettingsPanel.AREA_SELECTED_END_Y = Program.frame.glass.cursorPressed.y;
+	    			}
+    			}
+				SettingsPanel.AREA_SELECTED_CAMERA_DIMENSION = Program.cameraPanel.CAMERA_VIEW_BOUNDERYS_DIMENSION;
+				
+				areaSelectionNotActive();
 			}
 		});
-		
+
+		/* Back on step JButton */
 		backButton.setEnabled(true);
-		backButton.setIcon(BACK_BUTTON_ENABLED_IMAGE_ICON);
-		backButton.setPressedIcon(BACK_BUTTON_BLUE_PREST_IMAGE_ICON);
+		backButton.setIcon(Program.BACK_BUTTON_ENABLED_IMAGE_ICON);
+		backButton.setPressedIcon(Program.BACK_BUTTON_BLUE_PREST_IMAGE_ICON);
 		backButton.setOpaque(false);
 		backButton.setContentAreaFilled(false);
 		backButton.setBorderPainted(false);
 		backButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				/* Sets header back to blue */
-				SettingsPanel.frequencyPanel.headerButton.setToolTipText(SettingsPanel.frequencyPanel.PANEL_INFORMATION);
-				SettingsPanel.frequencyPanel.headerButton.setEnabled(false);
-				
-	    		/* Turns on */ 
-	    		SettingsPanel.frequencyPanel.frequencyPanel.setBorder(SettingsPanel.frequencyPanel.LIGHT_BLUE_BORDER);
-	    		SettingsPanel.frequencyPanel.floatInputTextField.setVisible(true);
-				SettingsPanel.frequencyPanel.textNote.setVisible(true);
-				SettingsPanel.frequencyPanel.textMoreThen.setVisible(true);
-				SettingsPanel.frequencyPanel.textLessThen.setVisible(true);
-				FrequensySettingsSubPanel.nextButton.setVisible(true);
-				SettingsPanel.frequencyPanel.stepLabel.setText(SettingsPanel.frequencyPanel.STEP_TEXT_LIGHT_BLUE);
-				SettingsPanel.frequencyPanel.frequencyPanel.setPreferredSize(SettingsPanel.frequencyPanel.FREQUENCY_PANEL_DIMENSION_ON);
-				SettingsPanel.frequencyPanel.headerAndPanelContiner.setPreferredSize(SettingsPanel.frequencyPanel.HEADER_AND_PANEL_CONTINER_DIMENSION_ON);
-				SettingsPanel.frequencyPanel.stepContiner.setPreferredSize(SettingsPanel.frequencyPanel.STEP_CONTINER_DIMENSION_ON);
-				
-				/* Turns off */
-				SettingsPanel.frequencyPanel.frequencyLabel.setVisible(false);
-				FrequensySettingsSubPanel.FREQUENCY_SELECTED = false;
-				
-				/* Removing next step */
-				headerAndPanelContiner.remove(SettingsPanel.areaPanel.areaPanel);
-				headerButton.setDisabledIcon(SettingsPanel.areaPanel.HEADER_DISABLED_GRAY_IMAGE_ICON);
-				stepLabel.setText(SettingsPanel.areaPanel.STEP_TEXT_GRAY);
-				
-				DISPLAY_AREA_HELP_VIDEO = false;
-
-				/* Don´t show the selected area */
-				Program.frame.GET_AREA_BOOLEAN = false;
-				Program.frame.glass.setVisible(false);
-				Program.settingsPanel.areaPanel.nextButton.setEnabled(false);
+				areaSelectionNotActive();
+				SettingsPanel.frequencyPanel.frequencyPanelActive();
 			}
 		});
 
 		/* Setting containers Layouts for the right GUI look. */
 		continer1.setLayout(new BorderLayout());
-		/* Containers for GUI look */
 		continer1.add(backButton, BorderLayout.WEST);
 		continer1.add(nextButton, BorderLayout.EAST);
 		continer1.add(areaNotSelectedLabel, BorderLayout.CENTER);
 		
-		threadDisplayVideo = new Thread("threadDisplay"){
+		threadDisplayAreaSelectionVideo = new Thread("threadDisplay"){
         	public void run(){
 	            while (true) {
             		IplImage grabbedImage = null;
@@ -305,16 +315,107 @@ public class AreaSettingsSubPanel extends JPanel {
 	            }
         	}
         };
-        threadDisplayVideo.setDaemon(true);
-        threadDisplayVideo.start();
+        threadDisplayAreaSelectionVideo.setDaemon(true);
+        threadDisplayAreaSelectionVideo.start();
 		
 		/* Sets container backgrounds to white instead of gray for contrast */
+		colorCameraPanel.setBackground(Color.WHITE);
 		continer1.setBackground(Color.WHITE);
 		areaPanel.setBackground(Color.WHITE);
-		areaPanel.setBorder(LIGHT_BLUE_BORDER);
 		areaPanel.add(continer1, BorderLayout.SOUTH);
 		areaPanel.add(colorCameraPanel, BorderLayout.CENTER);
+		headerAndPanelContiner.add(areaPanel, BorderLayout.SOUTH);
+		areaPanel.setVisible(false);
 		
 		this.add(headerAndPanelContiner);
+	}
+	
+	public void areaSelectionActive(){
+		/* Shows the help video when made active */
+		DISPLAY_AREA_HELP_VIDEO = true;
+		
+		if(Program.frame.glass.cursorReleased.x > 0 && Program.frame.glass.cursorReleased.y > 0)
+		{
+			nextButton.setEnabled(true);
+			Program.frame.MOUSE_RELEASED_BOOLEAN = true;
+		}
+		headerButton.setEnabled(false);
+		
+		headerButton.setDisabledIcon(SettingsPanel.areaPanel.HEADER_DISABLED_BLUE_IMAGE_ICON);
+		
+		nextButton.setVisible(true);
+		backButton.setVisible(true);
+		areaNotSelectedLabel.setVisible(true);
+		colorCameraPanel.setVisible(true);
+		
+		/* Changing size of panels when button has been pressed*/	
+		areaPanel.setPreferredSize(AREA_PANEL_DIMENSION_ACTIVE);
+
+		/* Changing size of panels when button has been pressed*/	
+		areaPanel.setPreferredSize(AREA_PANEL_DIMENSION_ACTIVE);
+		headerAndPanelContiner.setPreferredSize(HEADER_AND_PANEL_CONTINER_DIMENSION_ACTIVE);
+		stepContiner.setPreferredSize(STEP_CONTINER_DIMENSION_ACTIVE);
+		
+		areaPanel.setVisible(true);
+		
+		headerAndPanelContiner.setPreferredSize(HEADER_AND_PANEL_CONTINER_DIMENSION_ACTIVE);
+		stepContiner.setPreferredSize(STEP_CONTINER_DIMENSION_ACTIVE);
+		
+		stepLabel.setText(SettingsPanel.areaPanel.STEP_TEXT_LIGHT_BLUE);
+		areaLabel.setVisible(false);
+		areaPanel.setBorder(Program.LIGHT_BLUE_BORDER);
+		
+		Program.frame.glass.setVisible(true);
+		
+		areaPanel.add(areaLabel, BorderLayout.EAST);
+	}
+	public void areaSelectionNotActive(){
+
+		/* Sets header button to enabled and green with a new tool tip */
+		headerButton.setToolTipText(HEADER_BUTTON_TOOL_TIP_TEXT);
+		
+		/* No video enabled */
+		DISPLAY_AREA_HELP_VIDEO = false;
+		
+		/* Sets video and buttons not visible */
+		nextButton.setVisible(false);
+		backButton.setVisible(false);
+		areaNotSelectedLabel.setVisible(false);
+		colorCameraPanel.setVisible(false);
+
+
+		/* Don´t show the selected area */
+		MainFrame.GET_AREA_BOOLEAN = false;
+		Program.frame.glass.setVisible(false);
+		
+		if (SettingsPanel.AREA_SELECTED)
+		{
+			/* Sets step label green when button has been pressed */
+			stepLabel.setText(STEP_TEXT_DARK_GREEN);
+			
+			/* AreaPanel and header Green */
+			areaPanel.setBorder(Program.GREEN_BORDER);
+			areaPanel.setVisible(true);
+			headerButton.setEnabled(true);
+			
+			/* Changing size of panels when button has been pressed*/	
+			areaPanel.setPreferredSize(AREA_PANEL_DIMENSION_DONE);
+			headerAndPanelContiner.setPreferredSize(HEADER_AND_PANEL_CONTINER_DIMENSION_DONE);
+			stepContiner.setPreferredSize(STEP_CONTINER_DIMENSION_DONE);
+			
+			areaLabel.setVisible(true);
+		}
+		else
+		{
+			/* Changing size of panels when button has been pressed*/	
+			areaPanel.setPreferredSize(AREA_PANEL_DIMENSION_OFF);
+			headerAndPanelContiner.setPreferredSize(HEADER_AND_PANEL_CONTINER_DIMENSION_OFF);
+			stepContiner.setPreferredSize(STEP_CONTINER_DIMENSION_OFF);
+			
+			areaPanel.setVisible(false);
+			/* Sets Header button gray */
+			headerButton.setDisabledIcon(SettingsPanel.areaPanel.HEADER_DISABLED_GRAY_IMAGE_ICON);
+			headerButton.setEnabled(false);
+		}
 	}
 }

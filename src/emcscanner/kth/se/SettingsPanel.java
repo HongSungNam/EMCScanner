@@ -17,19 +17,20 @@ import javax.swing.JPanel;
 public class SettingsPanel extends JPanel{
 	/* User selected values */
 	public static float FREQUENCY;
+	public static boolean AREA_SELECTED = false;
 	public static float AREA_SELECTED_START_X;
 	public static float AREA_SELECTED_START_Y;
-	public static float AREA_SELECTED_WIDTH;
-	public static float AREA_SELECTED_HIGHT;
+	public static float AREA_SELECTED_END_X;
+	public static float AREA_SELECTED_END_Y;
 	public static Dimension AREA_SELECTED_CAMERA_DIMENSION;
-	
-
 	
 	/* Global values used by the program */
 	public static FrequensySettingsSubPanel frequencyPanel;
 	public static AreaSettingsSubPanel areaPanel;
-	//public static SettingsSubPanel scanDensityPanel;
+	public static DensitySettingsSubPanel densityPanel;
 	//public static SettingsSubPanel fileNamePanel;
+	
+	public JButton backButton = new JButton();
 	
 	/**
 	 * SettingsPanel
@@ -47,22 +48,19 @@ public class SettingsPanel extends JPanel{
 		/* Creates the different sub panels for the settingsPanel */
 		frequencyPanel = new FrequensySettingsSubPanel();
 		areaPanel = new AreaSettingsSubPanel();
-		//scanDensityPanel = new SettingsSubPanel("Step 3/4", "This is where you select the density between eatch scanned point.", 3);
+		densityPanel = new DensitySettingsSubPanel();
 		//fileNamePanel = new SettingsSubPanel("Step 4/4", "This is where you select the file name that you want to have.", 4);
 		settingsContiner.add(frequencyPanel);
 		settingsContiner.add(areaPanel);
-		//settingsContiner.add(scanDensityPanel);
+		settingsContiner.add(densityPanel);
 		//settingsContiner.add(fileNamePanel);
 		
-		/* Import the images for the back button */
-		ImageIcon BACK_BUTTON_ENABLED_IMAGE_ICON = new ImageIcon("image/ButtonBlueBack.png");
-		ImageIcon BACK_BUTTON_BLUE_PREST_IMAGE_ICON = new ImageIcon("image/ButtonBlueBackPrest.png");
+		
 		
 		/* Button made for going back to previous views */
-		final JButton backButton = new JButton();
 		backButton.setEnabled(true);
-		backButton.setIcon(BACK_BUTTON_ENABLED_IMAGE_ICON);
-		backButton.setPressedIcon(BACK_BUTTON_BLUE_PREST_IMAGE_ICON);
+		backButton.setIcon(Program.BACK_BUTTON_ENABLED_IMAGE_ICON);
+		backButton.setPressedIcon(Program.BACK_BUTTON_BLUE_PREST_IMAGE_ICON);
 		backButton.setOpaque(false);
 		backButton.setContentAreaFilled(false);
 		backButton.setBorderPainted(false);
@@ -74,7 +72,7 @@ public class SettingsPanel extends JPanel{
 			}
 		});
 		
-		/* continer made for setting backButton in the corner to the bottom */
+		/* Container made for setting backButton in the corner to the bottom */
 		JPanel continer  = 	new JPanel();
 		continer.setLayout(new BorderLayout());
 		continer.add(backButton, BorderLayout.WEST);

@@ -127,11 +127,11 @@ public class CameraPanel extends JPanel{
 			}
 			@Override 
 			public void mousePressed(MouseEvent arg0) {
-				if (Program.frame.GET_AREA_BOOLEAN)
+				if (MainFrame.GET_AREA_BOOLEAN)
 				{
 		        	if(arg0.getX() <= Program.cameraPanel.CAMERA_VIEW_BOUNDERYS_DIMENSION.getWidth())
 		        	{
-		        		if(arg0.getY() >= MainFrame.menuBar.getHeight() && arg0.getY() <= Program.cameraPanel.CAMERA_VIEW_BOUNDERYS_DIMENSION.getHeight() + MainFrame.menuBar.getHeight())
+		        		if(arg0.getY() >= 0 && arg0.getY() <= Program.cameraPanel.CAMERA_VIEW_BOUNDERYS_DIMENSION.getHeight())
 		        		{
 		        			Program.frame.glass.setVisible(true);
 		        			Program.frame.glass.cursorPressed = new Point(arg0.getPoint());
@@ -144,59 +144,92 @@ public class CameraPanel extends JPanel{
 			}
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
-				if (Program.frame.GET_AREA_BOOLEAN)
+				if (MainFrame.GET_AREA_BOOLEAN)
 				{
 		        	if(Program.frame.MOUSE_RELEASED_BOOLEAN == false)
 		        	{
 						if(arg0.getX() <= Program.cameraPanel.CAMERA_VIEW_BOUNDERYS_DIMENSION.getWidth())
 			        	{
-			        		if(arg0.getY() >= MainFrame.menuBar.getHeight() && arg0.getY() <= Program.cameraPanel.CAMERA_VIEW_BOUNDERYS_DIMENSION.getHeight() + MainFrame.menuBar.getHeight())
+			        		if(arg0.getY() >= 0 && arg0.getY() <= Program.cameraPanel.CAMERA_VIEW_BOUNDERYS_DIMENSION.getHeight() + MainFrame.menuBar.getHeight())
 			        		{
 			        			Program.frame.MOUSE_RELEASED_BOOLEAN = true;
 			        			Program.frame.glass.cursorReleased = new Point(arg0.getPoint());
 			        			Program.frame.glass.repaint();
 			        		}
-			        		else if(arg0.getY() <= MainFrame.menuBar.getHeight())
+			        		else if(arg0.getY() <= 0)
 			        		{
 			        			Program.frame.MOUSE_RELEASED_BOOLEAN = true;
 			        			Program.frame.glass.cursorReleased.x = arg0.getX();
-			        			Program.frame.glass.cursorReleased.y = (int) MainFrame.menuBar.getHeight();
+			        			Program.frame.glass.cursorReleased.y = 0;
 			        			Program.frame.glass.repaint();
 			        		}
 			        		else
 			        		{
 			        			Program.frame.MOUSE_RELEASED_BOOLEAN = true;
 			        			Program.frame.glass.cursorReleased.x = arg0.getX();
-			        			Program.frame.glass.cursorReleased.y = (int) Program.cameraPanel.CAMERA_VIEW_BOUNDERYS_DIMENSION.getHeight() + MainFrame.menuBar.getHeight();
+			        			Program.frame.glass.cursorReleased.y = (int) Program.cameraPanel.CAMERA_VIEW_BOUNDERYS_DIMENSION.getHeight();
 			        			Program.frame.glass.repaint();
 			        		}
 			        	}
 			        	else
 			        	{
-			        		if(arg0.getY() >= MainFrame.menuBar.getHeight() && arg0.getY() <= Program.cameraPanel.CAMERA_VIEW_BOUNDERYS_DIMENSION.getHeight() + MainFrame.menuBar.getHeight())
+			        		if(arg0.getY() >= 0 && arg0.getY() <= Program.cameraPanel.CAMERA_VIEW_BOUNDERYS_DIMENSION.getHeight())
 			        		{
 			        			Program.frame.MOUSE_RELEASED_BOOLEAN = true;
 			        			Program.frame.glass.cursorReleased.x = (int) Program.cameraPanel.CAMERA_VIEW_BOUNDERYS_DIMENSION.getWidth(); 
 			        			Program.frame.glass.cursorReleased.y = arg0.getY();
 			        			Program.frame.glass.repaint();
 			        		}
-			        		else if(arg0.getY() <= MainFrame.menuBar.getHeight())
+			        		else if(arg0.getY() <= 0)
 			        		{
 			        			Program.frame.MOUSE_RELEASED_BOOLEAN = true;
 			        			Program.frame.glass.cursorReleased.x = (int) Program.cameraPanel.CAMERA_VIEW_BOUNDERYS_DIMENSION.getWidth();
-			        			Program.frame.glass.cursorReleased.y = (int) MainFrame.menuBar.getHeight();
+			        			Program.frame.glass.cursorReleased.y = 0;
 			        			Program.frame.glass.repaint();
 			        		}
 			        		else
 			        		{
 			        			Program.frame.MOUSE_RELEASED_BOOLEAN = true;
 			        			Program.frame.glass.cursorReleased.x = (int) Program.cameraPanel.CAMERA_VIEW_BOUNDERYS_DIMENSION.getWidth();
-			        			Program.frame.glass.cursorReleased.y = (int) Program.cameraPanel.CAMERA_VIEW_BOUNDERYS_DIMENSION.getHeight()+ MainFrame.menuBar.getHeight();
+			        			Program.frame.glass.cursorReleased.y = (int) Program.cameraPanel.CAMERA_VIEW_BOUNDERYS_DIMENSION.getHeight();
 			        			Program.frame.glass.repaint();
 			        		}
 			        	}
 
-        				Program.settingsPanel.areaPanel.nextButton.setEnabled(true);
+        				AreaSettingsSubPanel.nextButton.setEnabled(true);
+        				if (Program.frame.glass.cursorPressed != null) 
+        		        {
+	        				if((Program.frame.glass.cursorPressed.x < Program.frame.glass.cursorReleased.x) )
+	        	    		{
+	        	    			if((Program.frame.glass.cursorPressed.y < Program.frame.glass.cursorReleased.y))
+	        	    			{
+			        				SettingsPanel.areaPanel.areaNotSelectedLabel.setText("<html><font color = rgb(100,150,255)>Area Selected:<br/>" +
+											" Width: " + (int) (Program.frame.glass.cursorReleased.x - Program.frame.glass.cursorPressed.x) + 
+											"<br/> Hight: " +(int) (Program.frame.glass.cursorReleased.y - Program.frame.glass.cursorPressed.y) + "</font></html>");	
+	        	    			}
+	        	    			else
+	            				{
+	        	    				SettingsPanel.areaPanel.areaNotSelectedLabel.setText("<html><font color = rgb(100,150,255)>Area Selected:<br/>" +
+											" Width: " + (int) (Program.frame.glass.cursorReleased.x - Program.frame.glass.cursorPressed.x) + 
+											"<br/> Hight: " +(int) (Program.frame.glass.cursorPressed.y - Program.frame.glass.cursorReleased.y) + "</font></html>");	
+	            				}
+	        	    		}
+	        				else
+	            			{
+	        					if((Program.frame.glass.cursorPressed.y < Program.frame.glass.cursorReleased.y))
+	        	    			{
+	        	    				SettingsPanel.areaPanel.areaNotSelectedLabel.setText("<html><font color = rgb(100,150,255)>Area Selected:<br/>" +
+											" Width: " + (int) (Program.frame.glass.cursorPressed.x - Program.frame.glass.cursorReleased.x) + 
+											"<br/> Hight: " +(int) (Program.frame.glass.cursorReleased.y - Program.frame.glass.cursorPressed.y) + "</font></html>");	
+	        	    			}
+	        					else
+	        	    			{
+	        	    				SettingsPanel.areaPanel.areaNotSelectedLabel.setText("<html><font color = rgb(100,150,255)>Area Selected:<br/>" +
+											" Width: " + (int) (Program.frame.glass.cursorPressed.x - Program.frame.glass.cursorReleased.x) + 
+											"<br/> Hight: " +(int) (Program.frame.glass.cursorPressed.y - Program.frame.glass.cursorReleased.y) + "</font></html>");	
+	        	    			}
+	            			}
+        		        }	
 		        	}
 				}
 			}
@@ -205,48 +238,48 @@ public class CameraPanel extends JPanel{
 			public void mouseMoved(MouseEvent evt) {
 			}
 			public void mouseDragged(MouseEvent arg0){
-				if (Program.frame.GET_AREA_BOOLEAN)
+				if (MainFrame.GET_AREA_BOOLEAN)
 				{
 					if (Program.frame.MOUSE_RELEASED_BOOLEAN == false)
 					{
 						if(arg0.getX() <= Program.cameraPanel.CAMERA_VIEW_BOUNDERYS_DIMENSION.getWidth())
 			        	{
-			        		if(arg0.getY() >= MainFrame.menuBar.getHeight() && arg0.getY() <= Program.cameraPanel.CAMERA_VIEW_BOUNDERYS_DIMENSION.getHeight() + MainFrame.menuBar.getHeight())
+			        		if(arg0.getY() >= 0 && arg0.getY() <= Program.cameraPanel.CAMERA_VIEW_BOUNDERYS_DIMENSION.getHeight())
 			        		{
 			        			Program.frame.glass.cursorReleased = new Point(arg0.getPoint());
 			        			Program.frame.glass.repaint();
 			        		}
-			        		else if(arg0.getY() <= MainFrame.menuBar.getHeight())
+			        		else if(arg0.getY() <= 0)
 			        		{
 			        			Program.frame.glass.cursorReleased.x = arg0.getX();
-			        			Program.frame.glass.cursorReleased.y = (int) MainFrame.menuBar.getHeight();
+			        			Program.frame.glass.cursorReleased.y = 0;
 			        			Program.frame.glass.repaint();
 			        		}
 			        		else
 			        		{
 			        			Program.frame.glass.cursorReleased.x = arg0.getX();
-			        			Program.frame.glass.cursorReleased.y = (int) Program.cameraPanel.CAMERA_VIEW_BOUNDERYS_DIMENSION.getHeight() + MainFrame.menuBar.getHeight();
+			        			Program.frame.glass.cursorReleased.y = (int) Program.cameraPanel.CAMERA_VIEW_BOUNDERYS_DIMENSION.getHeight();
 			        			Program.frame.glass.repaint();
 			        		}
 			        	}
 			        	else
 			        	{
-			        		if(arg0.getY() >= MainFrame.menuBar.getHeight() && arg0.getY() <= Program.cameraPanel.CAMERA_VIEW_BOUNDERYS_DIMENSION.getHeight() + MainFrame.menuBar.getHeight())
+			        		if(arg0.getY() >= 0 && arg0.getY() <= Program.cameraPanel.CAMERA_VIEW_BOUNDERYS_DIMENSION.getHeight())
 			        		{
 			        			Program.frame.glass.cursorReleased.x = (int) Program.cameraPanel.CAMERA_VIEW_BOUNDERYS_DIMENSION.getWidth(); 
 			        			Program.frame.glass.cursorReleased.y = arg0.getY();
 			        			Program.frame.glass.repaint();
 			        		}
-			        		else if(arg0.getY() <= MainFrame.menuBar.getHeight())
+			        		else if(arg0.getY() <= 0)
 			        		{
 			        			Program.frame.glass.cursorReleased.x = (int) Program.cameraPanel.CAMERA_VIEW_BOUNDERYS_DIMENSION.getWidth();
-			        			Program.frame.glass.cursorReleased.y = (int) MainFrame.menuBar.getHeight();
+			        			Program.frame.glass.cursorReleased.y = 0;
 			        			Program.frame.glass.repaint();
 			        		}
 			        		else
 			        		{
 			        			Program.frame.glass.cursorReleased.x = (int) Program.cameraPanel.CAMERA_VIEW_BOUNDERYS_DIMENSION.getWidth();
-			        			Program.frame.glass.cursorReleased.y = (int) Program.cameraPanel.CAMERA_VIEW_BOUNDERYS_DIMENSION.getHeight()+ MainFrame.menuBar.getHeight();
+			        			Program.frame.glass.cursorReleased.y = (int) Program.cameraPanel.CAMERA_VIEW_BOUNDERYS_DIMENSION.getHeight();
 			        			Program.frame.glass.repaint();
 			        		}
 			        	}
