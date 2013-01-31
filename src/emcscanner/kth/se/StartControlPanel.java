@@ -39,8 +39,10 @@ public class StartControlPanel extends JPanel {
 		nextButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				Program.cameraPanel.DISPLAY_WEB_CAMERA_INPUT = true;
 				MainPanel.setStages(Program.cameraPanel, Program.settingsPanel);
-				if (FrequensySettingsSubPanel.FREQUENCY_SELECTED)
+				
+				if (SettingsPanel.FREQUENCY_SELECTED)
 					AreaSettingsSubPanel.DISPLAY_AREA_HELP_VIDEO = true;
 			}
 		});

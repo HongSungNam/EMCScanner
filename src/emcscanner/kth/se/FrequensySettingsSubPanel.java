@@ -27,7 +27,8 @@ import com.googlecode.javacv.FrameGrabber.Exception;
 public class FrequensySettingsSubPanel extends JPanel{
 
 	/* Boolean */
-	public static boolean FREQUENCY_SELECTED = false;
+	public static boolean WRONG_FLOAT_INPUT = false;
+	public static boolean NEXT_BUTTON_ENABLED = false;
 	
 	/* Panels- Containers for setting up GUI */
 	public JPanel stepContiner = new JPanel();
@@ -77,13 +78,13 @@ public class FrequensySettingsSubPanel extends JPanel{
 	/* Dimensions */
 	public Dimension THIS_MINIMUM_DIMENSION = new Dimension(400, 100);
 	
-	public Dimension STEP_CONTINER_DIMENSION_ON = new Dimension(50, 180);
+	public Dimension STEP_CONTINER_DIMENSION_ACTIVE = new Dimension(50, 180);
 	public Dimension STEP_CONTINER_DIMENSION_OFF = new Dimension(50, 80);
 	
-	public Dimension FREQUENCY_PANEL_DIMENSION_ON = new Dimension(322, 140);
+	public Dimension FREQUENCY_PANEL_DIMENSION_ACTIVE = new Dimension(322, 140);
 	public Dimension FREQUENCY_PANEL_DIMENSION_OFF = new Dimension(322, 40);
 	
-	public Dimension HEADER_AND_PANEL_CONTINER_DIMENSION_ON = new Dimension(322, 180);
+	public Dimension HEADER_AND_PANEL_CONTINER_DIMENSION_ACTIVE = new Dimension(322, 180);
 	public Dimension HEADER_AND_PANEL_CONTINER_DIMENSION_OFF = new Dimension(322, 80);
 	
 	public Dimension HEADER_BUTTON_DIMENSION = new Dimension(355, 40);
@@ -112,8 +113,11 @@ public class FrequensySettingsSubPanel extends JPanel{
 		this.headerButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				frequencyPanelActive();
+				SettingsPanel.frequencyPanel.frequencySelectionPanelActive();
 				SettingsPanel.areaPanel.areaSelectionNotActive();
+				SettingsPanel.densityPanel.densitySelectionNotActive();
+
+				MainPanel.setLeftStage(Program.cameraPanel);
 			}
 		});
 		
@@ -125,20 +129,20 @@ public class FrequensySettingsSubPanel extends JPanel{
 		   the south and north of the header and the settings panels */
 		stepContiner.setLayout(new BorderLayout());
 		stepContiner.add(stepLabel, BorderLayout.NORTH );
-		stepContiner.setPreferredSize(STEP_CONTINER_DIMENSION_ON);
+		stepContiner.setPreferredSize(STEP_CONTINER_DIMENSION_ACTIVE);
 		this.add(stepContiner, BorderLayout.WEST);
 		
 		/* A panel for the Header and the sup settings panels. */
 		headerAndPanelContiner.setLayout(new BorderLayout());
 		headerAndPanelContiner.add(headerButton, BorderLayout.NORTH );
-		headerAndPanelContiner.setPreferredSize(HEADER_AND_PANEL_CONTINER_DIMENSION_ON);
+		headerAndPanelContiner.setPreferredSize(HEADER_AND_PANEL_CONTINER_DIMENSION_ACTIVE);
 		
 		/* Constants for the FrequencyPanel */
 		int frequencyInputLimit = 6;
 		
 		/* Panel for the frequency input */
 		frequencyPanel.setLayout(new BorderLayout());
-		frequencyPanel.setPreferredSize(FREQUENCY_PANEL_DIMENSION_ON);
+		frequencyPanel.setPreferredSize(FREQUENCY_PANEL_DIMENSION_ACTIVE);
 		
 		/* Warning Label with text centered */
 		textNote.setHorizontalAlignment(SwingConstants.CENTER);
@@ -161,16 +165,12 @@ public class FrequensySettingsSubPanel extends JPanel{
 		nextButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				FREQUENCY_SELECTED = true;
-				frequencyPanelNotActive();
+				SettingsPanel.FREQUENCY_SELECTED = true;
 				
+				SettingsPanel.frequencyPanel.frequencyPanelNotActive();
 				/* Adding the next step */
 				SettingsPanel.areaPanel.areaSelectionActive();
-				
-				/* Glass Panel at the cameraPanel */
-				MainFrame.GET_AREA_BOOLEAN = true;
-				
-				SettingsPanel.areaPanel.areaSelectionActive();
+				SettingsPanel.frequencyPanel.frequencyPanelNotActive();
 			}
 		});
 		
@@ -189,12 +189,16 @@ public class FrequensySettingsSubPanel extends JPanel{
 		    	checkFloat();
 		    }
 		    public void checkFloat(){
-		    	try{
+		    	boolean AREA_HEADER_BUTTON_TEMP_DISABLED = false;
+	    		boolean DENSITY_HEADER_BUTTON_TEMP_DISABLED = false;
+		    	try
+		    	{
 		    		float value = Float.valueOf(floatInputTextField.getText());
-					if ((0.1 <= value) && (value <= 6000))
+		    		if ((0.1 <= value) && (value <= 6000))
 			    	{
 						/* Sets next button enabled values */
-			    		nextButton.setEnabled(true);
+			    		nextButton.setEnabled(NEXT_BUTTON_ENABLED = true);
+			    		SettingsPanel.FREQUENCY_SELECTED = true;
 			    		
 			    		/* Sets header button enabled values */
 			    		headerButton.setDisabledIcon(HEADER_DISABLED_IMAGE_ICON);
@@ -207,10 +211,25 @@ public class FrequensySettingsSubPanel extends JPanel{
 						/* Changes text back to normal wrong values have been entered before */
 						textMoreThen.setText(TEXT_MORE_THEN_NORMAL_TEXT);
 						textLessThen.setText(TEXT_LESS_THEN_NORMAL_TEXT);
+						
+						if(AREA_HEADER_BUTTON_TEMP_DISABLED)
+						{
+							SettingsPanel.areaPanel.HEADER_BUTTON_ENABLED = true;
+							SettingsPanel.areaPanel.headerButton.setEnabled(SettingsPanel.areaPanel.HEADER_BUTTON_ENABLED);
+							SettingsPanel.areaPanel.headerButton.setDisabledIcon(SettingsPanel.areaPanel.HEADER_ENABLED_IMAGE_ICON);
+						}
+						if(DENSITY_HEADER_BUTTON_TEMP_DISABLED)
+						{
+							SettingsPanel.densityPanel.HEADER_BUTTON_ENABLED = true;
+							SettingsPanel.densityPanel.headerButton.setEnabled(SettingsPanel.densityPanel.HEADER_BUTTON_ENABLED);
+							SettingsPanel.densityPanel.headerButton.setDisabledIcon(SettingsPanel.densityPanel.HEADER_ENABLED_IMAGE_ICON);
+						}
+						
 			    	}
-					else{
+					else
+					{
 						/* Sets next button disabled values have been entered */
-						nextButton.setEnabled(false);
+						nextButton.setEnabled(NEXT_BUTTON_ENABLED = false);
 						
 						/* Sets header button disabled values have been entered */
 						headerButton.setDisabledIcon(HEADER_DISABLED_RED_IMAGE_ICON);
@@ -229,10 +248,24 @@ public class FrequensySettingsSubPanel extends JPanel{
 				    	{
 							textLessThen.setText(TEXT_LESS_THEN_RED_TEXT);
 				    	}
+						
+						if(SettingsPanel.areaPanel.HEADER_BUTTON_ENABLED)
+						{
+							SettingsPanel.areaPanel.headerButton.setEnabled(false);
+							SettingsPanel.areaPanel.headerButton.setDisabledIcon(SettingsPanel.areaPanel.HEADER_DISABLED_DARK_GREEN_IMAGE_ICON);
+							AREA_HEADER_BUTTON_TEMP_DISABLED = true;
+						}
+						if(SettingsPanel.densityPanel.HEADER_BUTTON_ENABLED)
+						{
+							SettingsPanel.densityPanel.headerButton.setEnabled(false);
+							SettingsPanel.densityPanel.headerButton.setDisabledIcon(SettingsPanel.areaPanel.HEADER_DISABLED_DARK_GREEN_IMAGE_ICON);
+							DENSITY_HEADER_BUTTON_TEMP_DISABLED = true;
+						}
 					}
-		    	} catch (NumberFormatException e) {		    		
+		    	} 
+				catch (NumberFormatException e) {		    		
 		    		/* Sets next button disabled when wrong values have been entered */
-					nextButton.setEnabled(false);
+					nextButton.setEnabled(NEXT_BUTTON_ENABLED = false);
 					
 					/* Sets header button disabled values have been entered */
 					headerButton.setDisabledIcon(HEADER_DISABLED_RED_IMAGE_ICON);
@@ -241,6 +274,20 @@ public class FrequensySettingsSubPanel extends JPanel{
 					/* Set borders red when wrong values have been entered */
 					frequencyPanel.setBorder(Program.RED_BORDER);
 					floatInputTextField.setBorder(Program.RED_BORDER);
+					
+					if(SettingsPanel.areaPanel.HEADER_BUTTON_ENABLED)
+					{
+						SettingsPanel.areaPanel.headerButton.setEnabled(false);
+						SettingsPanel.areaPanel.headerButton.setDisabledIcon(SettingsPanel.areaPanel.HEADER_DISABLED_DARK_GREEN_IMAGE_ICON);
+						AREA_HEADER_BUTTON_TEMP_DISABLED = true;
+					}
+					if(SettingsPanel.densityPanel.HEADER_BUTTON_ENABLED)
+					{
+						SettingsPanel.densityPanel.headerButton.setEnabled(false);
+						SettingsPanel.densityPanel.headerButton.setDisabledIcon(SettingsPanel.areaPanel.HEADER_DISABLED_DARK_GREEN_IMAGE_ICON);
+						DENSITY_HEADER_BUTTON_TEMP_DISABLED = true;
+					}
+					
 		    	}
 		    }
 		});
@@ -289,41 +336,40 @@ public class FrequensySettingsSubPanel extends JPanel{
 		
 		this.add(headerAndPanelContiner);
 	}
-	public void frequencyPanelActive(){
+	
+	/**
+	 * 
+	 */
+	public void frequencySelectionPanelActive(){
 		/* Sets header back to blue */
 		headerButton.setToolTipText(PANEL_INFORMATION);
 		headerButton.setEnabled(false);
 		
 		/* Turns on */ 
-		frequencyPanel.setBorder(Program.LIGHT_BLUE_BORDER);
 		floatInputTextField.setVisible(true);
 		textNote.setVisible(true);
 		textMoreThen.setVisible(true);
 		textLessThen.setVisible(true);
 		nextButton.setVisible(true);
+		
+		/* New Active dimensions */
+		frequencyPanel.setPreferredSize(FREQUENCY_PANEL_DIMENSION_ACTIVE);
+		headerAndPanelContiner.setPreferredSize(HEADER_AND_PANEL_CONTINER_DIMENSION_ACTIVE);
+		stepContiner.setPreferredSize(STEP_CONTINER_DIMENSION_ACTIVE);
+		
+		/* Sets Active colors light blue to border and text */
 		stepLabel.setText(STEP_TEXT_LIGHT_BLUE);
-		frequencyPanel.setPreferredSize(FREQUENCY_PANEL_DIMENSION_ON);
-		headerAndPanelContiner.setPreferredSize(HEADER_AND_PANEL_CONTINER_DIMENSION_ON);
-		stepContiner.setPreferredSize(STEP_CONTINER_DIMENSION_ON);
+		frequencyPanel.setBorder(Program.LIGHT_BLUE_BORDER);
 		
 		/* Turns off */
 		frequencyLabel.setVisible(false);
-		FREQUENCY_SELECTED = false;
-		
-		/* Removing next step */
-		//SettingsPanel.areaPanel.headerAndPanelContiner.remove(SettingsPanel.areaPanel.areaPanel);
-		AreaSettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.areaPanel.HEADER_DISABLED_GRAY_IMAGE_ICON);
-		SettingsPanel.areaPanel.stepLabel.setText(SettingsPanel.areaPanel.STEP_TEXT_GRAY);
-		
-		AreaSettingsSubPanel.DISPLAY_AREA_HELP_VIDEO = false;
-
-		/* Don´t show the selected area */
-		MainFrame.GET_AREA_BOOLEAN = false;
-		Program.frame.glass.setVisible(false);
-		Program.frame.MOUSE_RELEASED_BOOLEAN = false;
-		AreaSettingsSubPanel.nextButton.setEnabled(false);
+		SettingsPanel.FREQUENCY_SELECTED = false;
 	}
-	public void frequencyPanelNotActive(){
+	
+	/**
+	 * 
+	 */
+	public void frequencyPanelNotActive(){		
 		/* Sets the frequency that have been selected to SettingsPanels global variables */
 		SettingsPanel.FREQUENCY = Float.valueOf(floatInputTextField.getText());
 		
@@ -331,6 +377,7 @@ public class FrequensySettingsSubPanel extends JPanel{
 		headerButton.setToolTipText(HEADER_BUTTON_TOOL_TIP_TEXT);
 		headerButton.setEnabled(true);
 		
+		/* Green Borders */
 		frequencyPanel.setBorder(Program.GREEN_BORDER);
 
 		/* Sets step button, text and text input not visible when when next button has been pressed */
@@ -351,7 +398,5 @@ public class FrequensySettingsSubPanel extends JPanel{
 		/* Label that shows the frequency that the user has selected */
 		frequencyLabel.setText("<html><font color = rgb(120,200,40)>Selected frequency: </font>" + SettingsPanel.FREQUENCY + " MHz</html>");
 		frequencyLabel.setVisible(true);
-		
-		SettingsPanel.areaPanel.areaSelectionActive();
 	}
 }

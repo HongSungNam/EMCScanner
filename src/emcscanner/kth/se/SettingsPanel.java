@@ -15,14 +15,18 @@ import javax.swing.JPanel;
  *
  */
 public class SettingsPanel extends JPanel{
-	/* User selected values */
+	/* User selected Frequency values */
+	public static boolean FREQUENCY_SELECTED = false;
 	public static float FREQUENCY;
+	/* User selected Area Values */
 	public static boolean AREA_SELECTED = false;
 	public static float AREA_SELECTED_START_X;
 	public static float AREA_SELECTED_START_Y;
 	public static float AREA_SELECTED_END_X;
 	public static float AREA_SELECTED_END_Y;
 	public static Dimension AREA_SELECTED_CAMERA_DIMENSION;
+	/* User selected Density values */
+	public static boolean DENSITY_SELECTED = false;
 	
 	/* Global values used by the program */
 	public static FrequensySettingsSubPanel frequencyPanel;

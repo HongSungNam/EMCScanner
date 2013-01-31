@@ -19,6 +19,7 @@ public class Program {
 	public static ImageScannedPanel imageScannedPanel;
 	public static StartControlPanel startControlPanel;
 	public static ManualPanel manualPanel;
+	public static ImagePanel imagePanel;
 	
 	/* Image Icon next button */
 	public static ImageIcon NEXT_BUTTON_ENABLED_IMAGE_ICON = new ImageIcon("image/ButtonBlueNext.png");
@@ -57,6 +58,7 @@ public class Program {
     	startControlPanel = new StartControlPanel();
     	manualPanel = new ManualPanel();
     	frame = new MainFrame();
+    	imagePanel = new ImagePanel();
     	
     	GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(frame);
 

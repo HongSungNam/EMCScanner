@@ -57,12 +57,21 @@ public class MainFrame extends JFrame {
 		quitMenuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				DensitySettingsSubPanel.DISPLAY_DENSITY_HELP_VIDEO = false;
+				DensitySettingsSubPanel.DISPLAY_DENSITY_VIDEO = false;
+				AreaSettingsSubPanel.DISPLAY_AREA_HELP_VIDEO = false;
+				
 				try {
-					CameraPanel.threadDisplayCamera.stop();
 					Program.cameraPanel.grabber.stop();
+					AreaSettingsSubPanel.grabber.stop();
+					AreaSettingsSubPanel.grabber2.stop();
+					DensitySettingsSubPanel.grabber3.stop();
+					DensitySettingsSubPanel.grabber4.stop();
 				} catch (Exception e1) {
+					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+				
 				System.exit(0);
 			}
 		});
@@ -109,7 +118,7 @@ public class MainFrame extends JFrame {
 		//Size the frame
 		this.pack();
 		
-		glass = new MyGlassPane(Program.frame, menuBar, Program.settingsPanel.frequencyPanel.headerButton, Program.settingsPanel.areaPanel.backButton);
+		glass = new MyGlassPane(Program.frame, menuBar, SettingsPanel.frequencyPanel.headerButton, AreaSettingsSubPanel.backButton);
 		this.setGlassPane(glass);
 		
 		

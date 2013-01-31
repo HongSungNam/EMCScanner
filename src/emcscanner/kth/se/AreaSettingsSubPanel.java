@@ -32,7 +32,10 @@ public class AreaSettingsSubPanel extends JPanel {
 	static Thread threadDisplayAreaSelectionVideo;
 	
 	/* Boolean */
+	public static boolean DISPLAY_AREA_VIDEO = false;
 	public static boolean DISPLAY_AREA_HELP_VIDEO = false;
+	public static boolean HEADER_BUTTON_ENABLED = false;
+	
 	
 	/* Panels- Containers for setting up GUI */
 	public JPanel stepContiner = new JPanel();
@@ -73,6 +76,7 @@ public class AreaSettingsSubPanel extends JPanel {
 	public ImageIcon HEADER_DISABLED_GRAY_IMAGE_ICON 	= new ImageIcon("image/PanelGrayArea.png");
 	public ImageIcon HEADER_ENABLED_PREST_IMAGE_ICON 	= new ImageIcon("image/PanelGreenAreaPrest.png");
 	public ImageIcon HEADER_DISABLED_BLUE_IMAGE_ICON 	= new ImageIcon("image/PanelBlueArea.png");
+	public ImageIcon HEADER_DISABLED_DARK_GREEN_IMAGE_ICON 	= new ImageIcon("image/PanelDarkGreenArea.png");
 
 	/* Dimensions */
 	public Dimension THIS_MINIMUM_DIMENSION = new Dimension(400, 100);
@@ -97,7 +101,7 @@ public class AreaSettingsSubPanel extends JPanel {
 		this.setMinimumSize(THIS_MINIMUM_DIMENSION);
 
 		/* Sets creation values for the header button */
-		headerButton.setEnabled(false);
+		headerButton.setEnabled(HEADER_BUTTON_ENABLED = false);
 		headerButton.setPreferredSize(HEADER_BUTTON_DIMENSION);
 		headerButton.setToolTipText(PANEL_TOOL_TIP_TEXT);
 		headerButton.setOpaque(false);
@@ -110,13 +114,16 @@ public class AreaSettingsSubPanel extends JPanel {
 		headerButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
-				DISPLAY_AREA_HELP_VIDEO = false;
-
-				/* Show the selected area */
-				MainFrame.GET_AREA_BOOLEAN = true;
-				
-				areaSelectionActive();
+				if (FrequensySettingsSubPanel.NEXT_BUTTON_ENABLED)
+				{
+					SettingsPanel.FREQUENCY_SELECTED = true;
+					
+					SettingsPanel.areaPanel.areaSelectionActive();
+					SettingsPanel.frequencyPanel.frequencyPanelNotActive();
+					SettingsPanel.densityPanel.densitySelectionNotActive();
+					
+					MainPanel.setLeftStage(Program.cameraPanel);
+				}
 			}
 		});
 		/* Creates a Label for the step numbers. */
@@ -156,9 +163,7 @@ public class AreaSettingsSubPanel extends JPanel {
 		nextButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
 				SettingsPanel.AREA_SELECTED = true;
-				
 				if((Program.frame.glass.cursorPressed.x < Program.frame.glass.cursorReleased.x) )
 	    		{
 	    			if((Program.frame.glass.cursorPressed.y < Program.frame.glass.cursorReleased.y))
@@ -212,7 +217,21 @@ public class AreaSettingsSubPanel extends JPanel {
     			}
 				SettingsPanel.AREA_SELECTED_CAMERA_DIMENSION = Program.cameraPanel.CAMERA_VIEW_BOUNDERYS_DIMENSION;
 				
-				areaSelectionNotActive();
+				SettingsPanel.areaPanel.areaSelectionNotActive();
+				SettingsPanel.densityPanel.densitySelectionActive();
+				SettingsPanel.frequencyPanel.frequencyPanelNotActive();
+				
+				MainPanel.setLeftStage(Program.imagePanel);
+				
+				CameraPanel.SAVE_IMAGE = true;
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				Program.imagePanel.setPhoto();
 			}
 		});
 
@@ -227,7 +246,8 @@ public class AreaSettingsSubPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				areaSelectionNotActive();
-				SettingsPanel.frequencyPanel.frequencyPanelActive();
+				SettingsPanel.frequencyPanel.frequencySelectionPanelActive();
+				SettingsPanel.densityPanel.densitySelectionNotActive();
 			}
 		});
 
@@ -240,78 +260,87 @@ public class AreaSettingsSubPanel extends JPanel {
 		threadDisplayAreaSelectionVideo = new Thread("threadDisplay"){
         	public void run(){
 	            while (true) {
-            		IplImage grabbedImage = null;
-	                try {
-	                	if ((grabber.getLengthInFrames()-100) >= grabber.getFrameNumber())
-	                	{
-	                		if (DISPLAY_AREA_HELP_VIDEO)
-	                		{
-		                		grabbedImage = grabber.grab();
-	                		}
-	                		else{
+	            	if (DISPLAY_AREA_VIDEO)
+	            	{
+	            		IplImage grabbedImage = null;
+		                try {
+		                	if ((grabber.getLengthInFrames()-100) >= grabber.getFrameNumber())
+		                	{
+		                		if (DISPLAY_AREA_HELP_VIDEO)
+			                		grabbedImage = grabber.grab();
+		                		else
+		                			Thread.sleep(100);
+		                	}
+		                	else if((grabber2.getLengthInFrames()-100) >= grabber2.getFrameNumber()) {
+		                		if (DISPLAY_AREA_HELP_VIDEO)
+			                		grabbedImage = grabber2.grab();
+		                		else
+		                			Thread.sleep(100);
+		                	}
+		                	else
+		                	{
 		                		grabber.restart();
 	                			grabber2.restart();
-	                		}
-	                	}
-	                	else if((grabber2.getLengthInFrames()-100) >= grabber2.getFrameNumber()) {
-	                		if (DISPLAY_AREA_HELP_VIDEO)
-	                		{
-		                		grabbedImage = grabber2.grab();
-	                		}
-	                		else{
-		                		grabber.restart();
-	                			grabber2.restart();
-	                		}
-	                	}
-	                	else
-	                	{
-	                		grabber.restart();
-                			grabber2.restart();
-		                	/* Grabbed the image from the video */
-		                	grabbedImage = grabber.grab(); 
-	                	}
-	                		
-					} catch (com.googlecode.javacv.FrameGrabber.Exception e) {
-						continue;
-					}
-	                if (grabbedImage != null) {
-	                	/* Turns the image so that it have a mirror effect */
-	                	int widthFrame = colorCameraPanel.getWidth();
-	                    int heightFrame = colorCameraPanel.getHeight();
-	                    int widthCameraImage = grabbedImage.width();
-	                    int heightCameraImage = grabbedImage.height();
-
-	                    /* Creating dimensions for the camera and the panel area 
-	                       Used later for deciding the new dimension that we will resize the image to */
-	                    Dimension imgSize = new Dimension(widthCameraImage, heightCameraImage);
-	                    Dimension boundary = new Dimension(widthFrame, heightFrame);
-	                    
-	                    /* Changing the scaling of the grabbed camera image */
-	                    Dimension newImagebunderys = CameraPanel.getScaledDimension(imgSize, boundary);
-	                    //System.out.println(newImagebunderys);
-	                    
-	                    BufferedImage bufferdWebcameraImage;
-	                    
-	                    if((widthFrame > 0) || (heightFrame > 0))
-	                    {
-	                    	
-	                    	bufferdWebcameraImage = grabbedImage.getBufferedImage();
-							int type = bufferdWebcameraImage.getType() == 0? BufferedImage.TYPE_INT_ARGB
-							        : bufferdWebcameraImage.getType();
-
-							BufferedImage resizeImaged = CameraPanel.resizeImage(bufferdWebcameraImage, type, newImagebunderys.width, newImagebunderys.height);
-
-							colorCameraPanel.theCamera = resizeImaged;
-	                    }
-	                    else
-	                    {
-	                    	bufferdWebcameraImage = grabbedImage.getBufferedImage();
-							colorCameraPanel.theCamera = bufferdWebcameraImage;
-	                    }
-	                    
-	                	/* Show image on window */
-	                    colorCameraPanel.repaint();
-	                }
+			                	/* Grabbed the image from the video */
+	                			if (DISPLAY_AREA_HELP_VIDEO)
+	                				grabbedImage = grabber.grab();
+	                			else
+	                				Thread.sleep(100);
+		                	}
+		                		
+						} catch (com.googlecode.javacv.FrameGrabber.Exception e) {
+							continue;
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+		                if (grabbedImage != null) {
+		                	/* Turns the image so that it have a mirror effect */
+		                	int widthFrame = colorCameraPanel.getWidth();
+		                    int heightFrame = colorCameraPanel.getHeight();
+		                    int widthCameraImage = grabbedImage.width();
+		                    int heightCameraImage = grabbedImage.height();
+	
+		                    /* Creating dimensions for the camera and the panel area 
+		                       Used later for deciding the new dimension that we will resize the image to */
+		                    Dimension imgSize = new Dimension(widthCameraImage, heightCameraImage);
+		                    Dimension boundary = new Dimension(widthFrame, heightFrame);
+		                    
+		                    /* Changing the scaling of the grabbed camera image */
+		                    Dimension newImagebunderys = CameraPanel.getScaledDimension(imgSize, boundary);
+		                    //System.out.println(newImagebunderys);
+		                    
+		                    BufferedImage bufferdWebcameraImage;
+		                    
+		                    if((widthFrame > 0) || (heightFrame > 0))
+		                    {
+		                    	
+		                    	bufferdWebcameraImage = grabbedImage.getBufferedImage();
+								int type = bufferdWebcameraImage.getType() == 0? BufferedImage.TYPE_INT_ARGB
+								        : bufferdWebcameraImage.getType();
+	
+								BufferedImage resizeImaged = CameraPanel.resizeImage(bufferdWebcameraImage, type, newImagebunderys.width, newImagebunderys.height);
+	
+								colorCameraPanel.theCamera = resizeImaged;
+		                    }
+		                    else
+		                    {
+		                    	bufferdWebcameraImage = grabbedImage.getBufferedImage();
+								colorCameraPanel.theCamera = bufferdWebcameraImage;
+		                    }
+		                    
+		                	/* Show image on window */
+		                    colorCameraPanel.repaint();
+		                }
+	            	}
+		            else
+	            	{
+	            		try {
+							Thread.sleep(1000);
+							} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+	            	}
 	            }
         	}
         };
@@ -329,64 +358,75 @@ public class AreaSettingsSubPanel extends JPanel {
 		
 		this.add(headerAndPanelContiner);
 	}
-	
+	/**
+	 * ACTIVE
+	 */
 	public void areaSelectionActive(){
+		/* Glass Panel visible and active */
+		DISPLAY_AREA_VIDEO = true;
+		MainFrame.GET_AREA_BOOLEAN = true;
+		Program.frame.glass.setVisible(true);
+		
 		/* Shows the help video when made active */
 		DISPLAY_AREA_HELP_VIDEO = true;
 		
+		/* Turns off header button */
+		headerButton.setEnabled(HEADER_BUTTON_ENABLED = false);
+		headerButton.setDisabledIcon(SettingsPanel.areaPanel.HEADER_DISABLED_BLUE_IMAGE_ICON);
+		
+		/* New tool tip */
+		headerButton.setToolTipText(HEADER_BUTTON_TOOL_TIP_TEXT);
+		
+		/* Turns ON next back Lable video */
+		nextButton.setVisible(true);
+		backButton.setVisible(true);
+		areaNotSelectedLabel.setVisible(true);
+		colorCameraPanel.setVisible(true);
+		areaPanel.setVisible(true);
+		areaPanel.add(areaLabel, BorderLayout.EAST);
+		
+		/* Turns OFF area Label */
+		areaLabel.setVisible(false);
+		
+		/* Changing size of panels when button has been pressed*/	
+		areaPanel.setPreferredSize(AREA_PANEL_DIMENSION_ACTIVE);
+		headerAndPanelContiner.setPreferredSize(HEADER_AND_PANEL_CONTINER_DIMENSION_ACTIVE);
+		stepContiner.setPreferredSize(STEP_CONTINER_DIMENSION_ACTIVE);
+		
+		/* Sets appropriate blue active colors */
+		stepLabel.setText(SettingsPanel.areaPanel.STEP_TEXT_LIGHT_BLUE);
+		areaPanel.setBorder(Program.LIGHT_BLUE_BORDER);
+		
+		/* If a area has been selected */
 		if(Program.frame.glass.cursorReleased.x > 0 && Program.frame.glass.cursorReleased.y > 0)
 		{
 			nextButton.setEnabled(true);
 			Program.frame.MOUSE_RELEASED_BOOLEAN = true;
 		}
-		headerButton.setEnabled(false);
-		
-		headerButton.setDisabledIcon(SettingsPanel.areaPanel.HEADER_DISABLED_BLUE_IMAGE_ICON);
-		
-		nextButton.setVisible(true);
-		backButton.setVisible(true);
-		areaNotSelectedLabel.setVisible(true);
-		colorCameraPanel.setVisible(true);
-		
-		/* Changing size of panels when button has been pressed*/	
-		areaPanel.setPreferredSize(AREA_PANEL_DIMENSION_ACTIVE);
-
-		/* Changing size of panels when button has been pressed*/	
-		areaPanel.setPreferredSize(AREA_PANEL_DIMENSION_ACTIVE);
-		headerAndPanelContiner.setPreferredSize(HEADER_AND_PANEL_CONTINER_DIMENSION_ACTIVE);
-		stepContiner.setPreferredSize(STEP_CONTINER_DIMENSION_ACTIVE);
-		
-		areaPanel.setVisible(true);
-		
-		headerAndPanelContiner.setPreferredSize(HEADER_AND_PANEL_CONTINER_DIMENSION_ACTIVE);
-		stepContiner.setPreferredSize(STEP_CONTINER_DIMENSION_ACTIVE);
-		
-		stepLabel.setText(SettingsPanel.areaPanel.STEP_TEXT_LIGHT_BLUE);
-		areaLabel.setVisible(false);
-		areaPanel.setBorder(Program.LIGHT_BLUE_BORDER);
-		
-		Program.frame.glass.setVisible(true);
-		
-		areaPanel.add(areaLabel, BorderLayout.EAST);
 	}
+	/**
+	 * NOT ACTIVE
+	 */
 	public void areaSelectionNotActive(){
+		/* Don't show Glass Panel and turn inactive */
+		DISPLAY_AREA_VIDEO = false;
+		MainFrame.GET_AREA_BOOLEAN = false;
+		Program.frame.glass.setVisible(false);
 
-		/* Sets header button to enabled and green with a new tool tip */
-		headerButton.setToolTipText(HEADER_BUTTON_TOOL_TIP_TEXT);
-		
-		/* No video enabled */
+		/* Area help video disabled */
 		DISPLAY_AREA_HELP_VIDEO = false;
+		
+		/* New tool tip */
+		headerButton.setToolTipText(HEADER_BUTTON_TOOL_TIP_TEXT);
 		
 		/* Sets video and buttons not visible */
 		nextButton.setVisible(false);
 		backButton.setVisible(false);
 		areaNotSelectedLabel.setVisible(false);
 		colorCameraPanel.setVisible(false);
-
-
-		/* Don´t show the selected area */
-		MainFrame.GET_AREA_BOOLEAN = false;
-		Program.frame.glass.setVisible(false);
+		
+		/* Sets step label gray for not active */
+		stepLabel.setText(SettingsPanel.areaPanel.STEP_TEXT_GRAY);
 		
 		if (SettingsPanel.AREA_SELECTED)
 		{
@@ -395,15 +435,16 @@ public class AreaSettingsSubPanel extends JPanel {
 			
 			/* AreaPanel and header Green */
 			areaPanel.setBorder(Program.GREEN_BORDER);
-			areaPanel.setVisible(true);
-			headerButton.setEnabled(true);
+			headerButton.setEnabled(HEADER_BUTTON_ENABLED = true);
 			
 			/* Changing size of panels when button has been pressed*/	
 			areaPanel.setPreferredSize(AREA_PANEL_DIMENSION_DONE);
 			headerAndPanelContiner.setPreferredSize(HEADER_AND_PANEL_CONTINER_DIMENSION_DONE);
 			stepContiner.setPreferredSize(STEP_CONTINER_DIMENSION_DONE);
 			
+			/* Sets selected area and label visible */
 			areaLabel.setVisible(true);
+			areaPanel.setVisible(true);
 		}
 		else
 		{
@@ -412,10 +453,13 @@ public class AreaSettingsSubPanel extends JPanel {
 			headerAndPanelContiner.setPreferredSize(HEADER_AND_PANEL_CONTINER_DIMENSION_OFF);
 			stepContiner.setPreferredSize(STEP_CONTINER_DIMENSION_OFF);
 			
+			/* Sets selected area and label invisible */
+			areaLabel.setVisible(false);
 			areaPanel.setVisible(false);
+			
 			/* Sets Header button gray */
 			headerButton.setDisabledIcon(SettingsPanel.areaPanel.HEADER_DISABLED_GRAY_IMAGE_ICON);
-			headerButton.setEnabled(false);
+			headerButton.setEnabled(HEADER_BUTTON_ENABLED = false);
 		}
 	}
 }

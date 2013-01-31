@@ -36,6 +36,9 @@ public class CameraPanel extends JPanel{
 	public FrameGrabber grabber;
 	public Dimension CAMERA_VIEW_BOUNDERYS_DIMENSION;
 	
+	public static boolean DISPLAY_WEB_CAMERA_INPUT = true;
+	public static boolean SAVE_IMAGE = false;
+	
 	public CameraPanel() {
 		this.setLayout(new BorderLayout());
 		this.setPreferredSize(new Dimension((int) (3*Toolkit.getDefaultToolkit().getScreenSize().getWidth()/4), 0));
@@ -59,17 +62,32 @@ public class CameraPanel extends JPanel{
             threadDisplayCamera = new Thread("threadDisplay"){
             	public void run(){
 		            while (true) {
-		            	IplImage grabbedImage;
+		            	IplImage grabbedImage = null;
 		                try {
 		                	/* Grabbed the image from the camera */
-		                	grabbedImage = grabber.grab();
+		                	if(DISPLAY_WEB_CAMERA_INPUT)
+			            	{
+		                		grabbedImage = grabber.grab();
+			            	}
+		                	else{
+		                		grabber.restart();
+	                			Thread.sleep(100);
+	                		}
 						} catch (com.googlecode.javacv.FrameGrabber.Exception e) {
 							continue;
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
 						}
 		                if (grabbedImage != null) {
 		                	/* Turns the image so that it have a mirror effect */
-		                    cvFlip(grabbedImage, grabbedImage, 1);// l - r = 90_degrees_steps_anti_clockwise
+		                    cvFlip(grabbedImage, grabbedImage, 1);
 		                    cvSmooth(grabbedImage, grabbedImage, CV_GAUSSIAN, 3);
+		                    if(SAVE_IMAGE)
+		                    {
+		                    	cvSaveImage("webcam photo/WEBCAM_PHOTO.jpg", grabbedImage);
+		                    	SAVE_IMAGE = false;
+		                    }
 		                    
 		                    int widthFrame = Program.cameraPanel.getWidth();
 		                    int heightFrame = Program.cameraPanel.getHeight();
@@ -84,13 +102,8 @@ public class CameraPanel extends JPanel{
 		                    /* Changing the scaling of the grabbed camera image */
 		                    Dimension newImagebunderys = getScaledDimension(imgSize, boundary);
 		                    
-
 		                    /* Camera view dimension is being updated all the time so when we chose an area we will know where on the table we have chosen*/ 
 		                    CAMERA_VIEW_BOUNDERYS_DIMENSION = newImagebunderys;
-		                    
-		                    /* Sets glass panel size */
-		                    //if(CAMERA_VIEW_BOUNDERYS_DIMENSION.getHeight()>0 && CAMERA_VIEW_BOUNDERYS_DIMENSION.getWidth()>0)
-		                    //	Program.frame.glass.setPreferredSize(CAMERA_VIEW_BOUNDERYS_DIMENSION);
 		                    
 		                    if((widthFrame > 0) || (heightFrame > 0))
 		                    {
@@ -106,7 +119,6 @@ public class CameraPanel extends JPanel{
 		                    
 		                	/* Show image on window */
 		                    colorCameraPanel.repaint();
-		                	//cvSaveImage((i++)+"-aa.jpg", img);
 		                }
 		            }
             	}
