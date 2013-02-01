@@ -1,7 +1,6 @@
 package emcscanner.kth.se;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -59,7 +58,7 @@ public class CameraPanel extends JPanel{
         	/* Creates a ColorPanel and adds it to this camera panel */
             this.add(colorCameraPanel = new ColorPanel(buffImg));
             
-            threadDisplayCamera = new Thread("threadDisplay"){
+            threadDisplayCamera = new Thread("threadDisplayCamera"){
             	public void run(){
 		            while (true) {
 		            	IplImage grabbedImage = null;
@@ -216,14 +215,14 @@ public class CameraPanel extends JPanel{
 	        	    			if((Program.frame.glass.cursorPressed.y < Program.frame.glass.cursorReleased.y))
 	        	    			{
 			        				SettingsPanel.areaPanel.areaNotSelectedLabel.setText("<html><font color = rgb(100,150,255)>Area Selected:<br/>" +
-											" Width: " + (int) (Program.frame.glass.cursorReleased.x - Program.frame.glass.cursorPressed.x) + 
-											"<br/> Hight: " +(int) (Program.frame.glass.cursorReleased.y - Program.frame.glass.cursorPressed.y) + "</font></html>");	
+											" Width: " + (int) (Program.frame.glass.cursorReleased.x - Program.frame.glass.cursorPressed.x + 1) + 
+											"<br/> Hight: " +(int) (Program.frame.glass.cursorReleased.y - Program.frame.glass.cursorPressed.y + 1) + "</font></html>");	
 	        	    			}
 	        	    			else
 	            				{
 	        	    				SettingsPanel.areaPanel.areaNotSelectedLabel.setText("<html><font color = rgb(100,150,255)>Area Selected:<br/>" +
-											" Width: " + (int) (Program.frame.glass.cursorReleased.x - Program.frame.glass.cursorPressed.x) + 
-											"<br/> Hight: " +(int) (Program.frame.glass.cursorPressed.y - Program.frame.glass.cursorReleased.y) + "</font></html>");	
+											" Width: " + (int) (Program.frame.glass.cursorReleased.x - Program.frame.glass.cursorPressed.x + 1) + 
+											"<br/> Hight: " +(int) (Program.frame.glass.cursorPressed.y - Program.frame.glass.cursorReleased.y + 1) + "</font></html>");	
 	            				}
 	        	    		}
 	        				else
@@ -231,14 +230,14 @@ public class CameraPanel extends JPanel{
 	        					if((Program.frame.glass.cursorPressed.y < Program.frame.glass.cursorReleased.y))
 	        	    			{
 	        	    				SettingsPanel.areaPanel.areaNotSelectedLabel.setText("<html><font color = rgb(100,150,255)>Area Selected:<br/>" +
-											" Width: " + (int) (Program.frame.glass.cursorPressed.x - Program.frame.glass.cursorReleased.x) + 
-											"<br/> Hight: " +(int) (Program.frame.glass.cursorReleased.y - Program.frame.glass.cursorPressed.y) + "</font></html>");	
+											" Width: " + (int) (Program.frame.glass.cursorPressed.x - Program.frame.glass.cursorReleased.x + 1) + 
+											"<br/> Hight: " +(int) (Program.frame.glass.cursorReleased.y - Program.frame.glass.cursorPressed.y + 1) + "</font></html>");	
 	        	    			}
 	        					else
 	        	    			{
 	        	    				SettingsPanel.areaPanel.areaNotSelectedLabel.setText("<html><font color = rgb(100,150,255)>Area Selected:<br/>" +
-											" Width: " + (int) (Program.frame.glass.cursorPressed.x - Program.frame.glass.cursorReleased.x) + 
-											"<br/> Hight: " +(int) (Program.frame.glass.cursorPressed.y - Program.frame.glass.cursorReleased.y) + "</font></html>");	
+											" Width: " + (int) (Program.frame.glass.cursorPressed.x - Program.frame.glass.cursorReleased.x + 1) + 
+											"<br/> Hight: " +(int) (Program.frame.glass.cursorPressed.y - Program.frame.glass.cursorReleased.y + 1) + "</font></html>");	
 	        	    			}
 	            			}
         		        }	
@@ -322,30 +321,14 @@ public class CameraPanel extends JPanel{
 	 * @param boundary
 	 * @return
 	 */
-	public static Dimension getScaledDimension(Dimension imgSize, Dimension boundary) {
-	    int original_width = imgSize.width;
-	    int original_height = imgSize.height;
-	    int bound_width = boundary.width;
-	    int bound_height = boundary.height;
-	    int new_width = 0;
-	    int new_height = 0;
-
-	    // first check if we need to scale width
-	    if (original_width > bound_width) {
-	        //scale width to fit
-	        new_width = bound_width;
-	        //scale height to maintain aspect ratio
-	        new_height = (new_width * original_height) / original_width;
-	    }
-
-	    // then check if we need to scale even with the new height
-	    if (new_height > bound_height) {
-	        //scale height to fit instead
-	        new_height = bound_height;
-	        //scale width to maintain aspect ratio
-	        new_width = (new_height * original_width) / original_height;
-	    }
-
-	    return new Dimension(new_width, new_height);
+	public static Dimension getScaledDimension(Dimension section, Dimension screen) {
+		double scaleX = screen.getWidth() / section.getWidth();
+		double scaleY = screen.getHeight() / section.getHeight();
+		double scale = Math.min(scaleX, scaleY);
+		 
+		int x = (int)(scale * section.width); /* floor */
+		int y = (int)(scale * section.height);
+		
+		return new Dimension(x <= 0 ? 1 : x, y <= 0 ? 1 : y);
 	}
 }

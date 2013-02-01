@@ -1,6 +1,8 @@
 package emcscanner.kth.se;
 
 import java.awt.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.*;
 
@@ -17,6 +19,18 @@ public class MainPanel extends JPanel   {
 		
 		this.setLayout(new BorderLayout());
 		this.add(this.split, BorderLayout.CENTER);
+		
+		this.split.addPropertyChangeListener(new PropertyChangeListener(){
+			@Override
+			public void propertyChange(PropertyChangeEvent arg0) {
+				if (ImagePanel.IMAGE_TAKEN)
+					Program.imagePanel.resizePhoto();
+			}
+			
+		});
+		
+		
+		
 	}
 	public static void setLeftStage(JPanel left){
 		split.setLeftComponent(left);

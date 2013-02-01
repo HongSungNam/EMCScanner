@@ -169,8 +169,8 @@ public class AreaSettingsSubPanel extends JPanel {
 	    			if((Program.frame.glass.cursorPressed.y < Program.frame.glass.cursorReleased.y))
 	    			{
         				SettingsPanel.areaPanel.areaLabel.setText("<html><font color = rgb(120,200,40)>Area Selected:</font>" +
-								" Width: " + (int) (Program.frame.glass.cursorReleased.x - Program.frame.glass.cursorPressed.x) + 
-								" x Hight: " +(int) (Program.frame.glass.cursorReleased.y - Program.frame.glass.cursorPressed.y) + "</html>");
+								" Width: " + (int) (Program.frame.glass.cursorReleased.x - Program.frame.glass.cursorPressed.x + 1) + 
+								" x Hight: " +(int) (Program.frame.glass.cursorReleased.y - Program.frame.glass.cursorPressed.y + 1) + "</html>");
         				
         				SettingsPanel.AREA_SELECTED_START_X = Program.frame.glass.cursorPressed.x;
         				SettingsPanel.AREA_SELECTED_END_X = Program.frame.glass.cursorReleased.x;
@@ -181,8 +181,8 @@ public class AreaSettingsSubPanel extends JPanel {
 	    			else
     				{
 	    				SettingsPanel.areaPanel.areaLabel.setText("<html><font color = rgb(120,200,40)>Area Selected:</font>" +
-								" Width: " + (int) (Program.frame.glass.cursorReleased.x - Program.frame.glass.cursorPressed.x) + 
-								" x Hight: " +(int) (Program.frame.glass.cursorPressed.y - Program.frame.glass.cursorReleased.y) + "</font></html>");	
+								" Width: " + (int) (Program.frame.glass.cursorReleased.x - Program.frame.glass.cursorPressed.x + 1) + 
+								" x Hight: " +(int) (Program.frame.glass.cursorPressed.y - Program.frame.glass.cursorReleased.y + 1) + "</font></html>");	
 	    				/* Saves area settings */
         				SettingsPanel.AREA_SELECTED_START_X = Program.frame.glass.cursorPressed.x;
         				SettingsPanel.AREA_SELECTED_END_X = Program.frame.glass.cursorReleased.x;
@@ -195,8 +195,8 @@ public class AreaSettingsSubPanel extends JPanel {
 					if((Program.frame.glass.cursorPressed.y < Program.frame.glass.cursorReleased.y))
 	    			{
 	    				SettingsPanel.areaPanel.areaLabel.setText("<html><font color = rgb(120,200,40)>Area Selected:</font>" +
-								" Width: " + (int) (Program.frame.glass.cursorPressed.x - Program.frame.glass.cursorReleased.x) + 
-								" x Hight: " +(int) (Program.frame.glass.cursorReleased.y - Program.frame.glass.cursorPressed.y) + "</font></html>");	
+								" Width: " + (int) (Program.frame.glass.cursorPressed.x - Program.frame.glass.cursorReleased.x + 1) + 
+								" x Hight: " +(int) (Program.frame.glass.cursorReleased.y - Program.frame.glass.cursorPressed.y + 1) + "</font></html>");	
 	    				/* Saves area settings */
         				SettingsPanel.AREA_SELECTED_START_X = Program.frame.glass.cursorReleased.x;
         				SettingsPanel.AREA_SELECTED_END_X = Program.frame.glass.cursorPressed.x;
@@ -206,8 +206,8 @@ public class AreaSettingsSubPanel extends JPanel {
 					else
 	    			{
 	    				SettingsPanel.areaPanel.areaLabel.setText("<html><font color = rgb(120,200,40)>Area Selected:</font>" +
-								" Width: " + (int) (Program.frame.glass.cursorPressed.x - Program.frame.glass.cursorReleased.x) + 
-								" x Hight: " +(int) (Program.frame.glass.cursorPressed.y - Program.frame.glass.cursorReleased.y) + "</font></html>");
+								" Width: " + (int) (Program.frame.glass.cursorPressed.x - Program.frame.glass.cursorReleased.x + 1) + 
+								" x Hight: " +(int) (Program.frame.glass.cursorPressed.y - Program.frame.glass.cursorReleased.y + 1) + "</font></html>");
 	    				/* Saves area settings */
         				SettingsPanel.AREA_SELECTED_START_X = Program.frame.glass.cursorReleased.x;
         				SettingsPanel.AREA_SELECTED_END_X = Program.frame.glass.cursorPressed.x;

@@ -4,7 +4,11 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.JPanel;
 
@@ -23,21 +27,22 @@ import com.googlecode.javacv.OpenCVFrameGrabber;
 import com.googlecode.javacv.cpp.opencv_core.IplImage;
 
 public class ImagePanel extends JPanel{
-	public ColorPanel colorPanel;
-	
 	public static BufferedImage buffImg = null;
-	
+	public ColorPanel colorPanel = new ColorPanel(buffImg);
 	public Dimension PHOTO_VIEW_BOUNDERYS_DIMENSION;
+	
+	public IplImage photo;
+	public static boolean IMAGE_TAKEN = false;
+	public static boolean FIRST_TIME_REZISED = true;
 	
 	public ImagePanel(){
 		this.setLayout(new BorderLayout());
 		this.setPreferredSize(new Dimension((int) (3*Toolkit.getDefaultToolkit().getScreenSize().getWidth()/4), 0));
 	}
 	public void setPhoto(){
-		IplImage photo = cvLoadImage("webcam photo/WEBCAM_PHOTO.jpg");
-		CvMat rectangleImage;
-				
-		rectangleImage = cvCreateMat((int) (SettingsPanel.AREA_SELECTED_END_X - SettingsPanel.AREA_SELECTED_START_X),
+		this.photo = cvLoadImage("webcam photo/WEBCAM_PHOTO.jpg");
+			
+		CvMat rectangleImage = cvCreateMat((int) (SettingsPanel.AREA_SELECTED_END_X - SettingsPanel.AREA_SELECTED_START_X),
 									 (int) (SettingsPanel.AREA_SELECTED_END_Y - SettingsPanel.AREA_SELECTED_START_Y), 
 									 		CV_32SC2);
 		
@@ -45,19 +50,15 @@ public class ImagePanel extends JPanel{
 							 (int) (SettingsPanel.AREA_SELECTED_END_X - SettingsPanel.AREA_SELECTED_START_X), 
 							 (int) (SettingsPanel.AREA_SELECTED_END_Y - SettingsPanel.AREA_SELECTED_START_Y));
 		
-		
-		colorPanel = new ColorPanel(buffImg);
-		
 		int widthPhoto = SettingsPanel.AREA_SELECTED_CAMERA_DIMENSION.width;
         int heightPhoto = SettingsPanel.AREA_SELECTED_CAMERA_DIMENSION.height;
-        int widthCameraImage = photo.width();
-        int heightCameraImage = photo.height();
+        int widthCameraImage = this.photo.width();
+        int heightCameraImage = this.photo.height();
         
         /* Creating dimensions for the camera and the panel area 
            Used later for deciding the new dimension that we will resize the image to */
         Dimension imgSize = new Dimension(widthCameraImage, heightCameraImage);
         Dimension boundary = SettingsPanel.AREA_SELECTED_CAMERA_DIMENSION;
-        
         /* Changing the scaling of the grabbed camera image */
         Dimension newImagebunderys = CameraPanel.getScaledDimension(imgSize, boundary);
         
@@ -67,52 +68,76 @@ public class ImagePanel extends JPanel{
         if((widthPhoto > 0) || (heightPhoto > 0))
         {
         	
-        	BufferedImage bufferdWebcameraImage = photo.getBufferedImage();
+        	BufferedImage bufferdWebcameraImage = this.photo.getBufferedImage();
 			int type = bufferdWebcameraImage.getType() == 0? BufferedImage.TYPE_INT_ARGB
 			        : bufferdWebcameraImage.getType();
 
 			BufferedImage resizeImaged = CameraPanel.resizeImage(bufferdWebcameraImage, type, newImagebunderys.width, newImagebunderys.height);
 			
-			photo = IplImage.createFrom(resizeImaged);
+			IplImage photo1 = IplImage.createFrom(resizeImaged);
+			CvMat photo2 = cvGetSubRect(photo1.asCvMat(), rectangleImage, rect); 
+			IplImage iplPhoto2 = photo2.asIplImage();
 			
-			CvMat photo2 = cvGetSubRect(photo.asCvMat(), rectangleImage ,rect); 
-			
-			BufferedImage buffPhoto2 = photo2.asIplImage().getBufferedImage();
-			
-			
-			
-			int widthFrame = Program.cameraPanel.getWidth();
-	        int heightFrame =Program.cameraPanel.getHeight();
+			int widthPhotoArea = Program.cameraPanel.getWidth();
+	        int heightPhotoArea = Program.cameraPanel.getHeight();
+	        int widthCroptImage = iplPhoto2.width();
+	        int heightCroptImage = iplPhoto2.height();
+	        System.err.println(widthPhotoArea +" : "+ heightPhotoArea);
+	        System.err.println(widthCroptImage +" : "+ heightCroptImage);
 	        
-	        System.out.println(widthFrame);
-	        System.out.println(heightFrame);
-	        int widthCameraPhoto = buffPhoto2.getWidth();
-	        int heightCameraPhoto = buffPhoto2.getHeight();
-	        System.out.println(widthCameraPhoto);
-	        System.out.println(heightCameraPhoto);
-	        
-	        Dimension imgSize2 = new Dimension(widthCameraPhoto, heightCameraPhoto);
-	        Dimension boundary2 = new Dimension(widthFrame, heightFrame);
-	        
+	        /* Creating dimensions for the camera and the panel area 
+	           Used later for deciding the new dimension that we will resize the image to */
+	        Dimension imgSize2 = new Dimension(widthCroptImage, heightCroptImage);
+	        Dimension boundary2 = new Dimension(widthPhotoArea, heightPhotoArea);
 	        /* Changing the scaling of the grabbed camera image */
 	        Dimension newImagebunderys2 = CameraPanel.getScaledDimension(imgSize2, boundary2);
-			
-	        /* Camera view dimension is being updated all the time so when we chose an area we will know where on the table we have chosen*/ 
-	        PHOTO_VIEW_BOUNDERYS_DIMENSION = newImagebunderys2;
 
-	        if((widthFrame > 0) || (heightFrame > 0))
-	        {
-	        	BufferedImage bufferdWebcameraPhoto = buffPhoto2;
-				int type1 = bufferdWebcameraPhoto.getType() == 0? BufferedImage.TYPE_INT_ARGB
-				        : bufferdWebcameraPhoto.getType();
-				
-				BufferedImage resizeImaged2 = CameraPanel.resizeImage(bufferdWebcameraPhoto, type1, newImagebunderys2.width, newImagebunderys2.height);
+	        int width  = newImagebunderys2.width;
+	        int height  = newImagebunderys2.height;
 	        
-				colorPanel.theCamera = resizeImaged2;
-	        }
+	        System.err.println(width +" : "+ height);
+	        
+	        IplImage ipl = IplImage.create(width, height, photo.depth(), photo.nChannels());
+			
+			cvResize(iplPhoto2, ipl, CV_INTER_LANCZOS4);
+			
+			colorPanel.theCamera = ipl.getBufferedImage();
+
+	        this.colorPanel.repaint();
         }
-		
-        colorPanel.repaint();
 		this.add(colorPanel);
+	}
+	public void resizePhoto(){
+		int widthFrame;
+		int heightFrame;
+		if (FIRST_TIME_REZISED)
+		{
+			widthFrame = Program.cameraPanel.getWidth();
+	        heightFrame =Program.cameraPanel.getHeight();
+	        FIRST_TIME_REZISED = false;
+		}
+		else
+		{
+			widthFrame = this.getWidth();
+	        heightFrame =this.getHeight();
+		}
+		
+        int widthCameraPhoto = this.photo.width();
+        int heightCameraPhoto = this.photo.height();
+
+        Dimension imgSize2 = new Dimension(widthCameraPhoto, heightCameraPhoto);
+        Dimension boundary2 = new Dimension(widthFrame, heightFrame);
+        /* Changing the scaling of the grabbed camera image */
+        Dimension newImagebunderys2 = CameraPanel.getScaledDimension(imgSize2, boundary2);
+        
+        BufferedImage bufferdWebcameraImage1 = photo.getBufferedImage();
+		int type1 = bufferdWebcameraImage1.getType() == 0? BufferedImage.TYPE_INT_ARGB
+		        : bufferdWebcameraImage1.getType();
+
+		BufferedImage resizeImaged1 = CameraPanel.resizeImage(bufferdWebcameraImage1, type1, newImagebunderys2.width, newImagebunderys2.height);
+
+		colorPanel.theCamera = resizeImaged1;
+
+        this.colorPanel.repaint();
 	}
 }
