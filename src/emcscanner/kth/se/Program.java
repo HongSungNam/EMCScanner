@@ -21,6 +21,8 @@ public class Program {
 	public static ManualPanel manualPanel;
 	public static ImagePanel imagePanel;
 	
+	public static boolean USER_STUDENT = true;
+	
 	/* Image Icon next button */
 	public static ImageIcon NEXT_BUTTON_ENABLED_IMAGE_ICON = new ImageIcon("image/ButtonBlueNext.png");
 	public static ImageIcon NEXT_BUTTON_DISABLED_IMAGE_ICON = new ImageIcon("image/ButtonGrayNext.png");

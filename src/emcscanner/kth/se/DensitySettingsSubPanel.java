@@ -12,6 +12,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import com.googlecode.javacv.FrameGrabber.Exception;
 import com.googlecode.javacv.cpp.opencv_core.IplImage;
@@ -49,6 +52,23 @@ public class DensitySettingsSubPanel extends JPanel {
 	
 	public String NEXT_BUTTON_TOOL_TIP_TEXT = "You need to select an area before you can continue";
 	
+	public String SCAN_DENSITY_LIGHT_BLUE_LABEL = "<html> <font color = rgb(100,150,255)>Scan density: </font></html>";
+	public String SCAN_DENSITY_DARK_GREEN_LABEL = "<html> <font color = rgb(120,200,40)>Scan density: </font></html>";
+	public String SCAN_DENSITY_RED_LABEL = "<html> <font color = rgb(255,0,0)>Scan density: </font></html>";
+	public String WIDTH_LIGHT_BLUE_LABEL = "<html> <font color = rgb(100,150,255)> Width: </font></html>";
+	public String WIDTH_DARK_GREEN_LABEL = "<html> <font color = rgb(120,200,40)> Width: </font></html>";
+	public String WIDTH_RED_LABEL = "<html> <font color = rgb(255,0,0)> Width: </font></html>";
+	public String HEIGHT_LIGHT_BLUE_LABEL = "<html> <font color = rgb(100,150,255)> Height: </font></html>";
+	public String HEIGHT_DARK_GREEN_LABEL = "<html> <font color = rgb(120,200,40)> Height: </font></html>";
+	public String HEIGHT_RED_LABEL = "<html> <font color = rgb(255,0,0)> Height: </font></html>";
+	/* Labels */
+    JLabel scanDensityLabel = new JLabel(SCAN_DENSITY_LIGHT_BLUE_LABEL);
+    JLabel widthLabel = new JLabel(WIDTH_LIGHT_BLUE_LABEL);
+    JLabel heightLabel = new JLabel(HEIGHT_LIGHT_BLUE_LABEL);
+	
+	/* Constants for the FrequencyPanel */
+	public int densityInputLimit = 5;
+	
 	/* Imports the different images for the different button stages. */	
 	/* Import the images for the header button */
 	public ImageIcon HEADER_ENABLED_IMAGE_ICON 	 			= new ImageIcon("image/PanelGreenDensity.png");
@@ -62,16 +82,18 @@ public class DensitySettingsSubPanel extends JPanel {
 	public Dimension THIS_MINIMUM_DIMENSION = new Dimension(400, 100);
 	public Dimension HEADER_BUTTON_DIMENSION = new Dimension(355, 40);
 	public Dimension STEP_LABEL_DIMENSION = new Dimension(50,40);
+
+	public Dimension INPUT_TEXT_FEILD_DIMENSION = new Dimension(20,20);
 	
-	public Dimension STEP_CONTINER_DIMENSION_ACTIVE = new Dimension(50, 280);
+	public Dimension STEP_CONTINER_DIMENSION_ACTIVE = new Dimension(50, 300);
 	public Dimension STEP_CONTINER_DIMENSION_DONE = new Dimension(50, 80);
 	public Dimension STEP_CONTINER_DIMENSION_OFF = new Dimension(50, 40);
 	
-	public Dimension AREA_PANEL_DIMENSION_ACTIVE = new Dimension(322, 240);
-	public Dimension AREA_PANEL_DIMENSION_DONE = new Dimension(322, 40);
-	public Dimension AREA_PANEL_DIMENSION_OFF = new Dimension(322, 40);
+	public Dimension DENSITY_PANEL_DIMENSION_ACTIVE = new Dimension(322, 260);
+	public Dimension DENSITY_PANEL_DIMENSION_DONE = new Dimension(322, 40);
+	public Dimension DENSITY_PANEL_DIMENSION_OFF = new Dimension(322, 40);
 	
-	public Dimension HEADER_AND_PANEL_CONTINER_DIMENSION_ACTIVE = new Dimension(322, 280);
+	public Dimension HEADER_AND_PANEL_CONTINER_DIMENSION_ACTIVE = new Dimension(322, 300);
 	public Dimension HEADER_AND_PANEL_CONTINER_DIMENSION_DONE = new Dimension(322, 80);
 	public Dimension HEADER_AND_PANEL_CONTINER_DIMENSION_OFF = new Dimension(322, 40);
 	
@@ -83,6 +105,10 @@ public class DensitySettingsSubPanel extends JPanel {
 	public JPanel headerAndPanelContiner = new JPanel();
 	public JPanel densityPanel = new JPanel();
 	public JPanel continer1 = new JPanel();
+	
+	/* JTextField */
+	public JTextField heightDensityInputTextField = new JTextField(5);
+	public JTextField widthDensityInputTextField = new JTextField(5);
 	
 	public DensitySettingsSubPanel() {
 		this.setLayout(new FlowLayout());
@@ -127,7 +153,7 @@ public class DensitySettingsSubPanel extends JPanel {
 		
 		/* Panel for the frequency input */
 		densityPanel.setLayout(new BorderLayout());
-		densityPanel.setPreferredSize(AREA_PANEL_DIMENSION_OFF);
+		densityPanel.setPreferredSize(DENSITY_PANEL_DIMENSION_OFF);
 		
 		/* Next JButton */
 		nextButton.setOpaque(false);
@@ -146,6 +172,7 @@ public class DensitySettingsSubPanel extends JPanel {
 				
 			}
 		});
+		
 		/* Back on step JButton */
 		backButton.setEnabled(true);
 		backButton.setIcon(Program.BACK_BUTTON_ENABLED_IMAGE_ICON);
@@ -260,13 +287,107 @@ public class DensitySettingsSubPanel extends JPanel {
         };
         threadDisplayDensityVideo.setDaemon(true);
         threadDisplayDensityVideo.start();
+        
+        
+        
+        heightDensityInputTextField.setPreferredSize(INPUT_TEXT_FEILD_DIMENSION);
+        heightDensityInputTextField.setDocument(new LengthRestrictedDocument(densityInputLimit));
+        heightDensityInputTextField.setBorder(Program.LIGHT_BLUE_BORDER);
+        heightDensityInputTextField.getDocument().addDocumentListener(new DocumentListener () {
+			public void insertUpdate(DocumentEvent aEvent) {
+				checkInt();
+		    }
+		    public void removeUpdate(DocumentEvent aEvente) {
+		    	checkInt();
+		    }
+		    public void changedUpdate(DocumentEvent aEvent) {
+		    	checkInt();
+		    }
+		    public void checkInt()
+		    {
+		    	try
+		    	{
+		    		int value = Integer.valueOf(heightDensityInputTextField.getText());
+		    		if (value < ((SettingsPanel.AREA_SELECTED_END_Y-SettingsPanel.AREA_SELECTED_START_Y + 1)*10) )
+		    		{
+		    			heightDensityInputTextField.setBorder(Program.LIGHT_BLUE_BORDER);
+						heightLabel.setText(HEIGHT_LIGHT_BLUE_LABEL);
+		    			
+		    		}
+		    		else
+		    		{
+						heightLabel.setText(HEIGHT_RED_LABEL);
+						heightDensityInputTextField.setBorder(Program.RED_BORDER);
+		    		}
+		    	} 
+				catch (NumberFormatException e) {
+					heightLabel.setText(HEIGHT_RED_LABEL);
+					heightDensityInputTextField.setBorder(Program.RED_BORDER);
+		    	}
+		    }
+		});
+        
+        widthDensityInputTextField.setPreferredSize(INPUT_TEXT_FEILD_DIMENSION);
+        widthDensityInputTextField.setDocument(new LengthRestrictedDocument(densityInputLimit));
+        widthDensityInputTextField.setBorder(Program.LIGHT_BLUE_BORDER);
+        widthDensityInputTextField.getDocument().addDocumentListener(new DocumentListener () {
+			public void insertUpdate(DocumentEvent aEvent) {
+				checkInt();
+		    }
+		    public void removeUpdate(DocumentEvent aEvente) {
+		    	checkInt();
+		    }
+		    public void changedUpdate(DocumentEvent aEvent) {
+		    	checkInt();
+		    }
+		    public void checkInt()
+		    {
+		    	try
+		    	{
+		    		int value = Integer.valueOf(widthDensityInputTextField.getText());
+	    			if (value < ((SettingsPanel.AREA_SELECTED_END_X-SettingsPanel.AREA_SELECTED_START_X + 1)*10) )
+		    		{
+	    				widthLabel.setText(WIDTH_LIGHT_BLUE_LABEL);
+	    				widthDensityInputTextField.setBorder(Program.LIGHT_BLUE_BORDER);
+		    			
+		    		}
+		    		else
+		    		{
+		    			widthLabel.setText(WIDTH_RED_LABEL);
+		    			widthDensityInputTextField.setBorder(Program.RED_BORDER);
+		    			
+		    		}
+		    	} 
+				catch (NumberFormatException e) {
+					widthLabel.setText(WIDTH_RED_LABEL);
+					widthDensityInputTextField.setBorder(Program.RED_BORDER);
+		    	}
+		    }
+		});
+        
 		
         /* Sets container backgrounds to white instead of gray for contrast */
         colorDensityCameraPanel.setBackground(Color.WHITE);
+
+        JPanel imputFeildsContainer  = new JPanel();
+        imputFeildsContainer.add(scanDensityLabel);
+        imputFeildsContainer.add(widthLabel);
+        imputFeildsContainer.add(widthDensityInputTextField);
+        imputFeildsContainer.add(heightLabel);
+        imputFeildsContainer.add(heightDensityInputTextField);
+        
+        imputFeildsContainer.setBackground(Color.WHITE);
+        
+        
+        JPanel inputFeildsAButtons = new JPanel(new BorderLayout());
+        inputFeildsAButtons.add(continer1, BorderLayout.SOUTH);
+        inputFeildsAButtons.add(imputFeildsContainer, BorderLayout.NORTH);
+        
 		continer1.setBackground(Color.WHITE);
 		densityPanel.setBackground(Color.WHITE);
-		densityPanel.add(continer1, BorderLayout.SOUTH);
+		densityPanel.add(inputFeildsAButtons, BorderLayout.SOUTH);
 		densityPanel.add(colorDensityCameraPanel, BorderLayout.CENTER);
+		
 		headerAndPanelContiner.add(densityPanel, BorderLayout.SOUTH);
 		densityPanel.setVisible(false);
 		
@@ -276,6 +397,11 @@ public class DensitySettingsSubPanel extends JPanel {
 	 * ACTIVE
 	 */
 	public void densitySelectionActive(){
+
+		SettingsPanel.stage = 3;
+		Program.frame.setGlass();
+		Program.frame.glass.setVisible(true);
+		
 		/* Shows the help video when made active */
 		DISPLAY_DENSITY_HELP_VIDEO = true;
 		DISPLAY_DENSITY_VIDEO = true;
@@ -292,10 +418,10 @@ public class DensitySettingsSubPanel extends JPanel {
 		colorDensityCameraPanel.setVisible(true);
 		
 		/* Changing size of panels when button has been pressed*/	
-		densityPanel.setPreferredSize(AREA_PANEL_DIMENSION_ACTIVE);
+		densityPanel.setPreferredSize(DENSITY_PANEL_DIMENSION_ACTIVE);
 
 		/* Changing size of panels when button has been pressed*/	
-		densityPanel.setPreferredSize(AREA_PANEL_DIMENSION_ACTIVE);
+		densityPanel.setPreferredSize(DENSITY_PANEL_DIMENSION_ACTIVE);
 		headerAndPanelContiner.setPreferredSize(HEADER_AND_PANEL_CONTINER_DIMENSION_ACTIVE);
 		stepContiner.setPreferredSize(STEP_CONTINER_DIMENSION_ACTIVE);
 		
@@ -332,7 +458,7 @@ public class DensitySettingsSubPanel extends JPanel {
 			headerButton.setEnabled(HEADER_BUTTON_ENABLED = true);
 			
 			/* Changing size of panels when button has been pressed*/	
-			densityPanel.setPreferredSize(AREA_PANEL_DIMENSION_DONE);
+			densityPanel.setPreferredSize(DENSITY_PANEL_DIMENSION_DONE);
 			headerAndPanelContiner.setPreferredSize(HEADER_AND_PANEL_CONTINER_DIMENSION_DONE);
 			stepContiner.setPreferredSize(STEP_CONTINER_DIMENSION_DONE);
 		}
@@ -349,7 +475,7 @@ public class DensitySettingsSubPanel extends JPanel {
 			headerButton.setEnabled(HEADER_BUTTON_ENABLED = false);
 			
 			/* Changing size of panels when button has been pressed*/	
-			densityPanel.setPreferredSize(AREA_PANEL_DIMENSION_OFF);
+			densityPanel.setPreferredSize(DENSITY_PANEL_DIMENSION_OFF);
 			headerAndPanelContiner.setPreferredSize(HEADER_AND_PANEL_CONTINER_DIMENSION_OFF);
 			stepContiner.setPreferredSize(STEP_CONTINER_DIMENSION_OFF);
 		}

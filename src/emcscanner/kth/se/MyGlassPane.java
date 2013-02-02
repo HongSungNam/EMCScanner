@@ -17,7 +17,7 @@ public class MyGlassPane extends JComponent {
 	public Point cursorPressed;
 	public Point cursorReleased;
 	
-	public MyGlassPane(MainFrame frame, JMenuBar menuBar, JButton headerButton, final JButton backButton) {
+	public MyGlassPane(MainFrame frame) {
 		this.frame = frame;
 		cursorPressed = new Point(0,0);
 		cursorReleased = new Point(0,0);

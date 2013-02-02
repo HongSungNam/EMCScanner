@@ -58,6 +58,9 @@ public class FrequensySettingsSubPanel extends JPanel{
 	public String TEXT_LESS_THEN_NORMAL_TEXT = "<html><font color = rgb(100,150,255)>MHz</font>"+" ≤ 6000</html>";
 	public String TEXT_MORE_THEN_RED_TEXT = "<html><font color = rgb(255,0,0)>0.1 ≤</font></html>";
 	public String TEXT_LESS_THEN_RED_TEXT = "<html><font color = rgb(100,150,255)>MHz</font>"+"<font color = rgb(255,0,0)> ≤ 6000</font></html>";
+	
+	/* Constants for the FrequencyPanel */
+	public int frequencyInputLimit = 6;
 
 	/* JLabel */
 	public JLabel stepLabel = new JLabel(STEP_TEXT_LIGHT_BLUE);
@@ -137,9 +140,6 @@ public class FrequensySettingsSubPanel extends JPanel{
 		headerAndPanelContiner.add(headerButton, BorderLayout.NORTH );
 		headerAndPanelContiner.setPreferredSize(HEADER_AND_PANEL_CONTINER_DIMENSION_ACTIVE);
 		
-		/* Constants for the FrequencyPanel */
-		int frequencyInputLimit = 6;
-		
 		/* Panel for the frequency input */
 		frequencyPanel.setLayout(new BorderLayout());
 		frequencyPanel.setPreferredSize(FREQUENCY_PANEL_DIMENSION_ACTIVE);
@@ -214,15 +214,15 @@ public class FrequensySettingsSubPanel extends JPanel{
 						
 						if(AREA_HEADER_BUTTON_TEMP_DISABLED)
 						{
-							SettingsPanel.areaPanel.HEADER_BUTTON_ENABLED = true;
-							SettingsPanel.areaPanel.headerButton.setEnabled(SettingsPanel.areaPanel.HEADER_BUTTON_ENABLED);
-							SettingsPanel.areaPanel.headerButton.setDisabledIcon(SettingsPanel.areaPanel.HEADER_ENABLED_IMAGE_ICON);
+							AreaSettingsSubPanel.HEADER_BUTTON_ENABLED = true;
+							AreaSettingsSubPanel.headerButton.setEnabled(AreaSettingsSubPanel.HEADER_BUTTON_ENABLED);
+							AreaSettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.areaPanel.HEADER_ENABLED_IMAGE_ICON);
 						}
 						if(DENSITY_HEADER_BUTTON_TEMP_DISABLED)
 						{
-							SettingsPanel.densityPanel.HEADER_BUTTON_ENABLED = true;
-							SettingsPanel.densityPanel.headerButton.setEnabled(SettingsPanel.densityPanel.HEADER_BUTTON_ENABLED);
-							SettingsPanel.densityPanel.headerButton.setDisabledIcon(SettingsPanel.densityPanel.HEADER_ENABLED_IMAGE_ICON);
+							DensitySettingsSubPanel.HEADER_BUTTON_ENABLED = true;
+							DensitySettingsSubPanel.headerButton.setEnabled(DensitySettingsSubPanel.HEADER_BUTTON_ENABLED);
+							DensitySettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.densityPanel.HEADER_ENABLED_IMAGE_ICON);
 						}
 						
 			    	}
@@ -249,16 +249,16 @@ public class FrequensySettingsSubPanel extends JPanel{
 							textLessThen.setText(TEXT_LESS_THEN_RED_TEXT);
 				    	}
 						
-						if(SettingsPanel.areaPanel.HEADER_BUTTON_ENABLED)
+						if(AreaSettingsSubPanel.HEADER_BUTTON_ENABLED)
 						{
-							SettingsPanel.areaPanel.headerButton.setEnabled(false);
-							SettingsPanel.areaPanel.headerButton.setDisabledIcon(SettingsPanel.areaPanel.HEADER_DISABLED_DARK_GREEN_IMAGE_ICON);
+							AreaSettingsSubPanel.headerButton.setEnabled(false);
+							AreaSettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.areaPanel.HEADER_DISABLED_DARK_GREEN_IMAGE_ICON);
 							AREA_HEADER_BUTTON_TEMP_DISABLED = true;
 						}
-						if(SettingsPanel.densityPanel.HEADER_BUTTON_ENABLED)
+						if(DensitySettingsSubPanel.HEADER_BUTTON_ENABLED)
 						{
-							SettingsPanel.densityPanel.headerButton.setEnabled(false);
-							SettingsPanel.densityPanel.headerButton.setDisabledIcon(SettingsPanel.areaPanel.HEADER_DISABLED_DARK_GREEN_IMAGE_ICON);
+							DensitySettingsSubPanel.headerButton.setEnabled(false);
+							DensitySettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.areaPanel.HEADER_DISABLED_DARK_GREEN_IMAGE_ICON);
 							DENSITY_HEADER_BUTTON_TEMP_DISABLED = true;
 						}
 					}
@@ -275,16 +275,16 @@ public class FrequensySettingsSubPanel extends JPanel{
 					frequencyPanel.setBorder(Program.RED_BORDER);
 					floatInputTextField.setBorder(Program.RED_BORDER);
 					
-					if(SettingsPanel.areaPanel.HEADER_BUTTON_ENABLED)
+					if(AreaSettingsSubPanel.HEADER_BUTTON_ENABLED)
 					{
-						SettingsPanel.areaPanel.headerButton.setEnabled(false);
-						SettingsPanel.areaPanel.headerButton.setDisabledIcon(SettingsPanel.areaPanel.HEADER_DISABLED_DARK_GREEN_IMAGE_ICON);
+						AreaSettingsSubPanel.headerButton.setEnabled(false);
+						AreaSettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.areaPanel.HEADER_DISABLED_DARK_GREEN_IMAGE_ICON);
 						AREA_HEADER_BUTTON_TEMP_DISABLED = true;
 					}
-					if(SettingsPanel.densityPanel.HEADER_BUTTON_ENABLED)
+					if(DensitySettingsSubPanel.HEADER_BUTTON_ENABLED)
 					{
-						SettingsPanel.densityPanel.headerButton.setEnabled(false);
-						SettingsPanel.densityPanel.headerButton.setDisabledIcon(SettingsPanel.areaPanel.HEADER_DISABLED_DARK_GREEN_IMAGE_ICON);
+						DensitySettingsSubPanel.headerButton.setEnabled(false);
+						DensitySettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.areaPanel.HEADER_DISABLED_DARK_GREEN_IMAGE_ICON);
 						DENSITY_HEADER_BUTTON_TEMP_DISABLED = true;
 					}
 					
@@ -341,6 +341,9 @@ public class FrequensySettingsSubPanel extends JPanel{
 	 * 
 	 */
 	public void frequencySelectionPanelActive(){
+
+		Program.frame.glass.setVisible(false);
+		
 		/* Sets header back to blue */
 		headerButton.setToolTipText(PANEL_INFORMATION);
 		headerButton.setEnabled(false);

@@ -17,6 +17,7 @@ import com.googlecode.javacv.FrameGrabber.Exception;
  */
 public class MainFrame extends JFrame {
 	public MyGlassPane glass;
+	public MyGlassPanePhoto glassPhoto;
 	private boolean toggleFullScreen = false;
 	public static JMenuBar menuBar;
 	public boolean MOUSE_RELEASED_BOOLEAN = false;
@@ -118,9 +119,14 @@ public class MainFrame extends JFrame {
 		//Size the frame
 		this.pack();
 		
-		glass = new MyGlassPane(Program.frame, menuBar, SettingsPanel.frequencyPanel.headerButton, AreaSettingsSubPanel.backButton);
-		this.setGlassPane(glass);
-		
-		
+		glass = new MyGlassPane(Program.frame);
+		glassPhoto = new MyGlassPanePhoto(Program.frame);
+		setGlass();
+	}
+	public void setGlass(){
+		if (SettingsPanel.stage == 2)
+			this.setGlassPane(glass);
+		else if (SettingsPanel.stage == 3)
+			this.setGlassPane(glassPhoto);
 	}
 }

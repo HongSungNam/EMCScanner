@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
+import java.util.concurrent.ExecutionException;
 
 import javax.swing.JPanel;
 
@@ -84,6 +85,8 @@ public class CameraPanel extends JPanel{
 		                    cvSmooth(grabbedImage, grabbedImage, CV_GAUSSIAN, 3);
 		                    if(SAVE_IMAGE)
 		                    {
+		                    	cvFlip(grabbedImage, grabbedImage, 1);
+			                   
 		                    	cvSaveImage("webcam photo/WEBCAM_PHOTO.jpg", grabbedImage);
 		                    	SAVE_IMAGE = false;
 		                    }

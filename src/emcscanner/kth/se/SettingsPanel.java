@@ -15,10 +15,16 @@ import javax.swing.JPanel;
  *
  */
 public class SettingsPanel extends JPanel{
+	/* Real life in table dimensions in one tenth of a millimeter that is taken in by the camera */
+	int TABLE_WIDTH = 19200; 			// Temporary
+	int TABLE_HEIGHT = 10800;			// Temporary
+	public Dimension TABLE_DIMENSION = new Dimension(19200, 10800);
+	
 	/* User selected Frequency values */
 	public static boolean FREQUENCY_SELECTED = false;
 	public static float FREQUENCY;
 	/* User selected Area Values */
+	public static int stage = 2;
 	public static boolean AREA_SELECTED = false;
 	public static float AREA_SELECTED_START_X;
 	public static float AREA_SELECTED_START_Y;
@@ -27,6 +33,9 @@ public class SettingsPanel extends JPanel{
 	public static Dimension AREA_SELECTED_CAMERA_DIMENSION;
 	/* User selected Density values */
 	public static boolean DENSITY_SELECTED = false;
+
+	public static Dimension PHOTO_VIEW_DIMENSION;
+	public static Dimension CROPT_PHOTO_DIMENSION;
 	
 	/* Global values used by the program */
 	public static FrequensySettingsSubPanel frequencyPanel;

@@ -365,6 +365,8 @@ public class AreaSettingsSubPanel extends JPanel {
 		/* Glass Panel visible and active */
 		DISPLAY_AREA_VIDEO = true;
 		MainFrame.GET_AREA_BOOLEAN = true;
+		SettingsPanel.stage = 2;
+		Program.frame.setGlass();
 		Program.frame.glass.setVisible(true);
 		
 		/* Shows the help video when made active */
@@ -411,7 +413,6 @@ public class AreaSettingsSubPanel extends JPanel {
 		/* Don't show Glass Panel and turn inactive */
 		DISPLAY_AREA_VIDEO = false;
 		MainFrame.GET_AREA_BOOLEAN = false;
-		Program.frame.glass.setVisible(false);
 
 		/* Area help video disabled */
 		DISPLAY_AREA_HELP_VIDEO = false;
