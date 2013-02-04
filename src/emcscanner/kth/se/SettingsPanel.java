@@ -30,10 +30,30 @@ public class SettingsPanel extends JPanel{
 	public static float AREA_SELECTED_START_Y;
 	public static float AREA_SELECTED_END_X;
 	public static float AREA_SELECTED_END_Y;
+	
 	public static Dimension AREA_SELECTED_CAMERA_DIMENSION;
-	/* User selected Density values */
+	
+	public static float AREA_SELECTED_IMAGE_DEPENDENT_START_X;
+	public static float AREA_SELECTED_IMAGE_DEPENDENT_START_Y;
+	public static float AREA_SELECTED_IMAGE_DEPENDENT_END_X;
+	public static float AREA_SELECTED_IMAGE_DEPENDENT_END_Y;
+	public static float AREA_SELECTED_IMAGE_DEPENDENT_WIDTH;
+	public static float AREA_SELECTED_IMAGE_DEPENDENT_HEIGHT;
+	
+	/* User selected density values */
 	public static boolean DENSITY_SELECTED = false;
-
+	public static int DENSITY_SELECTED_WIDTH;
+	public static int DENSITY_SELECTED_HEIGHT;
+	
+	/* User selected file name */
+	public static boolean FILE_NAME_SELECTED = false;
+	public static String FILE_NAME;
+	
+	/* Scan viable */
+	public static final boolean SCAN_DONE = false;
+	
+	/* This class */
+	/* Dimensions */
 	public static Dimension PHOTO_VIEW_DIMENSION;
 	public static Dimension CROPT_PHOTO_DIMENSION;
 	
@@ -41,7 +61,8 @@ public class SettingsPanel extends JPanel{
 	public static FrequensySettingsSubPanel frequencyPanel;
 	public static AreaSettingsSubPanel areaPanel;
 	public static DensitySettingsSubPanel densityPanel;
-	//public static SettingsSubPanel fileNamePanel;
+	public static FileNameSettingsSubPanel fileNamePanel;
+	public static ScanSettingsSubPanel scanPanel;
 	
 	public JButton backButton = new JButton();
 	
@@ -62,16 +83,20 @@ public class SettingsPanel extends JPanel{
 		frequencyPanel = new FrequensySettingsSubPanel();
 		areaPanel = new AreaSettingsSubPanel();
 		densityPanel = new DensitySettingsSubPanel();
-		//fileNamePanel = new SettingsSubPanel("Step 4/4", "This is where you select the file name that you want to have.", 4);
+		fileNamePanel = new FileNameSettingsSubPanel();
+		scanPanel = new ScanSettingsSubPanel();
+		
 		settingsContiner.add(frequencyPanel);
 		settingsContiner.add(areaPanel);
 		settingsContiner.add(densityPanel);
-		//settingsContiner.add(fileNamePanel);
+		settingsContiner.add(fileNamePanel);
+		settingsContiner.add(scanPanel);
 		
 		
 		
 		/* Button made for going back to previous views */
 		backButton.setEnabled(true);
+		backButton.setPreferredSize(Program.BUTTON_DIMENSION);
 		backButton.setIcon(Program.BACK_BUTTON_ENABLED_IMAGE_ICON);
 		backButton.setPressedIcon(Program.BACK_BUTTON_BLUE_PREST_IMAGE_ICON);
 		backButton.setOpaque(false);

@@ -29,73 +29,76 @@ public class ImagePanel extends JPanel{
 	}
 	public void setPhoto(){
 		this.photo = cvLoadImage("webcam photo/WEBCAM_PHOTO.jpg");
-			
-		CvMat rectangleImage = cvCreateMat((int) (SettingsPanel.AREA_SELECTED_END_X - SettingsPanel.AREA_SELECTED_START_X),
-									 (int) (SettingsPanel.AREA_SELECTED_END_Y - SettingsPanel.AREA_SELECTED_START_Y), 
-									 		CV_32SC2);
+        cvFlip(this.photo, this.photo, 1);
+        cvSmooth(this.photo, this.photo, CV_GAUSSIAN, 3);
+
+		/* Create new area selection values depending on the image size. */
+				
+
+    	SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_START_X = ((SettingsPanel.AREA_SELECTED_START_X * this.photo.width())  / SettingsPanel.AREA_SELECTED_CAMERA_DIMENSION.width);
+    	SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_START_Y = ((SettingsPanel.AREA_SELECTED_START_Y * this.photo.height()) / SettingsPanel.AREA_SELECTED_CAMERA_DIMENSION.height);
+    	SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_END_X   = ((SettingsPanel.AREA_SELECTED_END_X   * this.photo.width() ) / SettingsPanel.AREA_SELECTED_CAMERA_DIMENSION.width );
+    	SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_END_Y   = ((SettingsPanel.AREA_SELECTED_END_Y   * this.photo.height()) / SettingsPanel.AREA_SELECTED_CAMERA_DIMENSION.height);
+    	SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_WIDTH   = (SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_END_X  - SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_START_X + 1);
+    	SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_HEIGHT  = (SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_END_Y  - SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_START_Y + 1);
+    	
+    	
+    	/* Sets values of Max density height and width */
+    	SettingsPanel.densityPanel.widthLabel.setText("<html><font color = rgb(100,150,255)> Width: </font></html>");
+    	SettingsPanel.densityPanel.widthLabelValue.setText("<html>" + (int)(SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_WIDTH * SettingsPanel.densityPanel.TIONDELS_MILLI_METER_PIXEL) + " &gt</html>");
+    	SettingsPanel.densityPanel.widthLabel0.setText("<html> &gt 0 </html>");
+    	SettingsPanel.densityPanel.heightLabel.setText("<html> <font color = rgb(100,150,255)> Height: </font></html> ");
+    	SettingsPanel.densityPanel.heightLabelValue.setText("<html>" + (int)(SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_HEIGHT * SettingsPanel.densityPanel.TIONDELS_MILLI_METER_PIXEL) + " &gt</html>");
+    	SettingsPanel.densityPanel.heightLabel0.setText("<html> &gt 0</html>");
+		   			
+		CvMat rectangleImage = cvCreateMat((int) SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_WIDTH,
+										   (int) SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_HEIGHT, 
+										   CV_32SC2);
 		
-		CvRect rect = cvRect((int) SettingsPanel.AREA_SELECTED_START_X, (int) SettingsPanel.AREA_SELECTED_START_Y, 
-							 (int) (SettingsPanel.AREA_SELECTED_END_X - SettingsPanel.AREA_SELECTED_START_X), 
-							 (int) (SettingsPanel.AREA_SELECTED_END_Y - SettingsPanel.AREA_SELECTED_START_Y));
+		CvRect rect = cvRect((int) SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_START_X,
+							 (int) SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_START_Y,
+							 (int) SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_WIDTH,
+							 (int) SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_HEIGHT);
 		
-		int widthPhoto = SettingsPanel.AREA_SELECTED_CAMERA_DIMENSION.width;
-        int heightPhoto = SettingsPanel.AREA_SELECTED_CAMERA_DIMENSION.height;
-        int widthCameraImage = this.photo.width();
-        int heightCameraImage = this.photo.height();
+		
+		
+		CvMat photo2 = cvGetSubRect(this.photo.asCvMat(), rectangleImage, rect); 
+		
+		IplImage iplPhoto2 = photo2.asIplImage();
+		
+		int widthPhotoArea = Program.cameraPanel.getWidth();
+        int heightPhotoArea = Program.cameraPanel.getHeight();
+        int widthCroptImage = iplPhoto2.width();
+        int heightCroptImage = iplPhoto2.height();
         
         /* Creating dimensions for the camera and the panel area 
            Used later for deciding the new dimension that we will resize the image to */
-        Dimension imgSize = new Dimension(widthCameraImage, heightCameraImage);
-        Dimension boundary = SettingsPanel.AREA_SELECTED_CAMERA_DIMENSION;
+        Dimension imgSize2 = new Dimension(widthCroptImage, heightCroptImage);
+        Dimension boundary2 = new Dimension(widthPhotoArea, heightPhotoArea);
         /* Changing the scaling of the grabbed camera image */
-        Dimension newImagebunderys = CameraPanel.getScaledDimension(imgSize, boundary);
+        Dimension newImagebunderys1 = CameraPanel.getScaledDimension(imgSize2, boundary2);
         
-        if((widthPhoto > 0) || (heightPhoto > 0))
-        {
-        	
-        	BufferedImage bufferdWebcameraImage = this.photo.getBufferedImage();
-			int type = bufferdWebcameraImage.getType() == 0? BufferedImage.TYPE_INT_ARGB
-			        : bufferdWebcameraImage.getType();
+        /* CROPT_IMAGE SIZE */ 
+        SettingsPanel.CROPT_PHOTO_DIMENSION = boundary2;
+        
+        /* Dimension is being updated all the time so we know where to draw the lines  */ 
+        SettingsPanel.PHOTO_VIEW_DIMENSION = newImagebunderys1;
 
-			BufferedImage resizeImaged = CameraPanel.resizeImage(bufferdWebcameraImage, type, newImagebunderys.width, newImagebunderys.height);
-			
-			IplImage photo1 = IplImage.createFrom(resizeImaged);
-			CvMat photo2 = cvGetSubRect(photo1.asCvMat(), rectangleImage, rect); 
-			IplImage iplPhoto2 = photo2.asIplImage();
-			
-			int widthPhotoArea = Program.cameraPanel.getWidth();
-	        int heightPhotoArea = Program.cameraPanel.getHeight();
-	        int widthCroptImage = iplPhoto2.width();
-	        int heightCroptImage = iplPhoto2.height();
-	        
-	        /* Creating dimensions for the camera and the panel area 
-	           Used later for deciding the new dimension that we will resize the image to */
-	        Dimension imgSize2 = new Dimension(widthCroptImage, heightCroptImage);
-	        Dimension boundary2 = new Dimension(widthPhotoArea, heightPhotoArea);
-	        /* Changing the scaling of the grabbed camera image */
-	        Dimension newImagebunderys1 = CameraPanel.getScaledDimension(imgSize2, boundary2);
-	        
-	        /* CROPT_IMAGE SIZE */ 
-	        SettingsPanel.CROPT_PHOTO_DIMENSION = boundary2;
-	        
-	        /* Dimension is being updated all the time so we know where to draw the lines  */ 
-	        SettingsPanel.PHOTO_VIEW_DIMENSION = newImagebunderys1;
+        int width  = newImagebunderys1.width;
+        int height  = newImagebunderys1.height;
+        
+        IplImage ipl = IplImage.create(width, height, photo.depth(), photo.nChannels());
+		
+		cvResize(iplPhoto2, ipl, CV_INTER_LANCZOS4);
+		
+		this.photo = ipl;
+		
+		colorPanel.theCamera = ipl.getBufferedImage();
+		
+		ImagePanel.IMAGE_TAKEN = true;
 
-	        int width  = newImagebunderys1.width;
-	        int height  = newImagebunderys1.height;
-	        
-	        IplImage ipl = IplImage.create(width, height, photo.depth(), photo.nChannels());
-			
-			cvResize(iplPhoto2, ipl, CV_INTER_LANCZOS4);
-			
-			this.photo = ipl;
-			
-			colorPanel.theCamera = ipl.getBufferedImage();
-			
-			ImagePanel.IMAGE_TAKEN = true;
-
-	        this.colorPanel.repaint();
-        }
+        this.colorPanel.repaint();
+        
 		this.add(colorPanel);
 	}
 	/*

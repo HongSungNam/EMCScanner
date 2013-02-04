@@ -9,7 +9,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
-import java.util.concurrent.ExecutionException;
 
 import javax.swing.JPanel;
 
@@ -20,7 +19,6 @@ import static com.googlecode.javacv.cpp.opencv_highgui.*;
 import com.googlecode.javacv.FrameGrabber;
 import com.googlecode.javacv.OpenCVFrameGrabber;
 import com.googlecode.javacv.cpp.opencv_core.IplImage;
-
 /**
  * 
  * @author Jonas
@@ -48,13 +46,20 @@ public class CameraPanel extends JPanel{
         	/* There exists many different types of frame grabbers. 
         	   This one is the one that is working for this camera. */
         	grabber = new OpenCVFrameGrabber(0);
+        	//CvCapture grabber = opencv_highgui.cvCreateCameraCapture(0);
         	
+        	
+        	//grabber.setFrameRate(60);
+        	int width = 4096;
+        	int height = 3072;
         	/* Sets the grabbers resolution */
-        	grabber.setImageHeight(1080);
-        	grabber.setImageWidth(1920);
+        	grabber.setImageHeight(height);
+        	grabber.setImageWidth(width);
         	
         	/* Starts the camera */
         	grabber.start();
+        	System.out.println("Grabbed");
+        	//cvSaveImage("webcam photo/WEBCAM_PHOTO_TEST_HIGH_RES.jpg", grabbedImage);
         	
         	/* Creates a ColorPanel and adds it to this camera panel */
             this.add(colorCameraPanel = new ColorPanel(buffImg));
@@ -86,7 +91,6 @@ public class CameraPanel extends JPanel{
 		                    if(SAVE_IMAGE)
 		                    {
 		                    	cvFlip(grabbedImage, grabbedImage, 1);
-			                   
 		                    	cvSaveImage("webcam photo/WEBCAM_PHOTO.jpg", grabbedImage);
 		                    	SAVE_IMAGE = false;
 		                    }

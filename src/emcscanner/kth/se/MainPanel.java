@@ -24,7 +24,9 @@ public class MainPanel extends JPanel   {
 			@Override
 			public void propertyChange(PropertyChangeEvent arg0) {
 				if (ImagePanel.IMAGE_TAKEN)
+				{
 					Program.imagePanel.resizePhoto();
+				}
 			}
 			
 		});

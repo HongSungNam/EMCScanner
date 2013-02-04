@@ -116,9 +116,10 @@ public class FrequensySettingsSubPanel extends JPanel{
 		this.headerButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				SettingsPanel.frequencyPanel.frequencySelectionPanelActive();
+				SettingsPanel.frequencyPanel.frequencyPanelActive();
 				SettingsPanel.areaPanel.areaSelectionNotActive();
-				SettingsPanel.densityPanel.densitySelectionNotActive();
+				SettingsPanel.densityPanel.densityPanelNotActive();
+				SettingsPanel.fileNamePanel.fileNamePanelNotActive();
 
 				MainPanel.setLeftStage(Program.cameraPanel);
 			}
@@ -156,7 +157,7 @@ public class FrequensySettingsSubPanel extends JPanel{
 		nextButton.setContentAreaFilled(false);
 		nextButton.setBorderPainted(false);
 		nextButton.setToolTipText(NEXT_BUTTON_TOOL_TIP_TEXT);
-		nextButton.setPreferredSize(NEXT_BUTTON_DIMENSION);
+		nextButton.setPreferredSize(Program.BUTTON_DIMENSION);
 		nextButton.setEnabled(false);
 		nextButton.setIcon(Program.NEXT_BUTTON_ENABLED_IMAGE_ICON);
 		nextButton.setDisabledIcon(Program.NEXT_BUTTON_DISABLED_IMAGE_ICON);
@@ -166,11 +167,11 @@ public class FrequensySettingsSubPanel extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				SettingsPanel.FREQUENCY_SELECTED = true;
-				
-				SettingsPanel.frequencyPanel.frequencyPanelNotActive();
 				/* Adding the next step */
 				SettingsPanel.areaPanel.areaSelectionActive();
 				SettingsPanel.frequencyPanel.frequencyPanelNotActive();
+				SettingsPanel.densityPanel.densityPanelNotActive();
+				SettingsPanel.fileNamePanel.fileNamePanelNotActive();
 			}
 		});
 		
@@ -191,6 +192,7 @@ public class FrequensySettingsSubPanel extends JPanel{
 		    public void checkFloat(){
 		    	boolean AREA_HEADER_BUTTON_TEMP_DISABLED = false;
 	    		boolean DENSITY_HEADER_BUTTON_TEMP_DISABLED = false;
+	    		boolean FILE_NAME_HEADER_BUTTON_TEMP_DISABLED = false;
 		    	try
 		    	{
 		    		float value = Float.valueOf(floatInputTextField.getText());
@@ -217,12 +219,21 @@ public class FrequensySettingsSubPanel extends JPanel{
 							AreaSettingsSubPanel.HEADER_BUTTON_ENABLED = true;
 							AreaSettingsSubPanel.headerButton.setEnabled(AreaSettingsSubPanel.HEADER_BUTTON_ENABLED);
 							AreaSettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.areaPanel.HEADER_ENABLED_IMAGE_ICON);
+							AREA_HEADER_BUTTON_TEMP_DISABLED = false;
 						}
 						if(DENSITY_HEADER_BUTTON_TEMP_DISABLED)
 						{
 							DensitySettingsSubPanel.HEADER_BUTTON_ENABLED = true;
 							DensitySettingsSubPanel.headerButton.setEnabled(DensitySettingsSubPanel.HEADER_BUTTON_ENABLED);
 							DensitySettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.densityPanel.HEADER_ENABLED_IMAGE_ICON);
+							DENSITY_HEADER_BUTTON_TEMP_DISABLED = false;
+						}
+						if(FILE_NAME_HEADER_BUTTON_TEMP_DISABLED)
+						{
+							FileNameSettingsSubPanel.HEADER_BUTTON_ENABLED = true;
+							FileNameSettingsSubPanel.headerButton.setEnabled(FileNameSettingsSubPanel.HEADER_BUTTON_ENABLED);
+							FileNameSettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.fileNamePanel.HEADER_ENABLED_IMAGE_ICON);
+							FILE_NAME_HEADER_BUTTON_TEMP_DISABLED = false;
 						}
 						
 			    	}
@@ -251,15 +262,21 @@ public class FrequensySettingsSubPanel extends JPanel{
 						
 						if(AreaSettingsSubPanel.HEADER_BUTTON_ENABLED)
 						{
-							AreaSettingsSubPanel.headerButton.setEnabled(false);
+							AreaSettingsSubPanel.headerButton.setEnabled(AreaSettingsSubPanel.HEADER_BUTTON_ENABLED = false);
 							AreaSettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.areaPanel.HEADER_DISABLED_DARK_GREEN_IMAGE_ICON);
 							AREA_HEADER_BUTTON_TEMP_DISABLED = true;
 						}
 						if(DensitySettingsSubPanel.HEADER_BUTTON_ENABLED)
 						{
-							DensitySettingsSubPanel.headerButton.setEnabled(false);
-							DensitySettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.areaPanel.HEADER_DISABLED_DARK_GREEN_IMAGE_ICON);
+							DensitySettingsSubPanel.headerButton.setEnabled(DensitySettingsSubPanel.HEADER_BUTTON_ENABLED = false);
+							DensitySettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.densityPanel.HEADER_DISABLED_DARK_GREEN_IMAGE_ICON);
 							DENSITY_HEADER_BUTTON_TEMP_DISABLED = true;
+						}
+						if(FileNameSettingsSubPanel.HEADER_BUTTON_ENABLED)
+						{
+							FileNameSettingsSubPanel.headerButton.setEnabled(FileNameSettingsSubPanel.HEADER_BUTTON_ENABLED = false);
+							FileNameSettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.fileNamePanel.HEADER_DISABLED_DARK_GREEN_IMAGE_ICON);
+							FILE_NAME_HEADER_BUTTON_TEMP_DISABLED = true;
 						}
 					}
 		    	} 
@@ -284,15 +301,18 @@ public class FrequensySettingsSubPanel extends JPanel{
 					if(DensitySettingsSubPanel.HEADER_BUTTON_ENABLED)
 					{
 						DensitySettingsSubPanel.headerButton.setEnabled(false);
-						DensitySettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.areaPanel.HEADER_DISABLED_DARK_GREEN_IMAGE_ICON);
+						DensitySettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.densityPanel.HEADER_DISABLED_DARK_GREEN_IMAGE_ICON);
 						DENSITY_HEADER_BUTTON_TEMP_DISABLED = true;
 					}
-					
+					if(FileNameSettingsSubPanel.HEADER_BUTTON_ENABLED)
+					{
+						FileNameSettingsSubPanel.headerButton.setEnabled(FileNameSettingsSubPanel.HEADER_BUTTON_ENABLED = false);
+						FileNameSettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.fileNamePanel.HEADER_DISABLED_DARK_GREEN_IMAGE_ICON);
+						FILE_NAME_HEADER_BUTTON_TEMP_DISABLED = true;
+					}
 		    	}
 		    }
 		});
-		
-		
 		
 		/* Containers for setting up GUI */
 		JPanel continer1 = new JPanel();
@@ -340,7 +360,9 @@ public class FrequensySettingsSubPanel extends JPanel{
 	/**
 	 * 
 	 */
-	public void frequencySelectionPanelActive(){
+	public void frequencyPanelActive(){
+		MainPanel.setLeftStage(Program.cameraPanel);
+
 
 		Program.frame.glass.setVisible(false);
 		

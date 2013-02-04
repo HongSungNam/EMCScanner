@@ -31,6 +31,7 @@ public class StartControlPanel extends JPanel {
 		nextButton.setOpaque(false);
 		nextButton.setContentAreaFilled(false);
 		nextButton.setBorderPainted(false);
+		nextButton.setPreferredSize(Program.BUTTON_DIMENSION);
 		nextButton.setToolTipText("You need to write a number between 0.1 and 6000 befor you can continue");
 		nextButton.setPreferredSize(new Dimension(90, 50));
 		nextButton.setEnabled(true);

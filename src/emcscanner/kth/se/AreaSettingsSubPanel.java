@@ -71,11 +71,11 @@ public class AreaSettingsSubPanel extends JPanel {
 
 	/* Imports the different images for the different button stages. */	
 	/* Import the images for the header button */
-	public ImageIcon HEADER_ENABLED_IMAGE_ICON 	 		= new ImageIcon("image/PanelGreenArea.png");
-	public ImageIcon HEADER_ENABLED_ROLLOVER_IMAGE_ICON = new ImageIcon("image/PanelGreenAreaRollover.png");
-	public ImageIcon HEADER_DISABLED_GRAY_IMAGE_ICON 	= new ImageIcon("image/PanelGrayArea.png");
-	public ImageIcon HEADER_ENABLED_PREST_IMAGE_ICON 	= new ImageIcon("image/PanelGreenAreaPrest.png");
-	public ImageIcon HEADER_DISABLED_BLUE_IMAGE_ICON 	= new ImageIcon("image/PanelBlueArea.png");
+	public ImageIcon HEADER_ENABLED_IMAGE_ICON 	 			= new ImageIcon("image/PanelGreenArea.png");
+	public ImageIcon HEADER_ENABLED_ROLLOVER_IMAGE_ICON 	= new ImageIcon("image/PanelGreenAreaRollover.png");
+	public ImageIcon HEADER_DISABLED_GRAY_IMAGE_ICON 		= new ImageIcon("image/PanelGrayArea.png");
+	public ImageIcon HEADER_ENABLED_PREST_IMAGE_ICON 		= new ImageIcon("image/PanelGreenAreaPrest.png");
+	public ImageIcon HEADER_DISABLED_BLUE_IMAGE_ICON 		= new ImageIcon("image/PanelBlueArea.png");
 	public ImageIcon HEADER_DISABLED_DARK_GREEN_IMAGE_ICON 	= new ImageIcon("image/PanelDarkGreenArea.png");
 
 	/* Dimensions */
@@ -120,7 +120,8 @@ public class AreaSettingsSubPanel extends JPanel {
 					
 					SettingsPanel.areaPanel.areaSelectionActive();
 					SettingsPanel.frequencyPanel.frequencyPanelNotActive();
-					SettingsPanel.densityPanel.densitySelectionNotActive();
+					SettingsPanel.densityPanel.densityPanelNotActive();
+					SettingsPanel.fileNamePanel.fileNamePanelNotActive();
 					
 					MainPanel.setLeftStage(Program.cameraPanel);
 				}
@@ -154,7 +155,7 @@ public class AreaSettingsSubPanel extends JPanel {
 		nextButton.setContentAreaFilled(false);
 		nextButton.setBorderPainted(false);
 		nextButton.setToolTipText(NEXT_BUTTON_TOOL_TIP_TEXT);
-		nextButton.setPreferredSize(Program.NEXT_BUTTON_DIMENSION);
+		nextButton.setPreferredSize(Program.BUTTON_DIMENSION);
 		nextButton.setEnabled(false);
 		nextButton.setIcon(Program.NEXT_BUTTON_ENABLED_IMAGE_ICON);
 		nextButton.setDisabledIcon(Program.NEXT_BUTTON_DISABLED_IMAGE_ICON);
@@ -166,7 +167,7 @@ public class AreaSettingsSubPanel extends JPanel {
 				SettingsPanel.AREA_SELECTED = true;
 				if((Program.frame.glass.cursorPressed.x < Program.frame.glass.cursorReleased.x) )
 	    		{
-	    			if((Program.frame.glass.cursorPressed.y < Program.frame.glass.cursorReleased.y))
+	    			if ((Program.frame.glass.cursorPressed.y < Program.frame.glass.cursorReleased.y))
 	    			{
         				SettingsPanel.areaPanel.areaLabel.setText("<html><font color = rgb(120,200,40)>Area Selected:</font>" +
 								" Width: " + (int) (Program.frame.glass.cursorReleased.x - Program.frame.glass.cursorPressed.x + 1) + 
@@ -192,11 +193,11 @@ public class AreaSettingsSubPanel extends JPanel {
 	    		}
 				else
     			{
-					if((Program.frame.glass.cursorPressed.y < Program.frame.glass.cursorReleased.y))
+					if ((Program.frame.glass.cursorPressed.y < Program.frame.glass.cursorReleased.y))
 	    			{
 	    				SettingsPanel.areaPanel.areaLabel.setText("<html><font color = rgb(120,200,40)>Area Selected:</font>" +
 								" Width: " + (int) (Program.frame.glass.cursorPressed.x - Program.frame.glass.cursorReleased.x + 1) + 
-								" x Hight: " +(int) (Program.frame.glass.cursorReleased.y - Program.frame.glass.cursorPressed.y + 1) + "</font></html>");	
+								" x Height: " +(int) (Program.frame.glass.cursorReleased.y - Program.frame.glass.cursorPressed.y + 1) + "</font></html>");	
 	    				/* Saves area settings */
         				SettingsPanel.AREA_SELECTED_START_X = Program.frame.glass.cursorReleased.x;
         				SettingsPanel.AREA_SELECTED_END_X = Program.frame.glass.cursorPressed.x;
@@ -218,11 +219,10 @@ public class AreaSettingsSubPanel extends JPanel {
 				SettingsPanel.AREA_SELECTED_CAMERA_DIMENSION = Program.cameraPanel.CAMERA_VIEW_BOUNDERYS_DIMENSION;
 				
 				SettingsPanel.areaPanel.areaSelectionNotActive();
-				SettingsPanel.densityPanel.densitySelectionActive();
+				SettingsPanel.densityPanel.densityPanelActive();
 				SettingsPanel.frequencyPanel.frequencyPanelNotActive();
-				
-				MainPanel.setLeftStage(Program.imagePanel);
-				
+				SettingsPanel.fileNamePanel.fileNamePanelNotActive();
+						
 				CameraPanel.SAVE_IMAGE = true;
 				try {
 					Thread.sleep(100);
@@ -237,6 +237,7 @@ public class AreaSettingsSubPanel extends JPanel {
 
 		/* Back on step JButton */
 		backButton.setEnabled(true);
+		backButton.setPreferredSize(Program.BUTTON_DIMENSION);
 		backButton.setIcon(Program.BACK_BUTTON_ENABLED_IMAGE_ICON);
 		backButton.setPressedIcon(Program.BACK_BUTTON_BLUE_PREST_IMAGE_ICON);
 		backButton.setOpaque(false);
@@ -246,8 +247,9 @@ public class AreaSettingsSubPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				areaSelectionNotActive();
-				SettingsPanel.frequencyPanel.frequencySelectionPanelActive();
-				SettingsPanel.densityPanel.densitySelectionNotActive();
+				SettingsPanel.frequencyPanel.frequencyPanelActive();
+				SettingsPanel.densityPanel.densityPanelNotActive();
+				SettingsPanel.fileNamePanel.fileNamePanelNotActive();
 			}
 		});
 
@@ -258,7 +260,7 @@ public class AreaSettingsSubPanel extends JPanel {
 		continer1.add(areaNotSelectedLabel, BorderLayout.CENTER);
 		
 		threadDisplayAreaSelectionVideo = new Thread("threadDisplay"){
-        	public void run(){
+        	public void run() {
 	            while (true) {
 	            	if (DISPLAY_AREA_VIDEO)
 	            	{
@@ -271,7 +273,7 @@ public class AreaSettingsSubPanel extends JPanel {
 		                		else
 		                			Thread.sleep(100);
 		                	}
-		                	else if((grabber2.getLengthInFrames()-100) >= grabber2.getFrameNumber()) {
+		                	else if ((grabber2.getLengthInFrames()-100) >= grabber2.getFrameNumber()) {
 		                		if (DISPLAY_AREA_HELP_VIDEO)
 			                		grabbedImage = grabber2.grab();
 		                		else
@@ -362,12 +364,15 @@ public class AreaSettingsSubPanel extends JPanel {
 	 * ACTIVE
 	 */
 	public void areaSelectionActive(){
+		MainPanel.setLeftStage(Program.cameraPanel);
+
+		SettingsPanel.stage = 2;
+		Program.frame.glass.repaint();
+		Program.frame.glass.setVisible(true);
+		
 		/* Glass Panel visible and active */
 		DISPLAY_AREA_VIDEO = true;
 		MainFrame.GET_AREA_BOOLEAN = true;
-		SettingsPanel.stage = 2;
-		Program.frame.setGlass();
-		Program.frame.glass.setVisible(true);
 		
 		/* Shows the help video when made active */
 		DISPLAY_AREA_HELP_VIDEO = true;
