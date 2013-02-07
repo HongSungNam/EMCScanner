@@ -4,43 +4,83 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
 
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import com.googlecode.javacv.FrameGrabber.Exception;
 /**
  * 
  * @author Jonas
  *
  */
-public class FrequensySettingsSubPanel extends JPanel{
-
+public class FrequensySettingsSubPanel extends JPanel {
+	
+	/* Threads */
+	static Thread DisplayFrequensyVideoThread;
+	
+	public static BufferedImage buffImg = null;
+	/* Creates a ColorPanel and adds it to this camera panel */
+	public static ColorPanel colorFrequensyVideoPanel = new ColorPanel(buffImg);
+	
 	/* Boolean */
+	/* Display video*/
+	public static boolean DISPLAY_VIDEO = true;
+	public static boolean DISPLAY_HELP_VIDEO = true;
+	
+	/* other Booleans */
 	public static boolean WRONG_FLOAT_INPUT = false;
 	public static boolean NEXT_BUTTON_ENABLED = false;
+	
+	public static boolean START_FREQUENSY_SELECTED = false;
+	public static boolean DENSITY_FREQUENSY_SELECTED = false;
+	public static boolean END_FREQUENCY_SELECTED = false;
+	
+	/* Float */
+	public float startValue = 0.1f;
+	public float endValue = 0;
+	
+	/* JCheckBox */
+	public JCheckBox endCheckBox = new JCheckBox();
 	
 	/* Panels- Containers for setting up GUI */
 	public JPanel stepContiner = new JPanel();
 	public JPanel headerAndPanelContiner = new JPanel();
 	public JPanel frequencyPanel = new JPanel();
 	
+	/* Containers for setting up GUI */
+	public JPanel continer1 = 	new JPanel();
+	public JPanel continer2 = 	new JPanel();
+	public JPanel startTextFeildContainer 	= new JPanel();
+	public JPanel endFrequensyContainer 	= new JPanel();
+	public JPanel endTextFeildContainer 	= new JPanel();
+	public JPanel continer4 = 	new JPanel();
+	public JPanel continer5 = 	new JPanel();
+	public JPanel continer6 = 	new JPanel();
+
+	public JPanel startFrequensyContainer = new JPanel(new BorderLayout());
+	public JPanel densityContainer = new JPanel(new FlowLayout());
+	public JPanel densityEndFrequensyContainer = new JPanel(new BorderLayout());
+	public JPanel frequencySummeryPanel = new JPanel(new BorderLayout());
+	public JPanel frequencySummeryContainer = new JPanel();
+	
 	/* Buttons */
 	public JButton headerButton = new JButton();
 	public static JButton nextButton = new JButton();
+	public JButton backButton = new JButton();
 	
 	/* JTextField */
-	public JTextField floatInputTextField = new JTextField(4);
+	public JTextField startFloatInputTextField = new JTextField(4);
+	public JTextField endFloatInputTextField = new JTextField(4);
+	public JTextField densityIntInputTextField = new JTextField(4);
 	
 	/* String */
 	public String STEP_TEXT_GRAY = "<html> <font color = rgb(120,120,120)>Step 1/4</font></html>";
@@ -52,24 +92,56 @@ public class FrequensySettingsSubPanel extends JPanel{
 	
 	public String HEADER_BUTTON_TOOL_TIP_TEXT = "Press to reselect The frequency";
 	
-	public String TEXT_NOTE_NORMAL_TEXT = "<html> <font color = rgb(255, 0, 0)> Note</font>: The signal generator’s " + 
-		 	 						   "<br>" + " Intervall is 0.1 – 6000 MHz. </html>";
-	public String TEXT_MORE_THEN_NORMAL_TEXT = "<html>0.1 ≤ </html>";
-	public String TEXT_LESS_THEN_NORMAL_TEXT = "<html><font color = rgb(100,150,255)>MHz</font>"+" ≤ 6000</html>";
-	public String TEXT_MORE_THEN_RED_TEXT = "<html><font color = rgb(255,0,0)>0.1 ≤</font></html>";
-	public String TEXT_LESS_THEN_RED_TEXT = "<html><font color = rgb(100,150,255)>MHz</font>"+"<font color = rgb(255,0,0)> ≤ 6000</font></html>";
+	public String MORE_THEN_NORMAL_TEXT = "<html>0.1 ≤ </html>";
+	public String LESS_THEN_NORMAL_TEXT = "<html><font color = rgb(100,150,255)>MHz</font>"+" ≤ 6000</html>";
+	
+	public String END_MORE_THEN_LIGHT_GRAY_TEXT = "<html><font color = rgb(110,110,110)>" + startValue + " ≤</font></html>";
+	public String LESS_THEN_LIGHT_GRAY_TEXT = "<html><font color = rgb(110,110,110)>MHz ≤ 6000</font></html>";
+	
+	public String MORE_THEN_RED_TEXT = "<html><font color = rgb(255,0,0)>0.1 ≤</font></html>";
+	public String LESS_THEN_RED_TEXT = "<html><font color = rgb(100,150,255)>MHz</font>"+"<font color = rgb(255,0,0)> ≤ 6000</font></html>";
+	
+	public String START_FREQUENSY_LIGHT_BLUE_TEXT = "<html><font color = rgb(100,150,255)>Start frequency: </font></html>";
+	public String START_FREQUENSY_RED_TEXT = "<html><font color = rgb(255,0,0)>Start frequency: </font></html>";
+	
+	public String END_FREQUENSY_LIGHT_GRAY_TEXT = "<html><font color = rgb(120,120,120)>End frequency: </font></html>";
+	public String END_FREQUENSY_LIGHT_BLUE_TEXT = "<html><font color = rgb(100,150,255)>End frequency: </font></html>";
+	public String END_FREQUENSY_RED_TEXT = "<html><font color = rgb(255,0,0)>End frequency: </font></html>";
+	
+	public String DENSITY_FREQUENSY_LIGHT_GRAY_TEXT = "<html><font color = rgb(120,120,120)>Frequency density:</font></html>";
+	public String DENSITY_FREQUENSY_LIGHT_BLUE_TEXT = "<html><font color = rgb(100,150,255)>Frequency density:</font></html>";
+	public String DENSITY_FREQUENSY_RED_TEXT = "<html><font color = rgb(255,0,0)>Frequency density:</font></html>";
+	
+	public String DENSITY_MORE_THEN_TEXT = "<html><font color = rgb(110,110,110)> 1 ≤</font></html>";
+	public String DENSITY_LESS_THEN_TEXT = "<html><font color = rgb(110,110,110)> ≤ </font></html>";
 	
 	/* Constants for the FrequencyPanel */
 	public int frequencyInputLimit = 6;
-
-	/* JLabel */
-	public JLabel stepLabel = new JLabel(STEP_TEXT_LIGHT_BLUE);
+	public int densityValue = 0;
+	public int densityEndValue = 1;
+	public int STAGE = 1; //This stage
 	
-	public JLabel textNote  = new JLabel(TEXT_NOTE_NORMAL_TEXT);
-	public JLabel textMoreThen = new JLabel(TEXT_MORE_THEN_NORMAL_TEXT);
-	public JLabel textLessThen = new JLabel(TEXT_LESS_THEN_NORMAL_TEXT);
-
-	public JLabel frequencyLabel = new JLabel();
+	/* JLabel */
+	public JLabel stepLabel 			= new JLabel(STEP_TEXT_LIGHT_BLUE);
+	
+	public JLabel startMoreThenLabel	= new JLabel(MORE_THEN_NORMAL_TEXT);
+	public JLabel startLessThenLabel 	= new JLabel(LESS_THEN_NORMAL_TEXT);
+	
+	public JLabel endMoreThenLabel		= new JLabel(END_MORE_THEN_LIGHT_GRAY_TEXT);
+	public JLabel endLessThenLabel 		= new JLabel(LESS_THEN_LIGHT_GRAY_TEXT);
+	
+	public JLabel densityMoreThenLabel	= new JLabel(DENSITY_MORE_THEN_TEXT);
+	public JLabel densityLessThenLabel	= new JLabel(DENSITY_LESS_THEN_TEXT);
+	
+	public JLabel frequencyLabel 		= new JLabel();
+	public JLabel frequencyLabelStart 	= new JLabel();
+	public JLabel frequencyLabelEnd 	= new JLabel();
+	public JLabel frequencyLabelDensity = new JLabel();
+	
+	public JLabel startFrequensyLabel 	= new JLabel(START_FREQUENSY_LIGHT_BLUE_TEXT);
+	public JLabel endFrequensyLabel 	= new JLabel(END_FREQUENSY_LIGHT_GRAY_TEXT);
+	public JLabel densityFrequensyLabel = new JLabel(DENSITY_FREQUENSY_LIGHT_GRAY_TEXT);
+	
 	
 	/* Imports the different images for the different button stages. */	
 	public ImageIcon HEADER_ENABLED_IMAGE_ICON 	 		= new ImageIcon("image/PanelGreenFrequency.png");
@@ -81,14 +153,16 @@ public class FrequensySettingsSubPanel extends JPanel{
 	/* Dimensions */
 	public Dimension THIS_MINIMUM_DIMENSION = new Dimension(400, 100);
 	
-	public Dimension STEP_CONTINER_DIMENSION_ACTIVE = new Dimension(50, 180);
-	public Dimension STEP_CONTINER_DIMENSION_OFF = new Dimension(50, 80);
+	public Dimension COLOR_PANEL_DIMENSION = new Dimension(322, 180);
 	
-	public Dimension FREQUENCY_PANEL_DIMENSION_ACTIVE = new Dimension(322, 140);
-	public Dimension FREQUENCY_PANEL_DIMENSION_OFF = new Dimension(322, 40);
+	public Dimension STEP_CONTINER_DIMENSION_ACTIVE = new Dimension(50, 380);
+	public Dimension STEP_CONTINER_DIMENSION_OFF = new Dimension(50, 100);
 	
-	public Dimension HEADER_AND_PANEL_CONTINER_DIMENSION_ACTIVE = new Dimension(322, 180);
-	public Dimension HEADER_AND_PANEL_CONTINER_DIMENSION_OFF = new Dimension(322, 80);
+	public Dimension FREQUENCY_PANEL_DIMENSION_ACTIVE = new Dimension(322, 340);
+	public Dimension FREQUENCY_PANEL_DIMENSION_OFF = new Dimension(322, 60);
+	
+	public Dimension HEADER_AND_PANEL_CONTINER_DIMENSION_ACTIVE = new Dimension(322, 380);
+	public Dimension HEADER_AND_PANEL_CONTINER_DIMENSION_OFF = new Dimension(322, 100);
 	
 	public Dimension HEADER_BUTTON_DIMENSION = new Dimension(355, 40);
 	public Dimension NEXT_BUTTON_DIMENSION = new Dimension(90, 50);
@@ -100,30 +174,23 @@ public class FrequensySettingsSubPanel extends JPanel{
 	 */
 	public FrequensySettingsSubPanel(){
 		this.setLayout(new FlowLayout());
-		this.setMinimumSize(THIS_MINIMUM_DIMENSION);
+		this.setMinimumSize(THIS_MINIMUM_DIMENSION);		
+
+		colorFrequensyVideoPanel.setVisible(true);
+		colorFrequensyVideoPanel.setPreferredSize(COLOR_PANEL_DIMENSION);
 		
 		/* Sets creation values for the header button */
-		this.headerButton.setEnabled(false);
-		this.headerButton.setPreferredSize(HEADER_BUTTON_DIMENSION);
-		this.headerButton.setToolTipText(PANEL_INFORMATION);
-		this.headerButton.setOpaque(false);
-		this.headerButton.setContentAreaFilled(false);
-		this.headerButton.setBorderPainted(false);
-		this.headerButton.setIcon(HEADER_ENABLED_IMAGE_ICON);
-		this.headerButton.setDisabledIcon(HEADER_DISABLED_IMAGE_ICON);
-		this.headerButton.setPressedIcon(HEADER_ENABLED_PREST_IMAGE_ICON);
-		this.headerButton.setRolloverIcon(HEADER_ENABLED_ROLLOVER_IMAGE_ICON);
-		this.headerButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				SettingsPanel.frequencyPanel.frequencyPanelActive();
-				SettingsPanel.areaPanel.areaSelectionNotActive();
-				SettingsPanel.densityPanel.densityPanelNotActive();
-				SettingsPanel.fileNamePanel.fileNamePanelNotActive();
-
-				MainPanel.setLeftStage(Program.cameraPanel);
-			}
-		});
+		headerButton.setEnabled(false);
+		headerButton.setPreferredSize(HEADER_BUTTON_DIMENSION);
+		headerButton.setToolTipText(PANEL_INFORMATION);
+		headerButton.setOpaque(false);
+		headerButton.setContentAreaFilled(false);
+		headerButton.setBorderPainted(false);
+		headerButton.setIcon(HEADER_ENABLED_IMAGE_ICON);
+		headerButton.setDisabledIcon(HEADER_DISABLED_IMAGE_ICON);
+		headerButton.setPressedIcon(HEADER_ENABLED_PREST_IMAGE_ICON);
+		headerButton.setRolloverIcon(HEADER_ENABLED_ROLLOVER_IMAGE_ICON);
+		headerButton.addActionListener(new headerButtonActionListener(this.STAGE));
 		
 		/* Creates a Label for the step numbers. */
 		stepLabel.setPreferredSize(STEP_LABEL_DIMENSION);
@@ -145,12 +212,23 @@ public class FrequensySettingsSubPanel extends JPanel{
 		frequencyPanel.setLayout(new BorderLayout());
 		frequencyPanel.setPreferredSize(FREQUENCY_PANEL_DIMENSION_ACTIVE);
 		
-		/* Warning Label with text centered */
-		textNote.setHorizontalAlignment(SwingConstants.CENTER);
-		
 		/* Boundary explanatory labels */
-		textMoreThen.setHorizontalAlignment(SwingConstants.CENTER);
-		textLessThen.setHorizontalAlignment(SwingConstants.CENTER);
+		startMoreThenLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		startLessThenLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		DisplayFrequensyVideoThread = new FrameGrabberThread(STAGE,"threadDisplay");
+        DisplayFrequensyVideoThread.setDaemon(true);
+        DisplayFrequensyVideoThread.start();
+        
+		/* Button made for going back to previous views */
+		backButton.setEnabled(true);
+		backButton.setPreferredSize(Program.BUTTON_DIMENSION);
+		backButton.setIcon(Program.BACK_BUTTON_ENABLED_IMAGE_ICON);
+		backButton.setPressedIcon(Program.BACK_BUTTON_BLUE_PREST_IMAGE_ICON);
+		backButton.setOpaque(false);
+		backButton.setContentAreaFilled(false);
+		backButton.setBorderPainted(false);
+		backButton.addActionListener(new BackActionListener());
 		
 		/* Next JButton */
 		nextButton.setOpaque(false);
@@ -163,23 +241,13 @@ public class FrequensySettingsSubPanel extends JPanel{
 		nextButton.setDisabledIcon(Program.NEXT_BUTTON_DISABLED_IMAGE_ICON);
 		nextButton.setPressedIcon(Program.NEXT_BUTTON_BLUE_PREST_IMAGE_ICON);
 		nextButton.setDisabledSelectedIcon(Program.NEXT_BUTTON_GRAY_PREST_IMAGE_ICON);
-		nextButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				SettingsPanel.FREQUENCY_SELECTED = true;
-				/* Adding the next step */
-				SettingsPanel.areaPanel.areaSelectionActive();
-				SettingsPanel.frequencyPanel.frequencyPanelNotActive();
-				SettingsPanel.densityPanel.densityPanelNotActive();
-				SettingsPanel.fileNamePanel.fileNamePanelNotActive();
-			}
-		});
+		nextButton.addActionListener(new NextActionListener());
 		
 		/* Text field for importing frequency from user only values from 0.1 to 6000 */
-		floatInputTextField.setPreferredSize(FLOAT_INPUT_TEXT_FEILD_DIMENSION);
-		floatInputTextField.setDocument(new LengthRestrictedDocument(frequencyInputLimit));
-		floatInputTextField.setBorder(Program.LIGHT_BLUE_BORDER);
-		floatInputTextField.getDocument().addDocumentListener(new DocumentListener () {
+		startFloatInputTextField.setPreferredSize(FLOAT_INPUT_TEXT_FEILD_DIMENSION);
+		startFloatInputTextField.setDocument(new LengthRestrictedDocument(frequencyInputLimit));
+		startFloatInputTextField.setBorder(Program.LIGHT_BLUE_BORDER);
+		startFloatInputTextField.getDocument().addDocumentListener(new DocumentListener () {
 			public void insertUpdate(DocumentEvent aEvent) {
 				checkFloat();
 		    }
@@ -195,12 +263,27 @@ public class FrequensySettingsSubPanel extends JPanel{
 	    		boolean FILE_NAME_HEADER_BUTTON_TEMP_DISABLED = false;
 		    	try
 		    	{
-		    		float value = Float.valueOf(floatInputTextField.getText());
+		    		float value = Float.parseFloat(startFloatInputTextField.getText().toLowerCase().replace(',', '.').replace('f', 'x').replace('d', 'x'));
+		    		startValue = value;
 		    		if ((0.1 <= value) && (value <= 6000))
 			    	{
-						/* Sets next button enabled values */
-			    		nextButton.setEnabled(NEXT_BUTTON_ENABLED = true);
-			    		SettingsPanel.FREQUENCY_SELECTED = true;
+						START_FREQUENSY_SELECTED = true;
+						
+			    		endFloatInputTextField.setEnabled(true);
+						endFloatInputTextField.setBorder(Program.LIGHT_BLUE_BORDER);
+						endMoreThenLabel.setText("<html><font color = rgb(0,0,0)>" + startValue + " ≤</font></html>");
+						endLessThenLabel.setText(LESS_THEN_NORMAL_TEXT);
+						endFrequensyLabel.setText(END_FREQUENSY_LIGHT_BLUE_TEXT);
+						if (startValue > endValue)
+							endFloatInputTextField.setText(""+(int)startValue);
+						densityIntInputTextField.setText(""+1);
+
+			    		/* Density selection  enabled */
+		    			densityIntInputTextField.setEnabled(true);
+		    			densityIntInputTextField.setBorder(Program.LIGHT_BLUE_BORDER);
+		    			densityMoreThenLabel.setText("<html><font color = rgb(0,0,0)>" + 1 + " ≤</font></html>");
+		    			densityLessThenLabel.setText("<html><font color = rgb(0,0,0)> ≤ " + densityEndValue + "</font></html>");
+		    			densityFrequensyLabel.setText(DENSITY_FREQUENSY_LIGHT_BLUE_TEXT);
 			    		
 			    		/* Sets header button enabled values */
 			    		headerButton.setDisabledIcon(HEADER_DISABLED_IMAGE_ICON);
@@ -208,11 +291,12 @@ public class FrequensySettingsSubPanel extends JPanel{
 			    		
 			    		/* Set borders light blue when enabled */
 						frequencyPanel.setBorder(Program.LIGHT_BLUE_BORDER);
-						floatInputTextField.setBorder(Program.LIGHT_BLUE_BORDER);
+						startFloatInputTextField.setBorder(Program.LIGHT_BLUE_BORDER);
 						
 						/* Changes text back to normal wrong values have been entered before */
-						textMoreThen.setText(TEXT_MORE_THEN_NORMAL_TEXT);
-						textLessThen.setText(TEXT_LESS_THEN_NORMAL_TEXT);
+						startMoreThenLabel.setText(MORE_THEN_NORMAL_TEXT);
+						startLessThenLabel.setText(LESS_THEN_NORMAL_TEXT);
+						
 						
 						if(AREA_HEADER_BUTTON_TEMP_DISABLED)
 						{
@@ -239,6 +323,24 @@ public class FrequensySettingsSubPanel extends JPanel{
 			    	}
 					else
 					{
+						START_FREQUENSY_SELECTED = false;
+						
+						if (startValue < endValue)
+							endFloatInputTextField.setText(""+(int)1);
+						
+						/* Turns density and end value gray and inactive */
+			    		nextButton.setEnabled(NEXT_BUTTON_ENABLED = false);
+			    		endFloatInputTextField.setEnabled(false);
+						endFloatInputTextField.setBorder(Program.LIGHT_GRAY_BORDER);
+						endMoreThenLabel.setText("<html><font color = rgb(110,110,110)>" + startValue + " ≤</font></html>");
+						endLessThenLabel.setText(LESS_THEN_LIGHT_GRAY_TEXT);
+						endFrequensyLabel.setText(END_FREQUENSY_LIGHT_GRAY_TEXT);
+		    			densityIntInputTextField.setEnabled(false);
+		    			densityIntInputTextField.setBorder(Program.LIGHT_GRAY_BORDER);
+		    			densityMoreThenLabel.setText("<html><font color = rgb(110,110,110)>" + 1 + " ≤</font></html>");
+		    			densityLessThenLabel.setText("<html><font color = rgb(110,110,110)> ≤ " + densityEndValue + "</font></html>");
+		    			densityFrequensyLabel.setText(DENSITY_FREQUENSY_LIGHT_GRAY_TEXT);
+		    			
 						/* Sets next button disabled values have been entered */
 						nextButton.setEnabled(NEXT_BUTTON_ENABLED = false);
 						
@@ -248,16 +350,16 @@ public class FrequensySettingsSubPanel extends JPanel{
 						
 						/* Set borders red when wrong values have been entered */
 						frequencyPanel.setBorder(Program.RED_BORDER);
-						floatInputTextField.setBorder(Program.RED_BORDER);
+						startFloatInputTextField.setBorder(Program.RED_BORDER);
 						
 						/* wrong values have been entered changes the text so user knows what they have entered wrongly */
 						if (0.1 > value)
 				    	{
-							textMoreThen.setText(TEXT_MORE_THEN_RED_TEXT);
+							startMoreThenLabel.setText(MORE_THEN_RED_TEXT);
 				    	}
 						if (6000 < value)
 				    	{
-							textLessThen.setText(TEXT_LESS_THEN_RED_TEXT);
+							startLessThenLabel.setText(LESS_THEN_RED_TEXT);
 				    	}
 						
 						if(AreaSettingsSubPanel.HEADER_BUTTON_ENABLED)
@@ -280,7 +382,22 @@ public class FrequensySettingsSubPanel extends JPanel{
 						}
 					}
 		    	} 
-				catch (NumberFormatException e) {		    		
+				catch (NumberFormatException e) {
+
+					START_FREQUENSY_SELECTED = false;
+					
+					/* Turns density and end value gray and inactive */
+		    		endFloatInputTextField.setEnabled(false);
+					endFloatInputTextField.setBorder(Program.LIGHT_GRAY_BORDER);
+					endMoreThenLabel.setText("<html><font color = rgb(110,110,110)>" + startValue + " ≤</font></html>");
+					endLessThenLabel.setText(LESS_THEN_LIGHT_GRAY_TEXT);
+					endFrequensyLabel.setText(END_FREQUENSY_LIGHT_GRAY_TEXT);
+	    			densityIntInputTextField.setEnabled(false);
+	    			densityIntInputTextField.setBorder(Program.LIGHT_GRAY_BORDER);
+	    			densityMoreThenLabel.setText("<html><font color = rgb(110,110,110)>" + 1 + " ≤</font></html>");
+	    			densityLessThenLabel.setText("<html><font color = rgb(110,110,110)> ≤ " + densityEndValue + "</font></html>");
+	    			densityFrequensyLabel.setText(DENSITY_FREQUENSY_LIGHT_GRAY_TEXT);
+	    			
 		    		/* Sets next button disabled when wrong values have been entered */
 					nextButton.setEnabled(NEXT_BUTTON_ENABLED = false);
 					
@@ -290,7 +407,7 @@ public class FrequensySettingsSubPanel extends JPanel{
 					
 					/* Set borders red when wrong values have been entered */
 					frequencyPanel.setBorder(Program.RED_BORDER);
-					floatInputTextField.setBorder(Program.RED_BORDER);
+					startFloatInputTextField.setBorder(Program.RED_BORDER);
 					
 					if(AreaSettingsSubPanel.HEADER_BUTTON_ENABLED)
 					{
@@ -311,46 +428,405 @@ public class FrequensySettingsSubPanel extends JPanel{
 						FILE_NAME_HEADER_BUTTON_TEMP_DISABLED = true;
 					}
 		    	}
+				
+				if (START_FREQUENSY_SELECTED && DENSITY_FREQUENSY_SELECTED && END_FREQUENCY_SELECTED)
+					nextButton.setEnabled(NEXT_BUTTON_ENABLED= true);
+				else
+					nextButton.setEnabled(NEXT_BUTTON_ENABLED= false);
 		    }
 		});
 		
-		/* Containers for setting up GUI */
-		JPanel continer1 = new JPanel();
-		JPanel continer2 = 	new JPanel();
-		JPanel continer3 = 	new JPanel();
-		JPanel continer4 = 	new JPanel();
-		JPanel continer5 = 	new JPanel();
+		endFloatInputTextField.setPreferredSize(FLOAT_INPUT_TEXT_FEILD_DIMENSION);
+		endFloatInputTextField.setDocument(new LengthRestrictedDocument(frequencyInputLimit));
+		endFloatInputTextField.setBorder(Program.LIGHT_GRAY_BORDER);
+		endFloatInputTextField.setEnabled(false);
+		endFloatInputTextField.getDocument().addDocumentListener(new DocumentListener () {
+			public void insertUpdate(DocumentEvent aEvent) {
+				checkFloat();
+		    }
+		    public void removeUpdate(DocumentEvent aEvente) {
+		    	checkFloat();
+		    }
+		    public void changedUpdate(DocumentEvent aEvent) {
+		    	checkFloat();
+		    }
+		    public void checkFloat(){
+		    	boolean AREA_HEADER_BUTTON_TEMP_DISABLED = false;
+	    		boolean DENSITY_HEADER_BUTTON_TEMP_DISABLED = false;
+	    		boolean FILE_NAME_HEADER_BUTTON_TEMP_DISABLED = false;
+		    	try
+		    	{
+		    		float value = Float.parseFloat(endFloatInputTextField.getText().toLowerCase().replace(',', '.').replace('f', 'x').replace('d', 'x'));
+	    			endValue = value;
+		    		if ((startValue <= value) && (value <= 6000))
+			    	{
+		    			END_FREQUENCY_SELECTED = true;
+						
+		    			densityEndValue = (int)((endValue-startValue) * 10 + 1.5);
+			    		
+						if (endValue < densityValue)
+							densityIntInputTextField.setText(""+(int)1);
+		    			
+			    		/* Density selection  enabled */
+		    			densityIntInputTextField.setEnabled(true);
+		    			densityIntInputTextField.setBorder(Program.LIGHT_BLUE_BORDER);
+		    			densityMoreThenLabel.setText("<html><font color = rgb(0,0,0)>" + 1 + " ≤</font></html>");
+		    			densityLessThenLabel.setText("<html><font color = rgb(0,0,0)> ≤ " + densityEndValue + "</font></html>");
+		    			densityFrequensyLabel.setText(DENSITY_FREQUENSY_LIGHT_BLUE_TEXT);
+		    			
+		    			/* Changes text back to normal wrong values have been entered before */
+						endMoreThenLabel.setText("<html><font color = rgb(0,0,0)>" + startValue + " ≤</font></html>");
+						endLessThenLabel.setText(LESS_THEN_NORMAL_TEXT);
+		    			
+			    		/* Sets header button enabled values */
+			    		headerButton.setDisabledIcon(HEADER_DISABLED_IMAGE_ICON);
+			    		headerButton.setEnabled(false);
+			    		
+			    		/* Set borders light blue when enabled */
+						frequencyPanel.setBorder(Program.LIGHT_BLUE_BORDER);
+						endFloatInputTextField.setBorder(Program.LIGHT_BLUE_BORDER);
+						
+						if(AREA_HEADER_BUTTON_TEMP_DISABLED)
+						{
+							AreaSettingsSubPanel.HEADER_BUTTON_ENABLED = true;
+							AreaSettingsSubPanel.headerButton.setEnabled(AreaSettingsSubPanel.HEADER_BUTTON_ENABLED);
+							AreaSettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.areaPanel.HEADER_ENABLED_IMAGE_ICON);
+							AREA_HEADER_BUTTON_TEMP_DISABLED = false;
+						}
+						if(DENSITY_HEADER_BUTTON_TEMP_DISABLED)
+						{
+							DensitySettingsSubPanel.HEADER_BUTTON_ENABLED = true;
+							DensitySettingsSubPanel.headerButton.setEnabled(DensitySettingsSubPanel.HEADER_BUTTON_ENABLED);
+							DensitySettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.densityPanel.HEADER_ENABLED_IMAGE_ICON);
+							DENSITY_HEADER_BUTTON_TEMP_DISABLED = false;
+						}
+						if(FILE_NAME_HEADER_BUTTON_TEMP_DISABLED)
+						{
+							FileNameSettingsSubPanel.HEADER_BUTTON_ENABLED = true;
+							FileNameSettingsSubPanel.headerButton.setEnabled(FileNameSettingsSubPanel.HEADER_BUTTON_ENABLED);
+							FileNameSettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.fileNamePanel.HEADER_ENABLED_IMAGE_ICON);
+							FILE_NAME_HEADER_BUTTON_TEMP_DISABLED = false;
+						}
+						
+			    	}
+					else
+					{
+						END_FREQUENCY_SELECTED = false;
+		    			
+						if (endValue < densityValue)
+							densityIntInputTextField.setText(""+(int)1);
+						
+						/* Sets next button disabled values have been entered */
+		    			densityIntInputTextField.setEnabled(false);
+		    			densityIntInputTextField.setBorder(Program.LIGHT_GRAY_BORDER);
+		    			densityMoreThenLabel.setText("<html><font color = rgb(110,110,110)>" + 1 + " ≤</font></html>");
+		    			densityLessThenLabel.setText("<html><font color = rgb(110,110,110)> ≤ " + densityEndValue + "</font></html>");
+		    			densityFrequensyLabel.setText(DENSITY_FREQUENSY_LIGHT_GRAY_TEXT);
+						
+						/* Sets header button disabled values have been entered */
+						headerButton.setDisabledIcon(HEADER_DISABLED_RED_IMAGE_ICON);
+						headerButton.setEnabled(false);
+						
+						/* Set borders red when wrong values have been entered */
+						frequencyPanel.setBorder(Program.RED_BORDER);
+						endFloatInputTextField.setBorder(Program.RED_BORDER);
+						
+						/* wrong values have been entered changes the text so user knows what they have entered wrongly */
+						if (startValue > value)
+				    	{
+							endMoreThenLabel.setText("<html><font color = rgb(255,0,0)>" + startValue + " ≤</font></html>");
+				    	}
+						if (6000 < value)
+				    	{
+							endLessThenLabel.setText(LESS_THEN_RED_TEXT);
+				    	}
+						
+						if(AreaSettingsSubPanel.HEADER_BUTTON_ENABLED)
+						{
+							AreaSettingsSubPanel.headerButton.setEnabled(AreaSettingsSubPanel.HEADER_BUTTON_ENABLED = false);
+							AreaSettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.areaPanel.HEADER_DISABLED_DARK_GREEN_IMAGE_ICON);
+							AREA_HEADER_BUTTON_TEMP_DISABLED = true;
+						}
+						if(DensitySettingsSubPanel.HEADER_BUTTON_ENABLED)
+						{
+							DensitySettingsSubPanel.headerButton.setEnabled(DensitySettingsSubPanel.HEADER_BUTTON_ENABLED = false);
+							DensitySettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.densityPanel.HEADER_DISABLED_DARK_GREEN_IMAGE_ICON);
+							DENSITY_HEADER_BUTTON_TEMP_DISABLED = true;
+						}
+						if(FileNameSettingsSubPanel.HEADER_BUTTON_ENABLED)
+						{
+							FileNameSettingsSubPanel.headerButton.setEnabled(FileNameSettingsSubPanel.HEADER_BUTTON_ENABLED = false);
+							FileNameSettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.fileNamePanel.HEADER_DISABLED_DARK_GREEN_IMAGE_ICON);
+							FILE_NAME_HEADER_BUTTON_TEMP_DISABLED = true;
+						}
+					}
+		    	} 
+				catch (NumberFormatException e) {
+					END_FREQUENCY_SELECTED = false;
+	    			
+		    		/* Sets next button disabled when wrong values have been entered */
+	    			densityIntInputTextField.setEnabled(false);
+	    			densityIntInputTextField.setBorder(Program.LIGHT_GRAY_BORDER);
+	    			/* Changes text back to normal wrong values have been entered before */
+	    			densityMoreThenLabel.setText("<html><font color = rgb(110,110,110)>" + 1 + " ≤</font></html>");
+	    			densityLessThenLabel.setText("<html><font color = rgb(110,110,110)> ≤ " + densityEndValue + "</font></html>");
+	    			densityFrequensyLabel.setText(DENSITY_FREQUENSY_LIGHT_GRAY_TEXT);
+					
+					/* Sets header button disabled values have been entered */
+					headerButton.setDisabledIcon(HEADER_DISABLED_RED_IMAGE_ICON);
+					headerButton.setEnabled(false);
+					
+					/* Set borders red when wrong values have been entered */
+					frequencyPanel.setBorder(Program.RED_BORDER);
+					endFloatInputTextField.setBorder(Program.RED_BORDER);
+					
+					if(AreaSettingsSubPanel.HEADER_BUTTON_ENABLED)
+					{
+						AreaSettingsSubPanel.headerButton.setEnabled(false);
+						AreaSettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.areaPanel.HEADER_DISABLED_DARK_GREEN_IMAGE_ICON);
+						AREA_HEADER_BUTTON_TEMP_DISABLED = true;
+					}
+					if(DensitySettingsSubPanel.HEADER_BUTTON_ENABLED)
+					{
+						DensitySettingsSubPanel.headerButton.setEnabled(false);
+						DensitySettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.densityPanel.HEADER_DISABLED_DARK_GREEN_IMAGE_ICON);
+						DENSITY_HEADER_BUTTON_TEMP_DISABLED = true;
+					}
+					if(FileNameSettingsSubPanel.HEADER_BUTTON_ENABLED)
+					{
+						FileNameSettingsSubPanel.headerButton.setEnabled(FileNameSettingsSubPanel.HEADER_BUTTON_ENABLED = false);
+						FileNameSettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.fileNamePanel.HEADER_DISABLED_DARK_GREEN_IMAGE_ICON);
+						FILE_NAME_HEADER_BUTTON_TEMP_DISABLED = true;
+					}
+		    	}
+				if (START_FREQUENSY_SELECTED && DENSITY_FREQUENSY_SELECTED && END_FREQUENCY_SELECTED)
+					nextButton.setEnabled(NEXT_BUTTON_ENABLED= true);
+				else
+					nextButton.setEnabled(NEXT_BUTTON_ENABLED= false);
+		    }
+		});
 		
+		densityIntInputTextField.setPreferredSize(FLOAT_INPUT_TEXT_FEILD_DIMENSION);
+		densityIntInputTextField.setDocument(new LengthRestrictedDocument(frequencyInputLimit));
+		densityIntInputTextField.setBorder(Program.LIGHT_GRAY_BORDER);
+		densityIntInputTextField.setEnabled(false);
+		densityIntInputTextField.getDocument().addDocumentListener(new DocumentListener () {
+			public void insertUpdate(DocumentEvent aEvent) {
+				checkFloat();
+		    }
+		    public void removeUpdate(DocumentEvent aEvente) {
+		    	checkFloat();
+		    }
+		    public void changedUpdate(DocumentEvent aEvent) {
+		    	checkFloat();
+		    }
+		    public void checkFloat(){
+		    	boolean AREA_HEADER_BUTTON_TEMP_DISABLED = false;
+	    		boolean DENSITY_HEADER_BUTTON_TEMP_DISABLED = false;
+	    		boolean FILE_NAME_HEADER_BUTTON_TEMP_DISABLED = false;
+		    	try
+		    	{
+		    		int value = Integer.valueOf(densityIntInputTextField.getText());
+		    		densityValue = value;
+		    		if ((1 <= value) && (value <= densityEndValue))
+			    	{
+		    			DENSITY_FREQUENSY_SELECTED = true;
+		    			
+						/* Sets next button enabled values */
+			    		nextButton.setEnabled(NEXT_BUTTON_ENABLED = true);
+			    		
+			    		/* Sets header button enabled values */
+			    		headerButton.setDisabledIcon(HEADER_DISABLED_IMAGE_ICON);
+			    		headerButton.setEnabled(false);
+			    		
+			    		/* Set borders light blue when enabled */
+						frequencyPanel.setBorder(Program.LIGHT_BLUE_BORDER);
+						densityIntInputTextField.setBorder(Program.LIGHT_BLUE_BORDER);
+						
+						/* Changes text back to normal wrong values have been entered before */
+		    			densityMoreThenLabel.setText("<html><font color = rgb(0,0,0)>" + 1 + " ≤</font></html>");
+		    			densityLessThenLabel.setText("<html><font color = rgb(0,0,0)> ≤ " + densityEndValue + "</font></html>");
+						
+						if(AREA_HEADER_BUTTON_TEMP_DISABLED)
+						{
+							AreaSettingsSubPanel.HEADER_BUTTON_ENABLED = true;
+							AreaSettingsSubPanel.headerButton.setEnabled(AreaSettingsSubPanel.HEADER_BUTTON_ENABLED);
+							AreaSettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.areaPanel.HEADER_ENABLED_IMAGE_ICON);
+							AREA_HEADER_BUTTON_TEMP_DISABLED = false;
+						}
+						if(DENSITY_HEADER_BUTTON_TEMP_DISABLED)
+						{
+							DensitySettingsSubPanel.HEADER_BUTTON_ENABLED = true;
+							DensitySettingsSubPanel.headerButton.setEnabled(DensitySettingsSubPanel.HEADER_BUTTON_ENABLED);
+							DensitySettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.densityPanel.HEADER_ENABLED_IMAGE_ICON);
+							DENSITY_HEADER_BUTTON_TEMP_DISABLED = false;
+						}
+						if(FILE_NAME_HEADER_BUTTON_TEMP_DISABLED)
+						{
+							FileNameSettingsSubPanel.HEADER_BUTTON_ENABLED = true;
+							FileNameSettingsSubPanel.headerButton.setEnabled(FileNameSettingsSubPanel.HEADER_BUTTON_ENABLED);
+							FileNameSettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.fileNamePanel.HEADER_ENABLED_IMAGE_ICON);
+							FILE_NAME_HEADER_BUTTON_TEMP_DISABLED = false;
+						}
+						
+			    	}
+					else
+					{
+						DENSITY_FREQUENSY_SELECTED = false;
+						/* Sets next button disabled values have been entered */
+						nextButton.setEnabled(NEXT_BUTTON_ENABLED = false);
+						
+						/* Sets header button disabled values have been entered */
+						headerButton.setDisabledIcon(HEADER_DISABLED_RED_IMAGE_ICON);
+						headerButton.setEnabled(false);
+						
+						/* Set borders red when wrong values have been entered */
+						frequencyPanel.setBorder(Program.RED_BORDER);
+						densityIntInputTextField.setBorder(Program.RED_BORDER);
+						
+						/* wrong values have been entered changes the text so user knows what they have entered wrongly */
+						if (1 > value)
+				    	{
+			    			densityMoreThenLabel.setText("<html><font color = rgb(255,0,0)>" + 1 + " ≤</font></html>");
+				    	}
+						if (densityEndValue < value)
+				    	{
+			    			densityLessThenLabel.setText("<html><font color = rgb(255,0,0)> ≤ " + densityEndValue + "</font></html>");
+				    	}
+						
+						if(AreaSettingsSubPanel.HEADER_BUTTON_ENABLED)
+						{
+							AreaSettingsSubPanel.headerButton.setEnabled(AreaSettingsSubPanel.HEADER_BUTTON_ENABLED = false);
+							AreaSettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.areaPanel.HEADER_DISABLED_DARK_GREEN_IMAGE_ICON);
+							AREA_HEADER_BUTTON_TEMP_DISABLED = true;
+						}
+						if(DensitySettingsSubPanel.HEADER_BUTTON_ENABLED)
+						{
+							DensitySettingsSubPanel.headerButton.setEnabled(DensitySettingsSubPanel.HEADER_BUTTON_ENABLED = false);
+							DensitySettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.densityPanel.HEADER_DISABLED_DARK_GREEN_IMAGE_ICON);
+							DENSITY_HEADER_BUTTON_TEMP_DISABLED = true;
+						}
+						if(FileNameSettingsSubPanel.HEADER_BUTTON_ENABLED)
+						{
+							FileNameSettingsSubPanel.headerButton.setEnabled(FileNameSettingsSubPanel.HEADER_BUTTON_ENABLED = false);
+							FileNameSettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.fileNamePanel.HEADER_DISABLED_DARK_GREEN_IMAGE_ICON);
+							FILE_NAME_HEADER_BUTTON_TEMP_DISABLED = true;
+						}
+					}
+		    	} 
+				catch (NumberFormatException e) {
+					DENSITY_FREQUENSY_SELECTED = false;		    		
+		    		/* Sets next button disabled when wrong values have been entered */
+					nextButton.setEnabled(NEXT_BUTTON_ENABLED = false);
+					
+					/* Sets header button disabled values have been entered */
+					headerButton.setDisabledIcon(HEADER_DISABLED_RED_IMAGE_ICON);
+					headerButton.setEnabled(false);
+					
+					/* Set borders red when wrong values have been entered */
+					frequencyPanel.setBorder(Program.RED_BORDER);
+					densityIntInputTextField.setBorder(Program.RED_BORDER);
+					
+					if(AreaSettingsSubPanel.HEADER_BUTTON_ENABLED)
+					{
+						AreaSettingsSubPanel.headerButton.setEnabled(false);
+						AreaSettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.areaPanel.HEADER_DISABLED_DARK_GREEN_IMAGE_ICON);
+						AREA_HEADER_BUTTON_TEMP_DISABLED = true;
+					}
+					if(DensitySettingsSubPanel.HEADER_BUTTON_ENABLED)
+					{
+						DensitySettingsSubPanel.headerButton.setEnabled(false);
+						DensitySettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.densityPanel.HEADER_DISABLED_DARK_GREEN_IMAGE_ICON);
+						DENSITY_HEADER_BUTTON_TEMP_DISABLED = true;
+					}
+					if(FileNameSettingsSubPanel.HEADER_BUTTON_ENABLED)
+					{
+						FileNameSettingsSubPanel.headerButton.setEnabled(FileNameSettingsSubPanel.HEADER_BUTTON_ENABLED = false);
+						FileNameSettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.fileNamePanel.HEADER_DISABLED_DARK_GREEN_IMAGE_ICON);
+						FILE_NAME_HEADER_BUTTON_TEMP_DISABLED = true;
+					}
+		    	}
+		    	if (START_FREQUENSY_SELECTED && DENSITY_FREQUENSY_SELECTED && END_FREQUENCY_SELECTED)
+					nextButton.setEnabled(NEXT_BUTTON_ENABLED= true);
+				else
+					nextButton.setEnabled(NEXT_BUTTON_ENABLED= false);
+		    }
+		});
+
 		/* Setting containers Layouts for the right GUI look. */
 		continer1.setLayout(new BorderLayout());
 		continer2.setLayout(new BorderLayout());
-		continer3.setLayout(new FlowLayout());
+		startTextFeildContainer.setLayout(new FlowLayout());
 		continer4.setLayout(new FlowLayout());
-		continer5.setLayout(new BorderLayout());
+		continer6.setLayout(new BorderLayout());
 		
 		/* Sets container backgrounds to white instead of gray for contrast */
 		continer1.setBackground(Color.WHITE);
 		continer2.setBackground(Color.WHITE);
-		continer3.setBackground(Color.WHITE);
 		continer4.setBackground(Color.WHITE);
+		continer6.setBackground(Color.WHITE);
 		continer5.setBackground(Color.WHITE);
+		colorFrequensyVideoPanel.setBackground(Color.WHITE);
+		densityEndFrequensyContainer.setBackground(Color.WHITE);
+		densityContainer.setBackground(Color.WHITE);
+		endTextFeildContainer.setBackground(Color.WHITE);
+		endFrequensyContainer.setBackground(Color.WHITE);
+		endCheckBox.setBackground(Color.WHITE);
 		frequencyPanel.setBackground(Color.WHITE);
+		frequencySummeryPanel.setBackground(Color.WHITE);
+		frequencySummeryContainer.setBackground(Color.WHITE);
+		startTextFeildContainer.setBackground(Color.WHITE);
+		startFrequensyContainer.setBackground(Color.WHITE);
+		startFrequensyContainer.setBackground(Color.WHITE);
 		
 		/* Containers for GUI look */
+		continer2.add(colorFrequensyVideoPanel, BorderLayout.NORTH);
+
 		continer1.add(nextButton, BorderLayout.EAST);
-		continer2.add(textNote, BorderLayout.CENTER);
-		continer3.add(floatInputTextField, BorderLayout.CENTER);
-		continer4.add(textMoreThen, FlowLayout.LEFT);
-		continer4.add(continer3, FlowLayout.CENTER); 
-		continer4.add(textLessThen, FlowLayout.RIGHT);
-		continer5.add(continer2, BorderLayout.NORTH);
-		continer5.add(continer4, BorderLayout.CENTER);
-		frequencyPanel.add(continer5, BorderLayout.NORTH);
+		continer1.add(backButton, BorderLayout.WEST);
+		
+		startTextFeildContainer.add(startFloatInputTextField, BorderLayout.CENTER);
+		endTextFeildContainer.add(endFloatInputTextField, BorderLayout.CENTER);
+		
+		startFrequensyContainer.add(startFrequensyLabel, BorderLayout.WEST);
+		startFrequensyContainer.add(startMoreThenLabel, BorderLayout.EAST);
+		
+		continer4.add(startFrequensyContainer, FlowLayout.LEFT);
+		continer4.add(startTextFeildContainer, FlowLayout.CENTER); 
+		continer4.add(startLessThenLabel, FlowLayout.RIGHT);
+		
+		endFrequensyContainer.add(endFrequensyLabel, BorderLayout.CENTER);
+		endFrequensyContainer.add(endMoreThenLabel, BorderLayout.EAST);
+		
+		continer5.add(endFrequensyContainer, FlowLayout.LEFT);
+		continer5.add(endTextFeildContainer, FlowLayout.CENTER); 
+		continer5.add(endLessThenLabel, FlowLayout.RIGHT);
+		
+		densityContainer.add(densityFrequensyLabel);
+		densityContainer.add(densityMoreThenLabel);
+		densityContainer.add(densityIntInputTextField);
+		densityContainer.add(densityLessThenLabel);
+		
+		densityEndFrequensyContainer.add(continer5, BorderLayout.NORTH);
+		densityEndFrequensyContainer.add(densityContainer, BorderLayout.SOUTH);
+		
+		continer6.add(continer2, BorderLayout.NORTH);
+		continer6.add(continer4, BorderLayout.CENTER);
+		continer6.add(densityEndFrequensyContainer, BorderLayout.SOUTH);
+		
+		frequencyPanel.add(continer6, BorderLayout.NORTH);
 		frequencyPanel.add(continer1, BorderLayout.SOUTH);
 		
 		frequencyPanel.setBorder(Program.LIGHT_BLUE_BORDER);
+		
+		frequencySummeryPanel.add(frequencyLabelStart, BorderLayout.NORTH);
+		frequencySummeryPanel.add(frequencyLabelEnd, BorderLayout.CENTER);
+		frequencySummeryPanel.add(frequencyLabelDensity, BorderLayout.SOUTH);
 
-		frequencyPanel.add(frequencyLabel, BorderLayout.EAST);
+		frequencySummeryContainer.add(frequencyLabel);
+		frequencySummeryContainer.add(frequencySummeryPanel);
+		
+		frequencyPanel.add(frequencySummeryContainer, BorderLayout.EAST);
 		
 		headerAndPanelContiner.add(frequencyPanel, BorderLayout.EAST);
 		
@@ -358,12 +834,22 @@ public class FrequensySettingsSubPanel extends JPanel{
 	}
 	
 	/**
-	 * 
+	 * ACTIVE
 	 */
-	public void frequencyPanelActive(){
+	public void frequencyPanelActive() {
+		SettingsPanel.setStage(this.STAGE);
+		
+		DISPLAY_HELP_VIDEO = true;
+
+		Program.settingsPanel.setVisible(true);
+		Program.cameraPanel.setVisible(true);
+		Program.manualPanel.setVisible(false);
+		Program.startControlPanel.setVisible(false);
+		Program.imagePanel.setVisible(false);
+		
 		MainPanel.setLeftStage(Program.cameraPanel);
-
-
+		Program.cameraPanel.setPreferredSize(new Dimension((int) (3*Toolkit.getDefaultToolkit().getScreenSize().getWidth()/4), 0));
+		Program.settingsPanel.setPreferredSize(new Dimension((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth()/4), 0));
 		Program.frame.glass.setVisible(false);
 		
 		/* Sets header back to blue */
@@ -371,11 +857,22 @@ public class FrequensySettingsSubPanel extends JPanel{
 		headerButton.setEnabled(false);
 		
 		/* Turns on */ 
-		floatInputTextField.setVisible(true);
-		textNote.setVisible(true);
-		textMoreThen.setVisible(true);
-		textLessThen.setVisible(true);
+		startFloatInputTextField.setVisible(true);
+		startMoreThenLabel.setVisible(true);
+		startLessThenLabel.setVisible(true);
 		nextButton.setVisible(true);
+		/* Containers for setting up GUI */
+		continer1.setVisible(true);
+		continer2.setVisible(true);
+		startTextFeildContainer.setVisible(true);
+		continer4.setVisible(true);
+		continer5.setVisible(true);
+		continer6.setVisible(true);
+		startFrequensyContainer.setVisible(true);
+		backButton.setVisible(true);
+		endFrequensyContainer.setVisible(true);
+		endCheckBox.setVisible(true);
+		colorFrequensyVideoPanel.setVisible(true);
 		
 		/* New Active dimensions */
 		frequencyPanel.setPreferredSize(FREQUENCY_PANEL_DIMENSION_ACTIVE);
@@ -392,11 +889,15 @@ public class FrequensySettingsSubPanel extends JPanel{
 	}
 	
 	/**
-	 * 
+	 * NOT ACTIVE
 	 */
-	public void frequencyPanelNotActive(){		
+	public void frequencyPanelNotActive(){
+		DISPLAY_HELP_VIDEO = false;
+		
 		/* Sets the frequency that have been selected to SettingsPanels global variables */
-		SettingsPanel.FREQUENCY = Float.valueOf(floatInputTextField.getText());
+		SettingsPanel.FREQUENCY_START_SELECTED_VALUE = startValue;
+		SettingsPanel.FREQUENCY_END_SELECTED_VALUE = endValue;
+		SettingsPanel.FREQUENCY_DENSITY_SELECTED_VALUE = densityValue;
 		
 		/* Sets header button to enabled and green with a new tool tip */
 		headerButton.setToolTipText(HEADER_BUTTON_TOOL_TIP_TEXT);
@@ -406,11 +907,23 @@ public class FrequensySettingsSubPanel extends JPanel{
 		frequencyPanel.setBorder(Program.GREEN_BORDER);
 
 		/* Sets step button, text and text input not visible when when next button has been pressed */
-		floatInputTextField.setVisible(false);
-		textNote.setVisible(false);
-		textMoreThen.setVisible(false);
-		textLessThen.setVisible(false);
+		startFloatInputTextField.setVisible(false);
+		startMoreThenLabel.setVisible(false);
+		startLessThenLabel.setVisible(false);
 		nextButton.setVisible(false);
+		
+		/* Containers for setting up GUI */
+		continer1.setVisible(false);
+		continer2.setVisible(false);
+		startTextFeildContainer.setVisible(false);
+		continer4.setVisible(false);
+		continer5.setVisible(false);
+		continer6.setVisible(false);
+		startFrequensyContainer.setVisible(false);
+		backButton.setVisible(false);
+		endFrequensyContainer.setVisible(false);
+		endCheckBox.setVisible(false);
+		colorFrequensyVideoPanel.setVisible(false);
 		
 		/* Sets step Label green when button has been pressed*/
 		stepLabel.setText(STEP_TEXT_DARK_GREEN);
@@ -421,7 +934,10 @@ public class FrequensySettingsSubPanel extends JPanel{
 		stepContiner.setPreferredSize(STEP_CONTINER_DIMENSION_OFF);
 		
 		/* Label that shows the frequency that the user has selected */
-		frequencyLabel.setText("<html><font color = rgb(120,200,40)>Selected frequency: </font>" + SettingsPanel.FREQUENCY + " MHz</html>");
+		frequencyLabel.setText("<html><font color = rgb(120,200,40)>Selected frequency: </font></html>");
+		frequencyLabelStart.setText("<html>Start = " + SettingsPanel.FREQUENCY_START_SELECTED_VALUE + " MHz,</html>");
+		frequencyLabelEnd.setText("<html>End = " + SettingsPanel.FREQUENCY_END_SELECTED_VALUE + " MHz,</html>");
+		frequencyLabelDensity.setText("<html>Density = "+ SettingsPanel.FREQUENCY_DENSITY_SELECTED_VALUE + "</html>");
 		frequencyLabel.setVisible(true);
 	}
 }

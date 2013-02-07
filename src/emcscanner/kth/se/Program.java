@@ -11,7 +11,6 @@ import javax.swing.border.Border;
  * EMC-Scanner
  */
 public class Program {	
-	public static MainFrame frame;
 	public static CameraPanel cameraPanel;
 	public static SettingsPanel settingsPanel;
 	public static DimentionPanel dimentionPanel;
@@ -20,6 +19,7 @@ public class Program {
 	public static StartControlPanel startControlPanel;
 	public static ManualPanel manualPanel;
 	public static ImagePanel imagePanel;
+	public static MainFrame frame;
 	
 	public static boolean USER_STUDENT = true;
 	
@@ -28,8 +28,6 @@ public class Program {
 	public static ImageIcon NEXT_BUTTON_DISABLED_IMAGE_ICON 	= new ImageIcon("image/ButtonGrayNext.png");
 	public static ImageIcon NEXT_BUTTON_BLUE_PREST_IMAGE_ICON 	= new ImageIcon("image/ButtonBlueNextPrest.png");
 	public static ImageIcon NEXT_BUTTON_GRAY_PREST_IMAGE_ICON 	= new ImageIcon("image/ButtonGrayNextPrest.png");
-	public static Dimension BUTTON_DIMENSION 					= new Dimension(85, 50);
-	public static Dimension MEDIUM_BUTTON_DIMENSION 			= new Dimension(100, 50);
 	
 	/* Import the images for the BACK button */
 	public static ImageIcon BACK_BUTTON_ENABLED_IMAGE_ICON 		= new ImageIcon("image/ButtonBlueBack.png");
@@ -44,15 +42,23 @@ public class Program {
 
 	/* Light blue border for the float input text field */
 	public static Border LIGHT_BLUE_BORDER 	= BorderFactory.createLineBorder(LIGHT_BLUE_COLOR);
+	public static Border LIGHT_GRAY_BORDER 	= BorderFactory.createLineBorder(LIGHT_GRAY_COLOR);
 	public static Border GREEN_BORDER 		= BorderFactory.createLineBorder(LIGHT_GREEN_COLOR);
 	public static Border RED_BORDER 		= BorderFactory.createLineBorder(RED_COLOR);
+	
+	/* Dimension */
+	public static Dimension BUTTON_DIMENSION 					= new Dimension(85, 50);
+	public static Dimension MEDIUM_BUTTON_DIMENSION 			= new Dimension(100, 50);
+	public static Dimension BUTTON_SMAL_DIMENSION 				= new Dimension(20, 20);
+	
+	
 
 	/**
 	 * This is the main method
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		
+
     	cameraPanel = new CameraPanel();
     	settingsPanel = new SettingsPanel();
     	dimentionPanel = new DimentionPanel();
@@ -60,9 +66,10 @@ public class Program {
     	imageScannedPanel = new ImageScannedPanel();
     	startControlPanel = new StartControlPanel();
     	manualPanel = new ManualPanel();
-    	frame = new MainFrame();
     	imagePanel = new ImagePanel();
+    	frame = new MainFrame();
     	
+    	MainPanel.setStages(startControlPanel, manualPanel);
     	GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(frame);
 
 		//Show it the frame

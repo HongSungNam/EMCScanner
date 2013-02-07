@@ -33,8 +33,6 @@ public class ImagePanel extends JPanel{
         cvSmooth(this.photo, this.photo, CV_GAUSSIAN, 3);
 
 		/* Create new area selection values depending on the image size. */
-				
-
     	SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_START_X = ((SettingsPanel.AREA_SELECTED_START_X * this.photo.width())  / SettingsPanel.AREA_SELECTED_CAMERA_DIMENSION.width);
     	SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_START_Y = ((SettingsPanel.AREA_SELECTED_START_Y * this.photo.height()) / SettingsPanel.AREA_SELECTED_CAMERA_DIMENSION.height);
     	SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_END_X   = ((SettingsPanel.AREA_SELECTED_END_X   * this.photo.width() ) / SettingsPanel.AREA_SELECTED_CAMERA_DIMENSION.width );
@@ -45,11 +43,11 @@ public class ImagePanel extends JPanel{
     	
     	/* Sets values of Max density height and width */
     	SettingsPanel.densityPanel.widthLabel.setText("<html><font color = rgb(100,150,255)> Width: </font></html>");
-    	SettingsPanel.densityPanel.widthLabelValue.setText("<html>" + (int)(SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_WIDTH * SettingsPanel.densityPanel.TIONDELS_MILLI_METER_PIXEL) + " &gt</html>");
-    	SettingsPanel.densityPanel.widthLabel0.setText("<html> &gt 0 </html>");
+    	SettingsPanel.densityPanel.widthLabelValue.setText("<html>" + (int)(SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_WIDTH * SettingsPanel.densityPanel.TIONDELS_MILLI_METER_PIXEL) + " &gt&nbsp</html>");
+    	SettingsPanel.densityPanel.widthLabel0.setText("<html> &nbsp&gt 0&nbsp </html>");
     	SettingsPanel.densityPanel.heightLabel.setText("<html> <font color = rgb(100,150,255)> Height: </font></html> ");
-    	SettingsPanel.densityPanel.heightLabelValue.setText("<html>" + (int)(SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_HEIGHT * SettingsPanel.densityPanel.TIONDELS_MILLI_METER_PIXEL) + " &gt</html>");
-    	SettingsPanel.densityPanel.heightLabel0.setText("<html> &gt 0</html>");
+    	SettingsPanel.densityPanel.heightLabelValue.setText("<html>" + (int)(SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_HEIGHT * SettingsPanel.densityPanel.TIONDELS_MILLI_METER_PIXEL) + " &gt&nbsp</html>");
+    	SettingsPanel.densityPanel.heightLabel0.setText("<html> &nbsp&gt 0&nbsp</html>");
 		   			
 		CvMat rectangleImage = cvCreateMat((int) SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_WIDTH,
 										   (int) SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_HEIGHT, 
@@ -59,7 +57,6 @@ public class ImagePanel extends JPanel{
 							 (int) SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_START_Y,
 							 (int) SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_WIDTH,
 							 (int) SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_HEIGHT);
-		
 		
 		
 		CvMat photo2 = cvGetSubRect(this.photo.asCvMat(), rectangleImage, rect); 

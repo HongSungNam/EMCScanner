@@ -7,6 +7,10 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.awt.event.WindowStateListener;
 
 import javax.swing.*;
 
@@ -16,6 +20,8 @@ import com.googlecode.javacv.FrameGrabber.Exception;
  * @param args
  */
 public class MainFrame extends JFrame {
+	public static MainPanel mainPanel;
+	
 	public MyGlassPane glass;
 	private boolean toggleFullScreen = false;
 	public static JMenuBar menuBar;
@@ -24,11 +30,7 @@ public class MainFrame extends JFrame {
 	
 	public MainFrame(){
 		super("EMC-Scanner");
-		
-		//Sets what will happen when the frame closes
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLayout(new BorderLayout());
-		
 		this.setUndecorated(true);
 		
 		menuBar  = new JMenuBar();
@@ -43,63 +45,63 @@ public class MainFrame extends JFrame {
                 KeyEvent.VK_S);
 		settingsMenuItem.setAccelerator(KeyStroke.getKeyStroke(
 		        KeyEvent.VK_S, 0));
+		JMenuItem nextMenuItem = new JMenuItem("Next",
+                KeyEvent.VK_ENTER);
+		nextMenuItem.setAccelerator(KeyStroke.getKeyStroke(
+		        KeyEvent.VK_ENTER, 0));
+		
+		JMenuItem backMenuItem = new JMenuItem("Back",
+                KeyEvent.VK_CONTROL);
+		backMenuItem.setAccelerator(KeyStroke.getKeyStroke(
+		        KeyEvent.VK_ENTER, KeyEvent.VK_CONTROL ));
+		
 		final JMenuItem fullScreenToggleMenuItem = new JMenuItem("Quit Full Screen",
                 KeyEvent.VK_F11);
 		fullScreenToggleMenuItem.setAccelerator(KeyStroke.getKeyStroke(
 		        KeyEvent.VK_F11, 0));
 		
+		menu.add(backMenuItem);
+		menu.add(nextMenuItem);
 		menu.add(settingsMenuItem);
 		menu.add(fullScreenToggleMenuItem);
 		menu.add(quitMenuItem);
 		
 		this.setJMenuBar(menuBar);
 		
+		backMenuItem.addActionListener(new BackActionListener());
+		nextMenuItem.addActionListener(new NextActionListener());
+		
 		quitMenuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				DensitySettingsSubPanel.DISPLAY_DENSITY_HELP_VIDEO = false;
-				DensitySettingsSubPanel.DISPLAY_DENSITY_VIDEO = false;
-				AreaSettingsSubPanel.DISPLAY_AREA_HELP_VIDEO = false;
-				
-				try {
-					Program.cameraPanel.grabber.stop();
-					AreaSettingsSubPanel.grabber.stop();
-					AreaSettingsSubPanel.grabber2.stop();
-					DensitySettingsSubPanel.grabber3.stop();
-					DensitySettingsSubPanel.grabber4.stop();
-				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				
-				System.exit(0);
+				quit();
 			}
 		});
 		
 		fullScreenToggleMenuItem.addActionListener(new ActionListener() {
     		@Override
 			public void actionPerformed(ActionEvent e) {
-				if (toggleFullScreen)
+    			if (toggleFullScreen)
 				{
 		    		fullScreenToggleMenuItem.setText("Leave Full Screen");
 		    		dispose();
+		    		
+		    		changePanelSize();
+		    		
 		    		setUndecorated(true);
 		    		setVisible(true);
 		    		toggleFullScreen = false;
 		    		pack();
-		    		Program.settingsPanel.setPreferredSize(new Dimension((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth()/4), 0));
-		    		Program.cameraPanel.setPreferredSize(new Dimension((int) (3*Toolkit.getDefaultToolkit().getScreenSize().getWidth()/4), 0));
 		    	}
 		    	else
 		    	{
 		    		fullScreenToggleMenuItem.setText("Enter Full Screen"); 
 		    		dispose();
+		    		changePanelSize();
 		    		setUndecorated(false);
 		    		setVisible(true);
 		    		toggleFullScreen = true;
 		    		pack();
-		    		Program.settingsPanel.setPreferredSize(new Dimension((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth()/4), 0));
-		    		Program.cameraPanel.setPreferredSize(new Dimension((int) (3*Toolkit.getDefaultToolkit().getScreenSize().getWidth()/4), 0));
 		    	}
 		    	if (Toolkit.getDefaultToolkit().isFrameStateSupported(Frame.MAXIMIZED_BOTH))
 		    	{
@@ -113,7 +115,19 @@ public class MainFrame extends JFrame {
         		}
 			}
 		});
-		this.add(new MainPanel(), BorderLayout.CENTER);
+		mainPanel = new MainPanel();
+		this.add(mainPanel, BorderLayout.CENTER);
+		
+		WindowListener exitListener = new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                int confirm = JOptionPane.showOptionDialog(null, "Are You Sure to Close Application?", "Exit Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+                if (confirm == 0) {
+                   quit();
+                }
+            }
+        };
+        this.addWindowListener(exitListener);
 		
 		//Size the frame
 		this.pack();
@@ -121,5 +135,28 @@ public class MainFrame extends JFrame {
 		glass = new MyGlassPane(Program.frame);
 
 		this.setGlassPane(glass);
+	}
+	public void changePanelSize() {
+		if (SettingsPanel.getStage() == 1 || SettingsPanel.getStage() == 2)
+			Program.cameraPanel.setPreferredSize(new Dimension((int) (3*Toolkit.getDefaultToolkit().getScreenSize().getWidth()/4), 0));
+		else if (SettingsPanel.getStage() == 3 || SettingsPanel.getStage() == 4)
+			Program.imagePanel.setPreferredSize(new Dimension((int) (3*Toolkit.getDefaultToolkit().getScreenSize().getWidth()/4), 0));
+		Program.settingsPanel.setPreferredSize(new Dimension((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth()/4), 0));
+	}
+	public void quit(){
+		try {
+			Thread.sleep(100);
+			CameraPanel.stopCamera = true;
+			Thread.sleep(100);
+        	FrequensySettingsSubPanel.DISPLAY_VIDEO = false ;
+			Thread.sleep(100);
+        	AreaSettingsSubPanel.DISPLAY_VIDEO = false ;
+			Thread.sleep(100);
+        	DensitySettingsSubPanel.DISPLAY_VIDEO = false ;
+			Thread.sleep(100);
+			System.exit(0);
+		} catch (InterruptedException e2) {
+			e2.printStackTrace();
+		} 
 	}
 }

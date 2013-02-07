@@ -4,8 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.Toolkit;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -22,6 +21,10 @@ public class FileNameSettingsSubPanel extends JPanel {
 	public JPanel headerAndPanelContiner 	= new JPanel();
 	public JPanel fileNamePanel 			= new JPanel();
 	public JPanel continer1 				= new JPanel();
+
+	private JPanel imputFeildsContainer  	= new JPanel(new BorderLayout());
+	private JPanel inputFeildsAButtons 		= new JPanel(new BorderLayout());
+	private JPanel inputContainer 			= new JPanel();
 	
 	/* JTextField */
 	public JTextField fileNameInputTextField = new JTextField(10);
@@ -37,6 +40,7 @@ public class FileNameSettingsSubPanel extends JPanel {
 	
 	/* Integers */
 	public int fileNameLengthLimit = 10;
+	public int STAGE = 4;
 	
 	/* Strings */
 	public String HEADER_BUTTON_TOOL_TIP_TEXT 					= "Press to reselect the file name ";
@@ -47,6 +51,8 @@ public class FileNameSettingsSubPanel extends JPanel {
 	public String STEP_TEXT_LIGHT_BLUE  						= "<html> <font color = rgb(100,150,255)>Step 4/4</font></html>";
 	public String STEP_TEXT_DARK_GREEN  						= "<html> <font color = rgb(120,200,40)>Step 4/4</font></html>";
 
+	public String NOTE_TEXT										= "<html><p align=center><font color = rgb(255,0,0)> Note: </font>Write a name for the result file that will contain the scan result.<br>"
+																+ "<font color = rgb(255,0,0)>OBS!&nbsp</font>The file name shall not contain eny of thes caracters ?, \\, /, *, &lt, &gt, :, \", |, _, -</align><html>";
 	/* Boolean */
 	public static boolean HEADER_BUTTON_ENABLED 				= false;
 	
@@ -58,6 +64,7 @@ public class FileNameSettingsSubPanel extends JPanel {
 	/* Labels */
 	public JLabel stepLabel 									= new JLabel(STEP_TEXT_GRAY); 
 	public JLabel fileNameSelectedLabel 						= new JLabel();
+	public JLabel noteLabel										= new JLabel(NOTE_TEXT);
 
 	/* Dimensions */
 	public Dimension THIS_MINIMUM_DIMENSION 					= new Dimension(400, 100);
@@ -66,23 +73,26 @@ public class FileNameSettingsSubPanel extends JPanel {
 
 	public Dimension INPUT_TEXT_FEILD_DIMENSION 				= new Dimension(20,20);
 	
-	public Dimension STEP_CONTINER_DIMENSION_ACTIVE 			= new Dimension(50, 140);
+	public Dimension STEP_CONTINER_DIMENSION_ACTIVE 			= new Dimension(50, 200);
 	public Dimension STEP_CONTINER_DIMENSION_DONE 				= new Dimension(50, 80);
 	public Dimension STEP_CONTINER_DIMENSION_OFF 				= new Dimension(50, 40);
 	
-	public Dimension FILE_NAME_PANEL_DIMENSION_ACTIVE 			= new Dimension(322, 100);
+	public Dimension FILE_NAME_PANEL_DIMENSION_ACTIVE 			= new Dimension(322, 160);
 	public Dimension FILE_NAME_DENSITY_PANEL_DIMENSION_DONE 	= new Dimension(322, 40);
 	public Dimension FILE_NAME_DENSITY_PANEL_DIMENSION_OFF 		= new Dimension(322, 40);
 	
-	public Dimension HEADER_AND_PANEL_CONTINER_DIMENSION_ACTIVE = new Dimension(322, 140);
+	public Dimension HEADER_AND_PANEL_CONTINER_DIMENSION_ACTIVE = new Dimension(322, 200);
 	public Dimension HEADER_AND_PANEL_CONTINER_DIMENSION_DONE 	= new Dimension(322, 80);
 	public Dimension HEADER_AND_PANEL_CONTINER_DIMENSION_OFF 	= new Dimension(322, 40);
-	
-	
-	
+
+	public Dimension NOTE_LABEL_DIMENSION					 	= new Dimension(322, 80);
+
 	public FileNameSettingsSubPanel() {
 		this.setLayout(new FlowLayout());
 		this.setMinimumSize(THIS_MINIMUM_DIMENSION);
+		
+		/* note label */
+		noteLabel.setPreferredSize(NOTE_LABEL_DIMENSION);
 		
 		/* Sets creation values for the header button */
 		headerButton.setEnabled(HEADER_BUTTON_ENABLED = false);
@@ -95,19 +105,7 @@ public class FileNameSettingsSubPanel extends JPanel {
 		headerButton.setDisabledIcon(HEADER_DISABLED_GRAY_IMAGE_ICON);
 		headerButton.setPressedIcon(HEADER_ENABLED_PREST_IMAGE_ICON);
 		headerButton.setRolloverIcon(HEADER_ENABLED_ROLLOVER_IMAGE_ICON);
-		headerButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (FrequensySettingsSubPanel.NEXT_BUTTON_ENABLED)
-				{
-					SettingsPanel.FREQUENCY_SELECTED = true;
-					SettingsPanel.areaPanel.areaSelectionNotActive();
-					SettingsPanel.densityPanel.densityPanelNotActive();
-					SettingsPanel.frequencyPanel.frequencyPanelNotActive();
-					SettingsPanel.fileNamePanel.fileNamePanelActive();
-				}
-			}
-		});
+		headerButton.addActionListener(new headerButtonActionListener(this.STAGE));
 		
 		/* Creates a Label for the step numbers. */
 		stepLabel.setPreferredSize(STEP_LABEL_DIMENSION);
@@ -140,18 +138,7 @@ public class FileNameSettingsSubPanel extends JPanel {
 		nextButton.setDisabledIcon(Program.NEXT_BUTTON_DISABLED_IMAGE_ICON);
 		nextButton.setPressedIcon(Program.NEXT_BUTTON_BLUE_PREST_IMAGE_ICON);
 		nextButton.setDisabledSelectedIcon(Program.NEXT_BUTTON_GRAY_PREST_IMAGE_ICON);
-		nextButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				SettingsPanel.FILE_NAME_SELECTED = true;
-				
-				SettingsPanel.densityPanel.densityPanelNotActive();
-				SettingsPanel.areaPanel.areaSelectionNotActive();
-				SettingsPanel.frequencyPanel.frequencyPanelNotActive();
-				SettingsPanel.fileNamePanel.fileNamePanelNotActive();
-				SettingsPanel.scanPanel.scanPanelActive();
-			}
-		});
+		nextButton.addActionListener(new NextActionListener());
 		
 		/* Back on step JButton */
 		backButton.setEnabled(true);
@@ -161,23 +148,15 @@ public class FileNameSettingsSubPanel extends JPanel {
 		backButton.setOpaque(false);
 		backButton.setContentAreaFilled(false);
 		backButton.setBorderPainted(false);
-		backButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				SettingsPanel.FREQUENCY_SELECTED = true;
-				
-				SettingsPanel.areaPanel.areaSelectionActive();
-				SettingsPanel.frequencyPanel.frequencyPanelNotActive();
-				SettingsPanel.densityPanel.densityPanelNotActive();
-
-				MainPanel.setLeftStage(Program.cameraPanel);
-			}
-		});
+		backButton.addActionListener(new BackActionListener());
 		
 		/* INPUT field for width */
         fileNameInputTextField.setPreferredSize(INPUT_TEXT_FEILD_DIMENSION);
         fileNameInputTextField.setDocument(new LengthRestrictedDocument(fileNameLengthLimit));
         fileNameInputTextField.setBorder(Program.LIGHT_BLUE_BORDER);
+        char[] r = {'?', '\\', '/', '*', '<',':', '>','"','|','_', '-'};
+        fileNameInputTextField.addKeyListener(new InvalidCharListener(r));
+        
         fileNameInputTextField.getDocument().addDocumentListener(new DocumentListener () {
 			public void insertUpdate(DocumentEvent aEvent) {
 				checkInt();
@@ -188,7 +167,7 @@ public class FileNameSettingsSubPanel extends JPanel {
 		    public void changedUpdate(DocumentEvent aEvent) {
 		    	checkInt();
 		    }
-		    public void checkInt()
+		    public void checkInt()        
 		    {
 		    	String name = fileNameInputTextField.getText();
 		    	if (name.isEmpty())
@@ -200,31 +179,32 @@ public class FileNameSettingsSubPanel extends JPanel {
 		    		nextButton.setEnabled(true);
 		    }
 		});
+
 		
 		/* Setting containers Layouts for the right GUI look. */
 		continer1.setLayout(new BorderLayout());
 		continer1.add(backButton, BorderLayout.WEST);
 		continer1.add(nextButton, BorderLayout.EAST);
 		
-		JPanel imputFeildsContainer  = new JPanel();
-        imputFeildsContainer.add(fileNameInputTextField);
-        
         imputFeildsContainer.setBackground(Color.WHITE);
-        
-        
-        JPanel inputFeildsAButtons = new JPanel(new BorderLayout());
-        inputFeildsAButtons.add(continer1, BorderLayout.SOUTH);
-        inputFeildsAButtons.add(imputFeildsContainer, BorderLayout.NORTH);
-        
 		continer1.setBackground(Color.WHITE);
 		fileNamePanel.setBackground(Color.WHITE);
+		inputFeildsAButtons.setBackground(Color.WHITE);
+		inputContainer.setBackground(Color.WHITE);
+
+		inputContainer.add(fileNameInputTextField);
+		
+		imputFeildsContainer.add(noteLabel, BorderLayout.NORTH);
+        imputFeildsContainer.add(inputContainer, BorderLayout.SOUTH);
+        
+        inputFeildsAButtons.add(continer1, BorderLayout.SOUTH);
+        inputFeildsAButtons.add(imputFeildsContainer, BorderLayout.NORTH);
 		fileNamePanel.add(inputFeildsAButtons, BorderLayout.SOUTH);
-		
 		fileNamePanel.add(fileNameSelectedLabel, BorderLayout.EAST);
-		fileNameSelectedLabel.setVisible(false);
-		
 		headerAndPanelContiner.add(fileNamePanel, BorderLayout.SOUTH);
+		
 		fileNamePanel.setVisible(false);
+		fileNameSelectedLabel.setVisible(false);
 		
 		this.add(headerAndPanelContiner);
 	}
@@ -232,9 +212,19 @@ public class FileNameSettingsSubPanel extends JPanel {
 	 * ACTIVE
 	 */
 	public void fileNamePanelActive() {
-		MainPanel.setLeftStage(Program.imagePanel);
 		
-		SettingsPanel.stage = 3;
+		MainPanel.setLeftStage(Program.imagePanel);
+
+		Program.settingsPanel.setVisible(true);
+		Program.manualPanel.setVisible(false);
+		Program.startControlPanel.setVisible(false);
+		Program.cameraPanel.setVisible(false);
+		Program.imagePanel.setVisible(true);
+		
+		Program.imagePanel.setPreferredSize(new Dimension((int) (3*Toolkit.getDefaultToolkit().getScreenSize().getWidth()/4), 0));
+		Program.settingsPanel.setPreferredSize(new Dimension((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth()/4), 0));
+		
+		SettingsPanel.setStage(this.STAGE);
 		Program.frame.glass.repaint();
 		Program.frame.glass.setVisible(true);
 		
@@ -249,6 +239,9 @@ public class FileNameSettingsSubPanel extends JPanel {
 		nextButton.setVisible(true);
 		backButton.setVisible(true);
 		fileNameInputTextField.setVisible(true);
+		imputFeildsContainer.setVisible(true);
+		inputFeildsAButtons.setVisible(true);
+		inputContainer.setVisible(true);
 		
 		/* Changing size of panels when button has been pressed*/	
 		fileNamePanel.setPreferredSize(FILE_NAME_PANEL_DIMENSION_ACTIVE);
@@ -273,6 +266,9 @@ public class FileNameSettingsSubPanel extends JPanel {
 		nextButton.setVisible(false);
 		backButton.setVisible(false);
 		fileNameInputTextField.setVisible(false);
+		imputFeildsContainer.setVisible(false);
+		inputFeildsAButtons.setVisible(false);
+		inputContainer.setVisible(false);
 		
 		if (SettingsPanel.FILE_NAME_SELECTED)
 		{
@@ -292,7 +288,7 @@ public class FileNameSettingsSubPanel extends JPanel {
 			headerAndPanelContiner.setPreferredSize(HEADER_AND_PANEL_CONTINER_DIMENSION_DONE);
 			stepContiner.setPreferredSize(STEP_CONTINER_DIMENSION_DONE);
 			
-			fileNameSelectedLabel.setText("<html><font color = rgb(120,200,40)>Choosen file name: </font>" + fileNameInputTextField.getText() + "</html>");
+			fileNameSelectedLabel.setText("<html><font color = rgb(120,200,40)>Choosen file name: </font>" + fileNameInputTextField.getText() + "&nbsp</html>");
 			
 			fileNameSelectedLabel.setVisible(true);
 		}

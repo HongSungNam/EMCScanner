@@ -35,21 +35,17 @@ public class CameraPanel extends JPanel{
 	public Dimension CAMERA_VIEW_BOUNDERYS_DIMENSION;
 	
 	public static boolean DISPLAY_WEB_CAMERA_INPUT = true;
+	public static boolean stopCamera = false;
 	public static boolean SAVE_IMAGE = false;
 	
 	public CameraPanel() {
 		this.setLayout(new BorderLayout());
 		this.setPreferredSize(new Dimension((int) (3*Toolkit.getDefaultToolkit().getScreenSize().getWidth()/4), 0));
-		
-		
         try {
         	/* There exists many different types of frame grabbers. 
         	   This one is the one that is working for this camera. */
         	grabber = new OpenCVFrameGrabber(0);
-        	//CvCapture grabber = opencv_highgui.cvCreateCameraCapture(0);
         	
-        	
-        	//grabber.setFrameRate(60);
         	int width = 4096;
         	int height = 3072;
         	/* Sets the grabbers resolution */
@@ -58,8 +54,6 @@ public class CameraPanel extends JPanel{
         	
         	/* Starts the camera */
         	grabber.start();
-        	System.out.println("Grabbed");
-        	//cvSaveImage("webcam photo/WEBCAM_PHOTO_TEST_HIGH_RES.jpg", grabbedImage);
         	
         	/* Creates a ColorPanel and adds it to this camera panel */
             this.add(colorCameraPanel = new ColorPanel(buffImg));
@@ -67,65 +61,82 @@ public class CameraPanel extends JPanel{
             threadDisplayCamera = new Thread("threadDisplayCamera"){
             	public void run(){
 		            while (true) {
-		            	IplImage grabbedImage = null;
-		                try {
-		                	/* Grabbed the image from the camera */
-		                	if(DISPLAY_WEB_CAMERA_INPUT)
-			            	{
-		                		grabbedImage = grabber.grab();
-			            	}
-		                	else{
-		                		grabber.restart();
-	                			Thread.sleep(100);
-	                		}
-						} catch (com.googlecode.javacv.FrameGrabber.Exception e) {
-							continue;
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-		                if (grabbedImage != null) {
-		                	/* Turns the image so that it have a mirror effect */
-		                    cvFlip(grabbedImage, grabbedImage, 1);
-		                    cvSmooth(grabbedImage, grabbedImage, CV_GAUSSIAN, 3);
-		                    if(SAVE_IMAGE)
-		                    {
-		                    	cvFlip(grabbedImage, grabbedImage, 1);
-		                    	cvSaveImage("webcam photo/WEBCAM_PHOTO.jpg", grabbedImage);
-		                    	SAVE_IMAGE = false;
-		                    }
-		                    
-		                    int widthFrame = Program.cameraPanel.getWidth();
-		                    int heightFrame = Program.cameraPanel.getHeight();
-		                    int widthCameraImage = grabbedImage.width();
-		                    int heightCameraImage = grabbedImage.height();
-		                    
-		                    /* Creating dimensions for the camera and the panel area 
-		                       Used later for deciding the new dimension that we will resize the image to */
-		                    Dimension imgSize = new Dimension(widthCameraImage, heightCameraImage);
-		                    Dimension boundary = new Dimension(widthFrame, heightFrame);
-		                    
-		                    /* Changing the scaling of the grabbed camera image */
-		                    Dimension newImagebunderys = getScaledDimension(imgSize, boundary);
-		                    
-		                    /* Camera view dimension is being updated all the time so when we chose an area we will know where on the table we have chosen*/ 
-		                    CAMERA_VIEW_BOUNDERYS_DIMENSION = newImagebunderys;
-		                    
-		                    if((widthFrame > 0) || (heightFrame > 0))
-		                    {
-		                    	
-		                    	BufferedImage bufferdWebcameraImage = grabbedImage.getBufferedImage();
-								int type = bufferdWebcameraImage.getType() == 0? BufferedImage.TYPE_INT_ARGB
-								        : bufferdWebcameraImage.getType();
-
-								BufferedImage resizeImaged = resizeImage(bufferdWebcameraImage, type, newImagebunderys.width, newImagebunderys.height);
-
-								colorCameraPanel.theCamera = resizeImaged;
-		                    }
-		                    
-		                	/* Show image on window */
-		                    colorCameraPanel.repaint();
-		                }
+		            	if (!stopCamera)
+		            	{
+			            	IplImage grabbedImage = null;
+			                try {
+			                	/* Grabbed the image from the camera */
+			                	if(DISPLAY_WEB_CAMERA_INPUT)
+				            	{
+			                		grabbedImage = grabber.grab();
+				            	}
+			                	else{
+			                		grabber.restart();
+		                			Thread.sleep(100);
+		                		}
+							} catch (com.googlecode.javacv.FrameGrabber.Exception e) {
+								continue;
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+			                if (grabbedImage != null) {
+			                	/* Turns the image so that it have a mirror effect */
+			                    cvFlip(grabbedImage, grabbedImage, 1);
+			                    cvSmooth(grabbedImage, grabbedImage, CV_GAUSSIAN, 3);
+			                    if(SAVE_IMAGE)
+			                    {
+			                    	cvFlip(grabbedImage, grabbedImage, 1);
+			                    	cvSaveImage("webcam photo/WEBCAM_PHOTO.jpg", grabbedImage);
+			                    	SAVE_IMAGE = false;
+			                    }
+			                    
+			                    int widthFrame = Program.cameraPanel.getWidth();
+			                    int heightFrame = Program.cameraPanel.getHeight();
+			                    int widthCameraImage = grabbedImage.width();
+			                    int heightCameraImage = grabbedImage.height();
+			                    
+			                    /* Creating dimensions for the camera and the panel area 
+			                       Used later for deciding the new dimension that we will resize the image to */
+			                    Dimension imgSize = new Dimension(widthCameraImage, heightCameraImage);
+			                    Dimension boundary = new Dimension(widthFrame, heightFrame);
+			                    
+			                    /* Changing the scaling of the grabbed camera image */
+			                    Dimension newImagebunderys = getScaledDimension(imgSize, boundary);
+			                    
+			                    /* Camera view dimension is being updated all the time so when we chose an area we will know where on the table we have chosen*/ 
+			                    CAMERA_VIEW_BOUNDERYS_DIMENSION = new Dimension(newImagebunderys.width, newImagebunderys.height);
+			                    
+			                    if((widthFrame > 0) || (heightFrame > 0))
+			                    {
+			                    	
+			                    	BufferedImage bufferdWebcameraImage = grabbedImage.getBufferedImage();
+									int type = bufferdWebcameraImage.getType() == 0? BufferedImage.TYPE_INT_ARGB
+									        : bufferdWebcameraImage.getType();
+	
+									BufferedImage resizeImaged = resizeImage(bufferdWebcameraImage, type, newImagebunderys.width, newImagebunderys.height);
+	
+									colorCameraPanel.theCamera = resizeImaged;
+			                    }
+			                    try {
+									Thread.sleep(10);
+								} catch (InterruptedException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+			                	/* Show image on window */
+			                    colorCameraPanel.repaint();
+			                }
+			            }
+		            	else
+		            	{
+		            		try {
+								grabber.stop();
+							} catch (com.googlecode.javacv.FrameGrabber.Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+		            	}
 		            }
             	}
             };
@@ -168,11 +179,13 @@ public class CameraPanel extends JPanel{
 		        	{
 						if(arg0.getX() <= Program.cameraPanel.CAMERA_VIEW_BOUNDERYS_DIMENSION.getWidth())
 			        	{
-			        		if(arg0.getY() >= 0 && arg0.getY() <= Program.cameraPanel.CAMERA_VIEW_BOUNDERYS_DIMENSION.getHeight() + MainFrame.menuBar.getHeight())
-			        		{
+			        		if(arg0.getY() >= 0 && arg0.getY() <= Program.cameraPanel.CAMERA_VIEW_BOUNDERYS_DIMENSION.getHeight() )//+ MainFrame.menuBar.getHeight()
+			        		{			        			
 			        			Program.frame.MOUSE_RELEASED_BOOLEAN = true;
 			        			Program.frame.glass.cursorReleased = new Point(arg0.getPoint());
 			        			Program.frame.glass.repaint();
+			        			
+			        			cordinates();
 			        		}
 			        		else if(arg0.getY() <= 0)
 			        		{
@@ -180,6 +193,8 @@ public class CameraPanel extends JPanel{
 			        			Program.frame.glass.cursorReleased.x = arg0.getX();
 			        			Program.frame.glass.cursorReleased.y = 0;
 			        			Program.frame.glass.repaint();
+
+			        			cordinates();
 			        		}
 			        		else
 			        		{
@@ -187,6 +202,8 @@ public class CameraPanel extends JPanel{
 			        			Program.frame.glass.cursorReleased.x = arg0.getX();
 			        			Program.frame.glass.cursorReleased.y = (int) Program.cameraPanel.CAMERA_VIEW_BOUNDERYS_DIMENSION.getHeight();
 			        			Program.frame.glass.repaint();
+
+			        			cordinates();
 			        		}
 			        	}
 			        	else
@@ -197,6 +214,8 @@ public class CameraPanel extends JPanel{
 			        			Program.frame.glass.cursorReleased.x = (int) Program.cameraPanel.CAMERA_VIEW_BOUNDERYS_DIMENSION.getWidth(); 
 			        			Program.frame.glass.cursorReleased.y = arg0.getY();
 			        			Program.frame.glass.repaint();
+
+			        			cordinates();
 			        		}
 			        		else if(arg0.getY() <= 0)
 			        		{
@@ -204,6 +223,8 @@ public class CameraPanel extends JPanel{
 			        			Program.frame.glass.cursorReleased.x = (int) Program.cameraPanel.CAMERA_VIEW_BOUNDERYS_DIMENSION.getWidth();
 			        			Program.frame.glass.cursorReleased.y = 0;
 			        			Program.frame.glass.repaint();
+
+			        			cordinates();
 			        		}
 			        		else
 			        		{
@@ -211,6 +232,8 @@ public class CameraPanel extends JPanel{
 			        			Program.frame.glass.cursorReleased.x = (int) Program.cameraPanel.CAMERA_VIEW_BOUNDERYS_DIMENSION.getWidth();
 			        			Program.frame.glass.cursorReleased.y = (int) Program.cameraPanel.CAMERA_VIEW_BOUNDERYS_DIMENSION.getHeight();
 			        			Program.frame.glass.repaint();
+
+			        			cordinates();
 			        		}
 			        	}
 
@@ -221,30 +244,30 @@ public class CameraPanel extends JPanel{
 	        	    		{
 	        	    			if((Program.frame.glass.cursorPressed.y < Program.frame.glass.cursorReleased.y))
 	        	    			{
-			        				SettingsPanel.areaPanel.areaNotSelectedLabel.setText("<html><font color = rgb(100,150,255)>Area Selected:<br/>" +
+			        				SettingsPanel.areaPanel.areaNotSelectedLabel.setText("<html><p align=center><font color = rgb(100,150,255)>Area Selected:</font><br/>" +
 											" Width: " + (int) (Program.frame.glass.cursorReleased.x - Program.frame.glass.cursorPressed.x + 1) + 
-											"<br/> Hight: " +(int) (Program.frame.glass.cursorReleased.y - Program.frame.glass.cursorPressed.y + 1) + "</font></html>");	
+											"<br/> Hight: " +(int) (Program.frame.glass.cursorReleased.y - Program.frame.glass.cursorPressed.y + 1) + "</p align></html>");
 	        	    			}
 	        	    			else
 	            				{
-	        	    				SettingsPanel.areaPanel.areaNotSelectedLabel.setText("<html><font color = rgb(100,150,255)>Area Selected:<br/>" +
+	        	    				SettingsPanel.areaPanel.areaNotSelectedLabel.setText("<html><p align=center><font color = rgb(100,150,255)>Area Selected:</font><br/>" +
 											" Width: " + (int) (Program.frame.glass.cursorReleased.x - Program.frame.glass.cursorPressed.x + 1) + 
-											"<br/> Hight: " +(int) (Program.frame.glass.cursorPressed.y - Program.frame.glass.cursorReleased.y + 1) + "</font></html>");	
+											"<br/> Hight: " +(int) (Program.frame.glass.cursorPressed.y - Program.frame.glass.cursorReleased.y + 1) + "</p align></html>");
 	            				}
 	        	    		}
 	        				else
 	            			{
 	        					if((Program.frame.glass.cursorPressed.y < Program.frame.glass.cursorReleased.y))
 	        	    			{
-	        	    				SettingsPanel.areaPanel.areaNotSelectedLabel.setText("<html><font color = rgb(100,150,255)>Area Selected:<br/>" +
+	        	    				SettingsPanel.areaPanel.areaNotSelectedLabel.setText("<html><p align=center><font color = rgb(100,150,255)>Area Selected:</font><br/>" +
 											" Width: " + (int) (Program.frame.glass.cursorPressed.x - Program.frame.glass.cursorReleased.x + 1) + 
-											"<br/> Hight: " +(int) (Program.frame.glass.cursorReleased.y - Program.frame.glass.cursorPressed.y + 1) + "</font></html>");	
+											"<br/> Hight: " +(int) (Program.frame.glass.cursorReleased.y - Program.frame.glass.cursorPressed.y + 1) + "</p align></html>");
 	        	    			}
 	        					else
 	        	    			{
-	        	    				SettingsPanel.areaPanel.areaNotSelectedLabel.setText("<html><font color = rgb(100,150,255)>Area Selected:<br/>" +
+	        	    				SettingsPanel.areaPanel.areaNotSelectedLabel.setText("<html><p align=center><font color = rgb(100,150,255)>Area Selected:</font><br/>" +
 											" Width: " + (int) (Program.frame.glass.cursorPressed.x - Program.frame.glass.cursorReleased.x + 1) + 
-											"<br/> Hight: " +(int) (Program.frame.glass.cursorPressed.y - Program.frame.glass.cursorReleased.y + 1) + "</font></html>");	
+											"<br/> Hight: " +(int) (Program.frame.glass.cursorPressed.y - Program.frame.glass.cursorReleased.y + 1) + "</p align></html>");
 	        	    			}
 	            			}
         		        }	
@@ -337,5 +360,66 @@ public class CameraPanel extends JPanel{
 		int y = (int)(scale * section.height);
 		
 		return new Dimension(x <= 0 ? 1 : x, y <= 0 ? 1 : y);
+	}
+	public void stopCameraFunktion(){
+
+		try {
+			grabber.stop();
+		} catch (com.googlecode.javacv.FrameGrabber.Exception e) {
+			e.printStackTrace();
+		}
+	}
+	private void cordinates(){
+		if(Program.frame.glass.cursorPressed.x < Program.frame.glass.cursorReleased.x)
+		{
+			if(Program.frame.glass.cursorPressed.y < Program.frame.glass.cursorReleased.y)
+			{
+				if (Program.frame.glass.cursorReleased.x < 0)
+					SettingsPanel.AREA_SELECTED_END_X = 0;
+				else
+					SettingsPanel.AREA_SELECTED_END_X = Program.frame.glass.cursorReleased.x;
+				
+				SettingsPanel.AREA_SELECTED_START_X = Program.frame.glass.cursorPressed.x;
+				SettingsPanel.AREA_SELECTED_START_Y = Program.frame.glass.cursorPressed.y;
+				SettingsPanel.AREA_SELECTED_END_Y = Program.frame.glass.cursorReleased.y;
+			}
+			else
+			{
+				if (Program.frame.glass.cursorReleased.x < 0)
+					SettingsPanel.AREA_SELECTED_END_X = 0;
+				else
+					SettingsPanel.AREA_SELECTED_END_X = Program.frame.glass.cursorReleased.x;
+				
+				SettingsPanel.AREA_SELECTED_START_X = Program.frame.glass.cursorPressed.x;
+				SettingsPanel.AREA_SELECTED_START_Y = Program.frame.glass.cursorReleased.y;
+				SettingsPanel.AREA_SELECTED_END_Y = Program.frame.glass.cursorPressed.y;
+			}
+		}
+		else
+		{
+			if(Program.frame.glass.cursorPressed.y < Program.frame.glass.cursorReleased.y)
+			{
+				if (Program.frame.glass.cursorReleased.x < 0)
+					SettingsPanel.AREA_SELECTED_START_X = 0;
+				else
+					SettingsPanel.AREA_SELECTED_START_X = Program.frame.glass.cursorReleased.x;
+				
+				SettingsPanel.AREA_SELECTED_END_X = Program.frame.glass.cursorPressed.x;
+				SettingsPanel.AREA_SELECTED_START_Y = Program.frame.glass.cursorPressed.y;
+				SettingsPanel.AREA_SELECTED_END_Y = Program.frame.glass.cursorReleased.y;
+			}
+			else
+			{
+				if (Program.frame.glass.cursorReleased.x < 0)
+					SettingsPanel.AREA_SELECTED_START_X = 0;
+				else
+					SettingsPanel.AREA_SELECTED_START_X = Program.frame.glass.cursorReleased.x;
+					
+				SettingsPanel.AREA_SELECTED_END_X = Program.frame.glass.cursorPressed.x;
+				
+				SettingsPanel.AREA_SELECTED_START_Y = Program.frame.glass.cursorReleased.y;
+				SettingsPanel.AREA_SELECTED_END_Y = Program.frame.glass.cursorPressed.y;
+			}
+		}
 	}
 }

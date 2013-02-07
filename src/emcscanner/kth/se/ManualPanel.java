@@ -3,7 +3,6 @@ package emcscanner.kth.se;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.awt.event.KeyListener;
 
 import javax.swing.JPanel;
 
@@ -15,7 +14,7 @@ public class ManualPanel extends JPanel {
 	public ManualPanel(){	
 		
 		this.setLayout(new BorderLayout());
-		this.setPreferredSize(new Dimension(0, 0));
+		this.setPreferredSize(new Dimension((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth()/2), 0));
 
 		/* PDF File Location */
 		String filePath = "F:/ElectromagneticScanner/Electromagnetic Scanner/PDF Manual/GroupAssignment.pdf";

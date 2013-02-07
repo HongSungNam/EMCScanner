@@ -1,12 +1,12 @@
 package emcscanner.kth.se;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.Toolkit;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 /**
@@ -20,11 +20,16 @@ public class SettingsPanel extends JPanel{
 	int TABLE_HEIGHT = 10800;			// Temporary
 	public Dimension TABLE_DIMENSION = new Dimension(19200, 10800);
 	
+	private static int stage = 1;
+	
 	/* User selected Frequency values */
 	public static boolean FREQUENCY_SELECTED = false;
-	public static float FREQUENCY;
+	
+	public static float FREQUENCY_START_SELECTED_VALUE;
+	public static float FREQUENCY_END_SELECTED_VALUE;
+	public static int FREQUENCY_DENSITY_SELECTED_VALUE;
+	
 	/* User selected Area Values */
-	public static int stage = 2;
 	public static boolean AREA_SELECTED = false;
 	public static float AREA_SELECTED_START_X;
 	public static float AREA_SELECTED_START_Y;
@@ -64,6 +69,7 @@ public class SettingsPanel extends JPanel{
 	public static FileNameSettingsSubPanel fileNamePanel;
 	public static ScanSettingsSubPanel scanPanel;
 	
+	/* Buttons */
 	public JButton backButton = new JButton();
 	
 	/**
@@ -73,7 +79,9 @@ public class SettingsPanel extends JPanel{
 	 */
 	public SettingsPanel() {
 		this.setLayout(new BorderLayout());
-		this.setPreferredSize(new Dimension(0,0));
+		this.setPreferredSize(new Dimension((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth()/2), 0));
+
+		this.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 0, Program.LIGHT_GRAY_COLOR));
 		
 		/* Container made for GUI to be able to add the back button in the right corner */
 		JPanel settingsContiner  = 	new JPanel();
@@ -92,8 +100,6 @@ public class SettingsPanel extends JPanel{
 		settingsContiner.add(fileNamePanel);
 		settingsContiner.add(scanPanel);
 		
-		
-		
 		/* Button made for going back to previous views */
 		backButton.setEnabled(true);
 		backButton.setPreferredSize(Program.BUTTON_DIMENSION);
@@ -102,13 +108,7 @@ public class SettingsPanel extends JPanel{
 		backButton.setOpaque(false);
 		backButton.setContentAreaFilled(false);
 		backButton.setBorderPainted(false);
-		backButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				AreaSettingsSubPanel.DISPLAY_AREA_HELP_VIDEO = false;
-				MainPanel.setStages(Program.startControlPanel, Program.manualPanel);
-			}
-		});
+		backButton.addActionListener(new BackActionListener());
 		
 		/* Container made for setting backButton in the corner to the bottom */
 		JPanel continer  = 	new JPanel();
@@ -117,5 +117,11 @@ public class SettingsPanel extends JPanel{
 		
 		this.add(settingsContiner, BorderLayout.NORTH);
 		this.add(continer, BorderLayout.SOUTH);
+	}
+	public static int getStage() {
+		return stage;
+	}
+	public static void setStage(int stage) {
+		SettingsPanel.stage = stage;
 	}
 }

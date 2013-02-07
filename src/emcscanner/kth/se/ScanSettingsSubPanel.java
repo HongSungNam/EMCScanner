@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -11,17 +12,14 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 public class ScanSettingsSubPanel extends JPanel {
 
 	/* Panels- Containers for setting up GUI */
-	public JPanel stepContiner 				= new JPanel();
-	public JPanel headerAndPanelContiner 	= new JPanel();
-	public JPanel scanPanel 				= new JPanel();
-	public JPanel continer1 				= new JPanel();
+	public JPanel stepContiner 									= new JPanel();
+	public JPanel headerAndPanelContiner 						= new JPanel();
+	public JPanel scanPanel 									= new JPanel();
+	public JPanel continer1 									= new JPanel();
 	
 	/* Imports the different images for the different button stages. */	
 	/* Import the images for the header button */
@@ -32,11 +30,9 @@ public class ScanSettingsSubPanel extends JPanel {
 	public ImageIcon HEADER_DISABLED_BLUE_IMAGE_ICON 			= new ImageIcon("image/PanelBlueScan.png");
 	public ImageIcon HEADER_DISABLED_DARK_GREEN_IMAGE_ICON 		= new ImageIcon("image/PanelDarkGreenScan.png"); 
 	
-
 	public ImageIcon START_SCAN_ENABLED_IMAGE_ICON 	 			= new ImageIcon("image/ButtonStartScan.png");
 	public ImageIcon START_SCAN_ENABLED_PREST_IMAGE_ICON 	 	= new ImageIcon("image/ButtonStartScanPrest.png");
 	public ImageIcon START_SCAN_DISABLED_IMAGE_ICON 			= new ImageIcon("image/ButtonScanStarted.png");
-	
 	
 	public ImageIcon PAUSED_SCAN_ENABLED_IMAGE_ICON 			= new ImageIcon("image/ButtonPauseScan.png");
 	public ImageIcon PAUSED_SCAN_ENABLED_PREST_IMAGE_ICON 		= new ImageIcon("image/ButtonPauseScanPrest.png");
@@ -104,7 +100,7 @@ public class ScanSettingsSubPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				if (FrequensySettingsSubPanel.NEXT_BUTTON_ENABLED)
 				{
-					SettingsPanel.areaPanel.areaSelectionNotActive();
+					SettingsPanel.areaPanel.areaNotPanelActive();
 					SettingsPanel.densityPanel.densityPanelNotActive();
 					SettingsPanel.frequencyPanel.frequencyPanelNotActive();
 					SettingsPanel.fileNamePanel.fileNamePanelActive();
@@ -149,7 +145,7 @@ public class ScanSettingsSubPanel extends JPanel {
 				SettingsPanel.FILE_NAME_SELECTED = true;
 				
 				SettingsPanel.densityPanel.densityPanelNotActive();
-				SettingsPanel.areaPanel.areaSelectionNotActive();
+				SettingsPanel.areaPanel.areaNotPanelActive();
 				SettingsPanel.frequencyPanel.frequencyPanelNotActive();
 				SettingsPanel.fileNamePanel.fileNamePanelNotActive();
 			}
@@ -182,9 +178,10 @@ public class ScanSettingsSubPanel extends JPanel {
 		stopScanButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				SettingsPanel.areaPanel.areaSelectionActive();
 				SettingsPanel.frequencyPanel.frequencyPanelActive();
+				SettingsPanel.areaPanel.areaNotPanelActive();
 				SettingsPanel.densityPanel.densityPanelNotActive();
+				SettingsPanel.fileNamePanel.fileNamePanelNotActive();
 				SettingsPanel.scanPanel.scanPanelNotActive();
 			}
 		});
@@ -214,8 +211,17 @@ public class ScanSettingsSubPanel extends JPanel {
 	 */
 	public void scanPanelActive() {
 		MainPanel.setLeftStage(Program.imagePanel);
+
+		Program.settingsPanel.setVisible(true);
+		Program.manualPanel.setVisible(false);
+		Program.startControlPanel.setVisible(false);
+		Program.cameraPanel.setVisible(false);
+		Program.imagePanel.setVisible(true);
 		
-		SettingsPanel.stage = 3;
+		Program.imagePanel.setPreferredSize(new Dimension((int) (3*Toolkit.getDefaultToolkit().getScreenSize().getWidth()/4), 0));
+		Program.settingsPanel.setPreferredSize(new Dimension((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth()/4), 0));
+		
+		SettingsPanel.setStage(5);
 		Program.frame.glass.repaint();
 		Program.frame.glass.setVisible(true);
 		
@@ -264,10 +270,6 @@ public class ScanSettingsSubPanel extends JPanel {
 			scanPanel.setVisible(true);
 			headerButton.setEnabled(HEADER_BUTTON_ENABLED = true);
 			
-			/* Changing size of panels when button has been pressed*/	
-			//scanPanel.setPreferredSize(SCAN_DENSITY_PANEL_DIMENSION_DONE);
-			//headerAndPanelContiner.setPreferredSize(HEADER_AND_PANEL_CONTINER_DIMENSION_DONE);
-			//stepContiner.setPreferredSize(STEP_CONTINER_DIMENSION_DONE);
 		}
 		else
 		{

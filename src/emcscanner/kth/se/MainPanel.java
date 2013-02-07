@@ -1,47 +1,27 @@
 package emcscanner.kth.se;
 
 import java.awt.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 import javax.swing.*;
 
 
 /**
- * @param args
+ * @param argsW
  */
-public class MainPanel extends JPanel   {
-	public static JSplitPane split;
-	
+public class MainPanel extends JPanel {
+	public JPanel leftPanel = new JPanel();
+	public JPanel rightPanel = new JPanel();
 	public MainPanel(){	
-		this.split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false);
-		setStages(Program.startControlPanel, Program.manualPanel);
-		
 		this.setLayout(new BorderLayout());
-		this.add(this.split, BorderLayout.CENTER);
-		
-		this.split.addPropertyChangeListener(new PropertyChangeListener(){
-			@Override
-			public void propertyChange(PropertyChangeEvent arg0) {
-				if (ImagePanel.IMAGE_TAKEN)
-				{
-					Program.imagePanel.resizePhoto();
-				}
-			}
-			
-		});
-		
-		
-		
 	}
 	public static void setLeftStage(JPanel left){
-		split.setLeftComponent(left);
+		MainFrame.mainPanel.add(left, BorderLayout.WEST);
 	}
 	public static void setRightStage(JPanel right){
-		split.setRightComponent(right);
+		MainFrame.mainPanel.add(right, BorderLayout.EAST);
 	}
 	public static void setStages(JPanel left, JPanel right){
-		split.setRightComponent(right);
-		split.setLeftComponent(left);
+		MainFrame.mainPanel.add(left, BorderLayout.WEST);
+		MainFrame.mainPanel.add(right, BorderLayout.EAST);
 	}
 }
