@@ -79,8 +79,8 @@ public class SettingsPanel extends JPanel{
 	 */
 	public SettingsPanel() {
 		this.setLayout(new BorderLayout());
-		this.setPreferredSize(new Dimension((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth()/2), 0));
-
+		this.setPreferredSize(new Dimension((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth()/4), 0));
+		
 		this.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 0, Program.LIGHT_GRAY_COLOR));
 		
 		/* Container made for GUI to be able to add the back button in the right corner */

@@ -128,32 +128,41 @@ public class MyGlassPane extends JComponent {
 				{
 					if (SettingsPanel.densityPanel.NUMBER_OF_LINES_WIDTH != 0)
 					{
-						int LINE_X, LINE_Y1 = MainFrame.menuBar.getHeight();
-						int LINE_Y2 = LINE_Y1 + SettingsPanel.PHOTO_VIEW_DIMENSION.height;
-						int n = SettingsPanel.densityPanel.NUMBER_OF_LINES_WIDTH + 1;
-						for (int i = n; i <= SettingsPanel.PHOTO_VIEW_DIMENSION.width; i += n)
+						int y1 = MainFrame.menuBar.getHeight();
+						int y2 = SettingsPanel.PHOTO_VIEW_DIMENSION.height + y1;
+						
+						int w = SettingsPanel.PHOTO_VIEW_DIMENSION.width * DensitySettingsSubPanel.TIONDELS_MILLI_METER_PIXEL;
+						
+						int s = (int) (((SettingsPanel.densityPanel.NUMBER_OF_LINES_WIDTH + 1) * w )
+								 / ((((SettingsPanel.AREA_SELECTED_END_X - SettingsPanel.AREA_SELECTED_START_X + 1) * DensitySettingsSubPanel.TIONDELS_MILLI_METER_PIXEL))));
+						
+						for (int x = s - 1; x < w; x += s)
 						{
-							LINE_X = i;
-							g2.drawLine(LINE_X, LINE_Y1, LINE_X, LINE_Y2);
+							g2.drawLine(x / 10, y1, x / 10, y2);
 						}
 					}
 					if (SettingsPanel.densityPanel.NUMBER_OF_LINES_HEIGHT != 0)
 					{
-						int LINE_Y, LINE_X1 = 0;
-						int LINE_X2 = LINE_X1 + SettingsPanel.PHOTO_VIEW_DIMENSION.width;
-						int n = SettingsPanel.densityPanel.NUMBER_OF_LINES_HEIGHT + 1;
-						for (int i = n; i < SettingsPanel.PHOTO_VIEW_DIMENSION.height; i += n)
+						int x1 = 0;
+						int x2 = SettingsPanel.PHOTO_VIEW_DIMENSION.width + x1;
+						
+						int h = SettingsPanel.PHOTO_VIEW_DIMENSION.height * DensitySettingsSubPanel.TIONDELS_MILLI_METER_PIXEL;
+						
+						int s = (int) (((SettingsPanel.densityPanel.NUMBER_OF_LINES_HEIGHT + 1) * h )
+								 / ((((SettingsPanel.AREA_SELECTED_END_Y - SettingsPanel.AREA_SELECTED_START_Y + 1) * DensitySettingsSubPanel.TIONDELS_MILLI_METER_PIXEL))));
+						for (int y = s - 1; y < h; y += s)
 						{
-							LINE_Y = MainFrame.menuBar.getHeight() + i;
-							g2.drawLine(LINE_X1, LINE_Y, LINE_X2, LINE_Y);
+							int $y = y / 10 + MainFrame.menuBar.getHeight();
+							g2.drawLine(x1, $y, x2, $y);
 						}
+					}
+					try {
+						Thread.sleep(10);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
 					}
 				}
 			} 
-	        else if (SettingsPanel.getStage() == 5)
-	        {
-	        	
-	        }
 			g2.dispose();
 		}
 	}

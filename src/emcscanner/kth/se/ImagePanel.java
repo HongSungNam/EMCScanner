@@ -40,15 +40,6 @@ public class ImagePanel extends JPanel{
     	SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_WIDTH   = (SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_END_X  - SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_START_X + 1);
     	SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_HEIGHT  = (SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_END_Y  - SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_START_Y + 1);
     	
-    	
-    	/* Sets values of Max density height and width */
-    	SettingsPanel.densityPanel.widthLabel.setText("<html><font color = rgb(100,150,255)> Width: </font></html>");
-    	SettingsPanel.densityPanel.widthLabelValue.setText("<html>" + (int)(SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_WIDTH * SettingsPanel.densityPanel.TIONDELS_MILLI_METER_PIXEL) + " &gt&nbsp</html>");
-    	SettingsPanel.densityPanel.widthLabel0.setText("<html> &nbsp&gt 0&nbsp </html>");
-    	SettingsPanel.densityPanel.heightLabel.setText("<html> <font color = rgb(100,150,255)> Height: </font></html> ");
-    	SettingsPanel.densityPanel.heightLabelValue.setText("<html>" + (int)(SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_HEIGHT * SettingsPanel.densityPanel.TIONDELS_MILLI_METER_PIXEL) + " &gt&nbsp</html>");
-    	SettingsPanel.densityPanel.heightLabel0.setText("<html> &nbsp&gt 0&nbsp</html>");
-		   			
 		CvMat rectangleImage = cvCreateMat((int) SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_WIDTH,
 										   (int) SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_HEIGHT, 
 										   CV_32SC2);

@@ -31,7 +31,7 @@ public class DensitySettingsSubPanel extends JPanel {
 	
 	/* Integers */
 	public int MAX_LINES = 40;
-	public int TIONDELS_MILLI_METER_PIXEL = 10;
+	public static int TIONDELS_MILLI_METER_PIXEL = 10;
 	public int NUMBER_MAX_OF_LINES_WIDTH;
 	public int NUMBER_MAX_OF_LINES_HEIGHT;
 	public int NUMBER_OF_LINES_HEIGHT;
@@ -218,7 +218,7 @@ public class DensitySettingsSubPanel extends JPanel {
 		backButton.setBorderPainted(false);
 		backButton.addActionListener(new BackActionListener());
 
-		densityMillimeter.setEnabled(false);
+		densityMillimeter.setEnabled(true);
 		densityMillimeter.setOpaque(false);
 		densityMillimeter.setContentAreaFilled(false);
 		densityMillimeter.setBorderPainted(false);
@@ -233,10 +233,11 @@ public class DensitySettingsSubPanel extends JPanel {
 				densityMillimeter.setEnabled(false);
 				densityNumberOfSteps.setEnabled(true);
 				inputStepBoolean = false;
+				Program.frame.glass.repaint();
 			}
 		});
 
-		densityNumberOfSteps.setEnabled(true);
+		densityNumberOfSteps.setEnabled(false);
 		densityNumberOfSteps.setOpaque(false);
 		densityNumberOfSteps.setContentAreaFilled(false);
 		densityNumberOfSteps.setBorderPainted(false);
@@ -250,6 +251,7 @@ public class DensitySettingsSubPanel extends JPanel {
 				densityMillimeter.setEnabled(true);
 				densityNumberOfSteps.setEnabled(false);
 				inputStepBoolean = true;
+				Program.frame.glass.repaint();
 			}
 		});
 		
@@ -355,11 +357,12 @@ public class DensitySettingsSubPanel extends JPanel {
     	try
     	{
     		int value = Integer.valueOf(widthDensityInputTextField.getText());
-			if (value > 0 && value < (SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_WIDTH * TIONDELS_MILLI_METER_PIXEL))
+    		
+			if (value > 0 && value <= ((SettingsPanel.AREA_SELECTED_END_X - SettingsPanel.AREA_SELECTED_START_X + 1) * TIONDELS_MILLI_METER_PIXEL))
     		{
 				NUMBER_OF_LINES_WIDTH = value - 1;
 				widthLabel.setText("<html><font color = rgb(100,150,255)> Width: </font></html>");
-				widthLabelValue.setText("<html>" + (int)(SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_WIDTH * TIONDELS_MILLI_METER_PIXEL) + " &gt&nbsp</html>");
+				widthLabelValue.setText("<html>" + (int)((SettingsPanel.AREA_SELECTED_END_X - SettingsPanel.AREA_SELECTED_START_X + 1) * TIONDELS_MILLI_METER_PIXEL) + " &gt&nbsp</html>");
 				widthLabel0.setText("<html> &nbsp&gt 0&nbsp</html>");
 				
 				widthDensityInputTextField.setBorder(Program.LIGHT_BLUE_BORDER);
@@ -371,16 +374,16 @@ public class DensitySettingsSubPanel extends JPanel {
     		}
     		else
     		{						
-    			if (value > (SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_WIDTH * TIONDELS_MILLI_METER_PIXEL))
+    			if (value > ((SettingsPanel.AREA_SELECTED_END_X - SettingsPanel.AREA_SELECTED_START_X + 1) * TIONDELS_MILLI_METER_PIXEL))
     			{
 					widthLabel.setText("<html> <font color = rgb(255,0,0)> Width: </font></html>");
-					widthLabelValue.setText("<html><font color = rgb(255,0,0)>" + (int)(SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_WIDTH * TIONDELS_MILLI_METER_PIXEL) + " &gt&nbsp</font></html>");
+					widthLabelValue.setText("<html><font color = rgb(255,0,0)>" + (int)((SettingsPanel.AREA_SELECTED_END_X - SettingsPanel.AREA_SELECTED_START_X + 1) * TIONDELS_MILLI_METER_PIXEL) + " &gt&nbsp</font></html>");
     				widthLabel0.setText("<html> &nbsp&gt 0&nbsp</html>");
     			}
 				else if (value <= 0)
 				{
 					widthLabel.setText("<html> <font color = rgb(255,0,0)> Width: </font></html>");
-					widthLabelValue.setText("<html>" + (int)(SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_WIDTH * TIONDELS_MILLI_METER_PIXEL) + " &gt&nbsp</html>");
+					widthLabelValue.setText("<html>" + (int)((SettingsPanel.AREA_SELECTED_END_X - SettingsPanel.AREA_SELECTED_START_X + 1) * TIONDELS_MILLI_METER_PIXEL)  + " &gt&nbsp</html>");
 					widthLabel0.setText("<html><font color = rgb(255,0,0)> &nbsp&gt 0&nbsp</font></html>");
 				}
     			widthDensityInputTextField.setBorder(Program.RED_BORDER);
@@ -392,7 +395,7 @@ public class DensitySettingsSubPanel extends JPanel {
     	} 
 		catch (NumberFormatException e) {
 			widthLabel.setText("<html> <font color = rgb(255,0,0)> Width: </font></html>");
-			widthLabelValue.setText("<html>" + (int)(SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_WIDTH * TIONDELS_MILLI_METER_PIXEL) + " &gt&nbsp</html>");
+			widthLabelValue.setText("<html>" + (int)((SettingsPanel.AREA_SELECTED_END_X - SettingsPanel.AREA_SELECTED_START_X + 1) * TIONDELS_MILLI_METER_PIXEL) + " &gt&nbsp</html>");
 			widthLabel0.setText("<html> &nbsp&gt 0&nbsp</html>");
 			
 			widthDensityInputTextField.setBorder(Program.RED_BORDER);
@@ -408,12 +411,12 @@ public class DensitySettingsSubPanel extends JPanel {
     	try
     	{
     		int value = Integer.valueOf(heightDensityInputTextField.getText());
-    		if (value > 0 && value < (SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_HEIGHT * TIONDELS_MILLI_METER_PIXEL))
+    		if (value > 0 && value <= ((SettingsPanel.AREA_SELECTED_END_Y - SettingsPanel.AREA_SELECTED_START_Y + 1) * TIONDELS_MILLI_METER_PIXEL))
     		{
 				NUMBER_OF_LINES_HEIGHT = value - 1;
 				
 				heightLabel.setText("<html> <font color = rgb(100,150,255)> Height: </html> </font>");
-				heightLabelValue.setText("<html>" + (int)(SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_HEIGHT * TIONDELS_MILLI_METER_PIXEL) + " &gt&nbsp</html>");
+				heightLabelValue.setText("<html>" + (int)((SettingsPanel.AREA_SELECTED_END_Y - SettingsPanel.AREA_SELECTED_START_Y + 1) * TIONDELS_MILLI_METER_PIXEL) + " &gt&nbsp</html>");
 				heightLabel0.setText("<html> &nbsp&gt 0&nbsp</html>");
 					
     			heightDensityInputTextField.setBorder(Program.LIGHT_BLUE_BORDER);
@@ -426,16 +429,16 @@ public class DensitySettingsSubPanel extends JPanel {
     		}
     		else
     		{
-    			if (value > (SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_HEIGHT * TIONDELS_MILLI_METER_PIXEL))
+    			if (value > ((SettingsPanel.AREA_SELECTED_END_Y - SettingsPanel.AREA_SELECTED_START_Y + 1) * TIONDELS_MILLI_METER_PIXEL))
     			{
     				heightLabel.setText("<html> <font color = rgb(255,0,0)> Height: </html> </font>");
-    				heightLabelValue.setText("<html> <font color = rgb(255,0,0)>" + (int)(SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_HEIGHT * TIONDELS_MILLI_METER_PIXEL) + " &gt&nbsp</font></html>");
+    				heightLabelValue.setText("<html> <font color = rgb(255,0,0)>" + (int)((SettingsPanel.AREA_SELECTED_END_Y - SettingsPanel.AREA_SELECTED_START_Y + 1) * TIONDELS_MILLI_METER_PIXEL) + " &gt&nbsp</font></html>");
     				heightLabel0.setText("<html> &nbsp&gt 0&nbsp</html>");
     			}
     			else if (value <= 0)
     			{
     				heightLabel.setText("<html> <font color = rgb(255,0,0)> Height: </html> </font>");
-    				heightLabelValue.setText("<html>" + (int)(SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_HEIGHT * TIONDELS_MILLI_METER_PIXEL) + " &gt&nbsp</html>");
+    				heightLabelValue.setText("<html>" + (int)((SettingsPanel.AREA_SELECTED_END_Y - SettingsPanel.AREA_SELECTED_START_Y + 1) * TIONDELS_MILLI_METER_PIXEL) + " &gt&nbsp</html>");
     				heightLabel0.setText("<html><font color = rgb(255,0,0)> &nbsp&gt 0&nbsp</font></html>");
     			}
 				heightDensityInputTextField.setBorder(Program.RED_BORDER);
@@ -448,7 +451,7 @@ public class DensitySettingsSubPanel extends JPanel {
     	} 
 		catch (NumberFormatException e) {
 			heightLabel.setText("<html> <font color = rgb(255,0,0)> Height: </html> </font>");
-			heightLabelValue.setText("<html>" + (int)(SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_HEIGHT * TIONDELS_MILLI_METER_PIXEL) + " &gt&nbsp</html>");
+			heightLabelValue.setText("<html>" + (int)((SettingsPanel.AREA_SELECTED_END_Y - SettingsPanel.AREA_SELECTED_START_Y + 1) * TIONDELS_MILLI_METER_PIXEL) + " &gt&nbsp</html>");
 			heightLabel0.setText("<html> &nbsp&gt 0&nbsp</html>");
 			
 			heightDensityInputTextField.setBorder(Program.RED_BORDER);
@@ -472,12 +475,9 @@ public class DensitySettingsSubPanel extends JPanel {
 		Program.startControlPanel.setVisible(false);
 		Program.cameraPanel.setVisible(false);
 		Program.imagePanel.setVisible(true);
-
-		Program.imagePanel.setPreferredSize(new Dimension((int) (3*Toolkit.getDefaultToolkit().getScreenSize().getWidth()/4), 0));
-		Program.settingsPanel.setPreferredSize(new Dimension((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth()/4), 0));
+		
 		SettingsPanel.setStage(this.STAGE);
 		
-		Program.frame.glass.repaint();
 		Program.frame.glass.setVisible(VISIBLE);
 		
 		/* Shows the help video when made active */
@@ -515,9 +515,60 @@ public class DensitySettingsSubPanel extends JPanel {
 		
 		/* Turns on Panel */
 		densityPanel.setVisible(true);
-		
+
+
+    	
 		/* Doesn't show label */
 		densitySelectedLabel.setVisible(NOT_VISIBLE);
+		
+		int value = (NUMBER_OF_LINES_WIDTH+1);
+		int value2 = (NUMBER_OF_LINES_HEIGHT+1);
+		if (value > ((SettingsPanel.AREA_SELECTED_END_X - SettingsPanel.AREA_SELECTED_START_X + 1) * TIONDELS_MILLI_METER_PIXEL))
+		{
+			widthLabel.setText("<html> <font color = rgb(255,0,0)> Width: </font></html>");
+			widthLabelValue.setText("<html><font color = rgb(255,0,0)>" + (int)((SettingsPanel.AREA_SELECTED_END_X - SettingsPanel.AREA_SELECTED_START_X + 1) * TIONDELS_MILLI_METER_PIXEL) + " &gt&nbsp</font></html>");
+			widthLabel0.setText("<html> &nbsp&gt 0&nbsp</html>");
+			widthDensityInputTextField.setBorder(Program.RED_BORDER);
+			WIDTH_ENTERD_CORRECTLY = false;
+		}
+		else if (value <= 0)
+		{
+			widthLabel.setText("<html> <font color = rgb(255,0,0)> Width: </font></html>");
+			widthLabelValue.setText("<html>" + (int)((SettingsPanel.AREA_SELECTED_END_X - SettingsPanel.AREA_SELECTED_START_X + 1) * TIONDELS_MILLI_METER_PIXEL)  + " &gt&nbsp</html>");
+			widthLabel0.setText("<html><font color = rgb(255,0,0)> &nbsp&gt 0&nbsp</font></html>");
+			widthDensityInputTextField.setBorder(Program.RED_BORDER);
+			WIDTH_ENTERD_CORRECTLY = false;
+		}
+		else
+		{
+			widthLabel.setText("<html><font color = rgb(100,150,255)> Width: </font></html>");
+			widthLabelValue.setText("<html>" + (int)((SettingsPanel.AREA_SELECTED_END_X - SettingsPanel.AREA_SELECTED_START_X + 1)* DensitySettingsSubPanel.TIONDELS_MILLI_METER_PIXEL) + " &gt&nbsp</html>");
+			widthLabel0.setText("<html> &nbsp&gt 0&nbsp </html>");
+    	}
+		if (value2 > ((SettingsPanel.AREA_SELECTED_END_Y - SettingsPanel.AREA_SELECTED_START_Y + 1) * TIONDELS_MILLI_METER_PIXEL))
+		{
+			heightLabel.setText("<html> <font color = rgb(255,0,0)> Height: </html> </font>");
+			heightLabelValue.setText("<html> <font color = rgb(255,0,0)>" + (int)((SettingsPanel.AREA_SELECTED_END_Y - SettingsPanel.AREA_SELECTED_START_Y + 1) * TIONDELS_MILLI_METER_PIXEL) + " &gt&nbsp</font></html>");
+			heightLabel0.setText("<html> &nbsp&gt 0&nbsp</html>");
+			heightDensityInputTextField.setBorder(Program.RED_BORDER);
+			HEIGHT_ENTERD_CORRECTLY = false;
+		}
+		else if (value2 <= 0)
+		{
+			heightLabel.setText("<html> <font color = rgb(255,0,0)> Height: </html> </font>");
+			heightLabelValue.setText("<html>" + (int)((SettingsPanel.AREA_SELECTED_END_Y - SettingsPanel.AREA_SELECTED_START_Y + 1) * TIONDELS_MILLI_METER_PIXEL) + " &gt&nbsp</html>");
+			heightLabel0.setText("<html><font color = rgb(255,0,0)> &nbsp&gt 0&nbsp</font></html>");
+			heightDensityInputTextField.setBorder(Program.RED_BORDER);
+			HEIGHT_ENTERD_CORRECTLY = false;
+		}
+		else
+		{
+			heightLabel.setText("<html> <font color = rgb(100,150,255)> Height: </font></html> ");
+	    	heightLabelValue.setText("<html>" + (int)((SettingsPanel.AREA_SELECTED_END_Y - SettingsPanel.AREA_SELECTED_START_Y + 1)* DensitySettingsSubPanel.TIONDELS_MILLI_METER_PIXEL) + " &gt&nbsp</html>");
+	    	heightLabel0.setText("<html> &nbsp&gt 0&nbsp</html>");
+		}
+		Program.frame.glass.repaint();
+		
 		
 	}
 	/**

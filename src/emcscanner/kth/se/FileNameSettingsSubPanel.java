@@ -221,9 +221,6 @@ public class FileNameSettingsSubPanel extends JPanel {
 		Program.cameraPanel.setVisible(false);
 		Program.imagePanel.setVisible(true);
 		
-		Program.imagePanel.setPreferredSize(new Dimension((int) (3*Toolkit.getDefaultToolkit().getScreenSize().getWidth()/4), 0));
-		Program.settingsPanel.setPreferredSize(new Dimension((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth()/4), 0));
-		
 		SettingsPanel.setStage(this.STAGE);
 		Program.frame.glass.repaint();
 		Program.frame.glass.setVisible(true);

@@ -199,9 +199,6 @@ public class AreaSettingsSubPanel extends JPanel {
 		Program.startControlPanel.setVisible(false);
 		Program.cameraPanel.setVisible(true);
 		Program.imagePanel.setVisible(false);
-		
-		Program.cameraPanel.setPreferredSize(new Dimension((int) (3*Toolkit.getDefaultToolkit().getScreenSize().getWidth()/4), 0));
-		Program.settingsPanel.setPreferredSize(new Dimension((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth()/4), 0));
 
 		SettingsPanel.setStage(this.STAGE);
 		
@@ -252,8 +249,6 @@ public class AreaSettingsSubPanel extends JPanel {
 	 * NOT ACTIVE
 	 */
 	public void areaNotPanelActive(){
-		DISPLAY_HELP_VIDEO = false;
-		
 		/* Don't show Glass Panel and turn inactive */
 		MainFrame.GET_AREA_BOOLEAN = false;
 
@@ -271,10 +266,6 @@ public class AreaSettingsSubPanel extends JPanel {
 		continer1.setVisible(false);
 		areaSelectedContainer.setVisible(false);
 		
-		
-		/* Sets step label gray for not active */
-		stepLabel.setText(SettingsPanel.areaPanel.STEP_TEXT_GRAY);
-		
 		if (SettingsPanel.AREA_SELECTED)
 		{
 			/* Sets step label green when button has been pressed */
@@ -291,10 +282,12 @@ public class AreaSettingsSubPanel extends JPanel {
 			
 			/* Sets selected area and label visible */
 			areaLabel.setVisible(true);
-			areaPanel.setVisible(true);
 		}
 		else
 		{
+			/* Sets step label gray for not active */
+			stepLabel.setText(SettingsPanel.areaPanel.STEP_TEXT_GRAY);
+			
 			/* Changing size of panels when button has been pressed*/	
 			areaPanel.setPreferredSize(AREA_PANEL_DIMENSION_OFF);
 			headerAndPanelContiner.setPreferredSize(HEADER_AND_PANEL_CONTINER_DIMENSION_OFF);

@@ -11,6 +11,7 @@ public class NextActionListener implements ActionListener{
 		if (SettingsPanel.getStage() == 1 && Program.frame.glass.glasPanelActive){
 			if (SettingsPanel.frequencyPanel.nextButton.isEnabled())
 			{
+				//Program.cameraPanel.DISPLAY_WEB_CAMERA_INPUT = true;
 				SettingsPanel.FREQUENCY_SELECTED = true;
 				
 				SettingsPanel.FREQUENCY_START_SELECTED_VALUE = SettingsPanel.frequencyPanel.startValue;
@@ -30,38 +31,13 @@ public class NextActionListener implements ActionListener{
 		{
 			if (SettingsPanel.areaPanel.nextButton.isEnabled())
 			{
+				//Program.cameraPanel.DISPLAY_WEB_CAMERA_INPUT = false;
 				SettingsPanel.AREA_SELECTED = true;
-				if((Program.frame.glass.cursorPressed.x < Program.frame.glass.cursorReleased.x) )
-	    		{
-	    			if ((Program.frame.glass.cursorPressed.y < Program.frame.glass.cursorReleased.y))
-	    			{
-        				SettingsPanel.areaPanel.areaLabel.setText("<html><font color = rgb(120,200,40)>Area Selected:</font>" +
-								" Width: " + (int) (SettingsPanel.AREA_SELECTED_END_X - SettingsPanel.AREA_SELECTED_START_X + 1) + 
-								" x Hight: " +(int) (SettingsPanel.AREA_SELECTED_END_Y - SettingsPanel.AREA_SELECTED_START_Y + 1) + "&nbsp</html>");
+				
+        		SettingsPanel.areaPanel.areaLabel.setText("<html><font color = rgb(120,200,40)>Area Selected:</font>" +
+						" Width: " + (int) (SettingsPanel.AREA_SELECTED_END_X - SettingsPanel.AREA_SELECTED_START_X + 1) + 
+						" x Hight: " +(int) (SettingsPanel.AREA_SELECTED_END_Y - SettingsPanel.AREA_SELECTED_START_Y + 1) + "&nbsp</html>");
 
-	    			}
-	    			else
-    				{
-	    				SettingsPanel.areaPanel.areaLabel.setText("<html><font color = rgb(120,200,40)>Area Selected:</font>" +
-								" Width: " + (int) (SettingsPanel.AREA_SELECTED_END_X - SettingsPanel.AREA_SELECTED_START_X + 1) + 
-								" x Hight: " +(int) (SettingsPanel.AREA_SELECTED_START_Y - SettingsPanel.AREA_SELECTED_END_Y + 1) + "&nbsp</html>");	
-    				}
-	    		}
-				else
-    			{
-					if ((Program.frame.glass.cursorPressed.y < Program.frame.glass.cursorReleased.y))
-	    			{
-	    				SettingsPanel.areaPanel.areaLabel.setText("<html><font color = rgb(120,200,40)>Area Selected:</font>" +
-								" Width: " + (int) (SettingsPanel.AREA_SELECTED_START_X - SettingsPanel.AREA_SELECTED_END_X + 1) + 
-								" x Height: " +(int) (SettingsPanel.AREA_SELECTED_END_Y - SettingsPanel.AREA_SELECTED_START_Y + 1) + "&nbsp</html>");
-	    			}
-					else
-	    			{
-	    				SettingsPanel.areaPanel.areaLabel.setText("<html><font color = rgb(120,200,40)>Area Selected:</font>" +
-								" Width: " + (int) (SettingsPanel.AREA_SELECTED_START_X - SettingsPanel.AREA_SELECTED_END_X + 1) + 
-								" x Hight: " +(int) (SettingsPanel.AREA_SELECTED_START_Y - SettingsPanel.AREA_SELECTED_END_Y + 1) + "&nbsp</html>");
-	    			}
-    			}
 				SettingsPanel.AREA_SELECTED_CAMERA_DIMENSION = Program.cameraPanel.CAMERA_VIEW_BOUNDERYS_DIMENSION;
 				
 				SettingsPanel.areaPanel.areaNotPanelActive();
@@ -87,6 +63,7 @@ public class NextActionListener implements ActionListener{
 		{
 			if (SettingsPanel.densityPanel.nextButton.isEnabled())
 			{
+				//Program.cameraPanel.DISPLAY_WEB_CAMERA_INPUT = false;
 				SettingsPanel.DENSITY_SELECTED_WIDTH = SettingsPanel.densityPanel.NUMBER_OF_LINES_WIDTH + 1;
 				SettingsPanel.DENSITY_SELECTED_HEIGHT = SettingsPanel.densityPanel.NUMBER_OF_LINES_HEIGHT + 1;
 				SettingsPanel.DENSITY_SELECTED = true;
@@ -103,6 +80,7 @@ public class NextActionListener implements ActionListener{
 		{
 			if (SettingsPanel.fileNamePanel.nextButton.isEnabled())
 			{
+				//Program.cameraPanel.DISPLAY_WEB_CAMERA_INPUT = false;
 				SettingsPanel.FILE_NAME_SELECTED = true;
 				
 				SettingsPanel.densityPanel.densityPanelNotActive();
@@ -118,6 +96,8 @@ public class NextActionListener implements ActionListener{
 		}
 		else
 		{
+			//Program.cameraPanel.DISPLAY_WEB_CAMERA_INPUT = true;
+			
 			MainFrame.mainPanel.add(Program.settingsPanel, BorderLayout.EAST);
 			MainFrame.mainPanel.add(Program.cameraPanel, BorderLayout.CENTER);
 			Program.frame.glass.glasPanelActive = true;

@@ -21,30 +21,39 @@ public class FrameGrabberThread extends Thread {
 		{
     		DISPLAY_VIDEO = FrequensySettingsSubPanel.DISPLAY_VIDEO;
     		DISPLAY_HELP_VIDEO = FrequensySettingsSubPanel.DISPLAY_HELP_VIDEO;
-			grabber = new OpenCVFrameGrabber("video/test.avi");
-			grabber2 = new OpenCVFrameGrabber("video/test2.mp4");
-			System.err.println("Grabber initialised: " + stage);
+			grabber = new OpenCVFrameGrabber("video/test3.avi");
+			grabber2 = new OpenCVFrameGrabber("video/test4.avi");
+			grabber.setFrameRate(25);
+			grabber2.setFrameRate(25);
 		}
 		else if (this.stage == 2)
 		{
     		DISPLAY_VIDEO = AreaSettingsSubPanel.DISPLAY_VIDEO;
     		DISPLAY_HELP_VIDEO = AreaSettingsSubPanel.DISPLAY_HELP_VIDEO;
-			grabber = new OpenCVFrameGrabber("video/test.avi");
-			grabber2 = new OpenCVFrameGrabber("video/test2.mp4");
-			System.err.println("Grabber initialised: " + stage);
+			grabber = new OpenCVFrameGrabber("video/test3.avi");
+			grabber2 = new OpenCVFrameGrabber("video/test4.avi");
+			grabber.setFrameRate(25);
+			grabber2.setFrameRate(25);
 		}
 		else if (this.stage == 3)
 		{
     		DISPLAY_VIDEO = DensitySettingsSubPanel.DISPLAY_VIDEO;
     		DISPLAY_HELP_VIDEO = DensitySettingsSubPanel.DISPLAY_HELP_VIDEO;
-			grabber = new OpenCVFrameGrabber("video/test.avi");
-			grabber2 = new OpenCVFrameGrabber("video/test2.mp4");
-			System.err.println("Grabber initialised: " + stage);
+			grabber = new OpenCVFrameGrabber("video/test3.avi");
+			grabber2 = new OpenCVFrameGrabber("video/test4.avi");
+			grabber.setFrameRate(25);
+			grabber2.setFrameRate(25);
 		}
 	}
 	public void run() {
         while (DISPLAY_VIDEO) {
     		IplImage grabbedImage = null;
+    		try {
+				Thread.sleep(10);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
             try {
             	if ((grabber.getLengthInFrames()-100) >= grabber.getFrameNumber() && DISPLAY_HELP_VIDEO)
             	{
@@ -70,6 +79,8 @@ public class FrameGrabberThread extends Thread {
                 		DISPLAY_VIDEO = DensitySettingsSubPanel.DISPLAY_VIDEO;
                 		DISPLAY_HELP_VIDEO = DensitySettingsSubPanel.DISPLAY_HELP_VIDEO;
                 	}
+            		grabber.restart();
+        			grabber2.restart();
             		Thread.sleep(1000);
             	}
             	else

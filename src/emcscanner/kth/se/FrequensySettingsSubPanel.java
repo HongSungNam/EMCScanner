@@ -848,8 +848,6 @@ public class FrequensySettingsSubPanel extends JPanel {
 		Program.imagePanel.setVisible(false);
 		
 		MainPanel.setLeftStage(Program.cameraPanel);
-		Program.cameraPanel.setPreferredSize(new Dimension((int) (3*Toolkit.getDefaultToolkit().getScreenSize().getWidth()/4), 0));
-		Program.settingsPanel.setPreferredSize(new Dimension((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth()/4), 0));
 		Program.frame.glass.setVisible(false);
 		
 		/* Sets header back to blue */

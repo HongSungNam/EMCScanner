@@ -15,6 +15,7 @@ public class headerButtonActionListener implements ActionListener{
 		{
 			if (this.stage == 1)
 			{
+				//Program.cameraPanel.DISPLAY_WEB_CAMERA_INPUT = true;
 				SettingsPanel.frequencyPanel.frequencyPanelActive();
 				SettingsPanel.areaPanel.areaNotPanelActive();
 				SettingsPanel.densityPanel.densityPanelNotActive();
@@ -24,6 +25,7 @@ public class headerButtonActionListener implements ActionListener{
 			}
 			if (this.stage == 2)
 			{
+				//Program.cameraPanel.DISPLAY_WEB_CAMERA_INPUT = true;
 				SettingsPanel.FREQUENCY_SELECTED = true;
 				
 				SettingsPanel.areaPanel.areaPanelActive();
@@ -35,6 +37,7 @@ public class headerButtonActionListener implements ActionListener{
 			}
 			if (this.stage == 3)
 			{
+				//Program.cameraPanel.DISPLAY_WEB_CAMERA_INPUT = false;
 				SettingsPanel.FREQUENCY_SELECTED = true;
 				
 				SettingsPanel.areaPanel.areaNotPanelActive();
@@ -46,7 +49,7 @@ public class headerButtonActionListener implements ActionListener{
 			}
 			if (this.stage == 4)
 			{
-
+				//Program.cameraPanel.DISPLAY_WEB_CAMERA_INPUT = false;
 				SettingsPanel.FREQUENCY_SELECTED = true;
 				
 				SettingsPanel.areaPanel.areaNotPanelActive();

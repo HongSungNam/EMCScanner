@@ -72,7 +72,7 @@ public class CameraPanel extends JPanel{
 				            	}
 			                	else{
 			                		grabber.restart();
-		                			Thread.sleep(100);
+		                			Thread.sleep(10);
 		                		}
 							} catch (com.googlecode.javacv.FrameGrabber.Exception e) {
 								continue;
