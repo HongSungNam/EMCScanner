@@ -20,6 +20,7 @@ public class ImagePanel extends JPanel{
 	public ColorPanel colorPanel = new ColorPanel(buffImg);
 	
 	public IplImage photo;
+	private IplImage iplPhoto2;
 	public static boolean IMAGE_TAKEN = false;
 	public static boolean FIRST_TIME_REZISED = true;
 	
@@ -27,18 +28,24 @@ public class ImagePanel extends JPanel{
 		this.setLayout(new BorderLayout());
 		this.setPreferredSize(new Dimension((int) (3*Toolkit.getDefaultToolkit().getScreenSize().getWidth()/4), 0));
 	}
+	
 	public void setPhoto(){
-		this.photo = cvLoadImage("webcam photo/WEBCAM_PHOTO.jpg");
+		
+		//this.photo = cvLoadImage("webcam photo/WEBCAM_PHOTO.png");
+		
+		this.photo = Program.cameraPanel.phototaken;
+		
+		SettingsPanel.photo = this.photo;
         cvFlip(this.photo, this.photo, 1);
         cvSmooth(this.photo, this.photo, CV_GAUSSIAN, 3);
-
+        
 		/* Create new area selection values depending on the image size. */
     	SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_START_X = ((SettingsPanel.AREA_SELECTED_START_X * this.photo.width())  / SettingsPanel.AREA_SELECTED_CAMERA_DIMENSION.width);
     	SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_START_Y = ((SettingsPanel.AREA_SELECTED_START_Y * this.photo.height()) / SettingsPanel.AREA_SELECTED_CAMERA_DIMENSION.height);
     	SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_END_X   = ((SettingsPanel.AREA_SELECTED_END_X   * this.photo.width() ) / SettingsPanel.AREA_SELECTED_CAMERA_DIMENSION.width );
     	SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_END_Y   = ((SettingsPanel.AREA_SELECTED_END_Y   * this.photo.height()) / SettingsPanel.AREA_SELECTED_CAMERA_DIMENSION.height);
-    	SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_WIDTH   = (SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_END_X  - SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_START_X + 1);
-    	SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_HEIGHT  = (SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_END_Y  - SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_START_Y + 1);
+    	SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_WIDTH   = (SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_END_X  - SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_START_X);
+    	SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_HEIGHT  = (SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_END_Y  - SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_START_Y);
     	
 		CvMat rectangleImage = cvCreateMat((int) SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_WIDTH,
 										   (int) SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_HEIGHT, 
@@ -51,9 +58,10 @@ public class ImagePanel extends JPanel{
 		
 		
 		CvMat photo2 = cvGetSubRect(this.photo.asCvMat(), rectangleImage, rect); 
-		
-		IplImage iplPhoto2 = photo2.asIplImage();
-		
+
+		iplPhoto2 = photo2.asIplImage();
+    	cvSaveImage("webcam photo/WebCameraPhoto.png", iplPhoto2);
+    	
 		int widthPhotoArea = Program.cameraPanel.getWidth();
         int heightPhotoArea = Program.cameraPanel.getHeight();
         int widthCroptImage = iplPhoto2.width();
@@ -67,7 +75,7 @@ public class ImagePanel extends JPanel{
         Dimension newImagebunderys1 = CameraPanel.getScaledDimension(imgSize2, boundary2);
         
         /* CROPT_IMAGE SIZE */ 
-        SettingsPanel.CROPT_PHOTO_DIMENSION = boundary2;
+        SettingsPanel.CROPT_PHOTO_DIMENSION = new Dimension(widthCroptImage, heightCroptImage);
         
         /* Dimension is being updated all the time so we know where to draw the lines  */ 
         SettingsPanel.PHOTO_VIEW_DIMENSION = newImagebunderys1;

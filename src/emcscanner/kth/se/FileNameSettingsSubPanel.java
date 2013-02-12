@@ -154,6 +154,7 @@ public class FileNameSettingsSubPanel extends JPanel {
         fileNameInputTextField.setPreferredSize(INPUT_TEXT_FEILD_DIMENSION);
         fileNameInputTextField.setDocument(new LengthRestrictedDocument(fileNameLengthLimit));
         fileNameInputTextField.setBorder(Program.LIGHT_BLUE_BORDER);
+        fileNameInputTextField.setBackground(Program.LIGHT_BLUE_COLOR2);
         char[] r = {'?', '\\', '/', '*', '<',':', '>','"','|','_', '-'};
         fileNameInputTextField.addKeyListener(new InvalidCharListener(r));
         
@@ -176,7 +177,11 @@ public class FileNameSettingsSubPanel extends JPanel {
 		    		nextButton.setEnabled(false);
 		    	}
 		    	else
+		    	{
 		    		nextButton.setEnabled(true);
+
+		    		SettingsPanel.FILE_NAME = name;
+		    	}
 		    }
 		});
 

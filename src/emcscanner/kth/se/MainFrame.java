@@ -148,7 +148,7 @@ public class MainFrame extends JFrame {
 			Thread.sleep(100);
 			CameraPanel.stopCamera = true;
 			Thread.sleep(100);
-        	FrequensySettingsSubPanel.DISPLAY_VIDEO = false ;
+        	FrequencySettingsSubPanel.DISPLAY_VIDEO = false ;
 			Thread.sleep(100);
         	AreaSettingsSubPanel.DISPLAY_VIDEO = false ;
 			Thread.sleep(100);

@@ -11,7 +11,7 @@ public class headerButtonActionListener implements ActionListener{
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (FrequensySettingsSubPanel.NEXT_BUTTON_ENABLED)
+		if (FrequencySettingsSubPanel.NEXT_BUTTON_ENABLED)
 		{
 			if (this.stage == 1)
 			{

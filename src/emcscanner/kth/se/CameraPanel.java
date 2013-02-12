@@ -34,6 +34,9 @@ public class CameraPanel extends JPanel{
 	public FrameGrabber grabber;
 	public Dimension CAMERA_VIEW_BOUNDERYS_DIMENSION;
 	
+	public IplImage phototaken;
+	
+	
 	public static boolean DISPLAY_WEB_CAMERA_INPUT = true;
 	public static boolean stopCamera = false;
 	public static boolean SAVE_IMAGE = false;
@@ -61,35 +64,35 @@ public class CameraPanel extends JPanel{
             threadDisplayCamera = new Thread("threadDisplayCamera"){
             	public void run(){
 		            while (true) {
+		            	IplImage grabbedImage = null;
 		            	if (!stopCamera)
 		            	{
-			            	IplImage grabbedImage = null;
 			                try {
 			                	/* Grabbed the image from the camera */
 			                	if(DISPLAY_WEB_CAMERA_INPUT)
-				            	{
 			                		grabbedImage = grabber.grab();
-				            	}
-			                	else{
-			                		grabber.restart();
-		                			Thread.sleep(10);
-		                		}
+			                	else 
+			                		grabbedImage = null;
 							} catch (com.googlecode.javacv.FrameGrabber.Exception e) {
 								continue;
-							} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
 							}
+			                if(SAVE_IMAGE)
+		                    {
+			                    //cvFlip(grabbedImage, grabbedImage, 1);
+			                    //cvSmooth(grabbedImage, grabbedImage, CV_GAUSSIAN, 3);
+                    			phototaken = grabbedImage;
+                    			try {
+									Thread.sleep(200);
+								} catch (InterruptedException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+		                    	SAVE_IMAGE = false;
+		                    }
 			                if (grabbedImage != null) {
 			                	/* Turns the image so that it have a mirror effect */
 			                    cvFlip(grabbedImage, grabbedImage, 1);
 			                    cvSmooth(grabbedImage, grabbedImage, CV_GAUSSIAN, 3);
-			                    if(SAVE_IMAGE)
-			                    {
-			                    	cvFlip(grabbedImage, grabbedImage, 1);
-			                    	cvSaveImage("webcam photo/WEBCAM_PHOTO.jpg", grabbedImage);
-			                    	SAVE_IMAGE = false;
-			                    }
 			                    
 			                    int widthFrame = Program.cameraPanel.getWidth();
 			                    int heightFrame = Program.cameraPanel.getHeight();

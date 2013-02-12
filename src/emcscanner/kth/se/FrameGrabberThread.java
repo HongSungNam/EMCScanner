@@ -19,8 +19,8 @@ public class FrameGrabberThread extends Thread {
 		this.stage = stage;
 		if (this.stage == 1)
 		{
-    		DISPLAY_VIDEO = FrequensySettingsSubPanel.DISPLAY_VIDEO;
-    		DISPLAY_HELP_VIDEO = FrequensySettingsSubPanel.DISPLAY_HELP_VIDEO;
+    		DISPLAY_VIDEO = FrequencySettingsSubPanel.DISPLAY_VIDEO;
+    		DISPLAY_HELP_VIDEO = FrequencySettingsSubPanel.DISPLAY_HELP_VIDEO;
 			grabber = new OpenCVFrameGrabber("video/test3.avi");
 			grabber2 = new OpenCVFrameGrabber("video/test4.avi");
 			grabber.setFrameRate(25);
@@ -66,8 +66,8 @@ public class FrameGrabberThread extends Thread {
             	{
             		if (stage == 1)
                 	{
-                		DISPLAY_VIDEO = FrequensySettingsSubPanel.DISPLAY_VIDEO;
-                		DISPLAY_HELP_VIDEO = FrequensySettingsSubPanel.DISPLAY_HELP_VIDEO;
+                		DISPLAY_VIDEO = FrequencySettingsSubPanel.DISPLAY_VIDEO;
+                		DISPLAY_HELP_VIDEO = FrequencySettingsSubPanel.DISPLAY_HELP_VIDEO;
                 	}
                 	else if (stage == 2)
                 	{
@@ -100,8 +100,8 @@ public class FrameGrabberThread extends Thread {
             	int heightFrame = 0;
             	if(stage == 1 )
             	{
-                	widthFrame = FrequensySettingsSubPanel.colorFrequensyVideoPanel.getWidth();
-                    heightFrame = FrequensySettingsSubPanel.colorFrequensyVideoPanel.getHeight();
+                	widthFrame = FrequencySettingsSubPanel.colorFrequensyVideoPanel.getWidth();
+                    heightFrame = FrequencySettingsSubPanel.colorFrequensyVideoPanel.getHeight();
             	}
                 else if(stage == 2 )
             	{
@@ -137,7 +137,7 @@ public class FrameGrabberThread extends Thread {
 					BufferedImage resizeImaged = CameraPanel.resizeImage(bufferdWebcameraImage, type, newImagebunderys.width, newImagebunderys.height);
 					if(stage == 1 )
                 	{
-						FrequensySettingsSubPanel.colorFrequensyVideoPanel.theCamera = resizeImaged;
+						FrequencySettingsSubPanel.colorFrequensyVideoPanel.theCamera = resizeImaged;
                 	}
                     else if(stage == 2 )
                 	{
@@ -153,7 +153,7 @@ public class FrameGrabberThread extends Thread {
                 	bufferdWebcameraImage = grabbedImage.getBufferedImage();
                 	if(stage == 1 )
                 	{
-                		FrequensySettingsSubPanel.colorFrequensyVideoPanel.theCamera = bufferdWebcameraImage;
+                		FrequencySettingsSubPanel.colorFrequensyVideoPanel.theCamera = bufferdWebcameraImage;
                 	}
                     else if(stage == 2 )
                 	{
@@ -167,7 +167,7 @@ public class FrameGrabberThread extends Thread {
             	/* Show image on window */
                 if(stage == 1 )
             	{
-                	FrequensySettingsSubPanel.colorFrequensyVideoPanel.repaint();
+                	FrequencySettingsSubPanel.colorFrequensyVideoPanel.repaint();
             	}
                 else if(stage == 2 )
             	{
