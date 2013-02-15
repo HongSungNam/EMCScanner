@@ -3,9 +3,9 @@ package emcscanner.kth.se;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class headerButtonActionListener implements ActionListener{
+public class HeaderButtonActionListener implements ActionListener{
 	private int stage;
-	public headerButtonActionListener(int stage)
+	public HeaderButtonActionListener(int stage)
 	{
 		this.stage = stage;
 	}
@@ -17,11 +17,12 @@ public class headerButtonActionListener implements ActionListener{
 			{
 				//Program.cameraPanel.DISPLAY_WEB_CAMERA_INPUT = true;
 				SettingsPanel.frequencyPanel.frequencyPanelActive();
-				SettingsPanel.areaPanel.areaNotPanelActive();
+				SettingsPanel.areaPanel.areaPanelNotActive();
 				SettingsPanel.densityPanel.densityPanelNotActive();
 				SettingsPanel.fileNamePanel.fileNamePanelNotActive();
 				SettingsPanel.scanPanel.scanPanelNotActive();
 				SettingsPanel.frequencyPanel.startFloatInputTextField.grabFocus();
+					
 			}
 			if (this.stage == 2)
 			{
@@ -40,7 +41,7 @@ public class headerButtonActionListener implements ActionListener{
 				//Program.cameraPanel.DISPLAY_WEB_CAMERA_INPUT = false;
 				SettingsPanel.FREQUENCY_SELECTED = true;
 				
-				SettingsPanel.areaPanel.areaNotPanelActive();
+				SettingsPanel.areaPanel.areaPanelNotActive();
 				SettingsPanel.densityPanel.densityPanelActive();
 				SettingsPanel.frequencyPanel.frequencyPanelNotActive();
 				SettingsPanel.fileNamePanel.fileNamePanelNotActive();
@@ -52,12 +53,20 @@ public class headerButtonActionListener implements ActionListener{
 				//Program.cameraPanel.DISPLAY_WEB_CAMERA_INPUT = false;
 				SettingsPanel.FREQUENCY_SELECTED = true;
 				
-				SettingsPanel.areaPanel.areaNotPanelActive();
+				SettingsPanel.areaPanel.areaPanelNotActive();
 				SettingsPanel.densityPanel.densityPanelNotActive();
 				SettingsPanel.frequencyPanel.frequencyPanelNotActive();
 				SettingsPanel.fileNamePanel.fileNamePanelActive();
 				SettingsPanel.scanPanel.scanPanelNotActive();
 				SettingsPanel.fileNamePanel.fileNameInputTextField.grabFocus();
+			}
+			if (this.stage == 5)
+			{
+				SettingsPanel.areaPanel.areaPanelNotActive();
+				SettingsPanel.densityPanel.densityPanelNotActive();
+				SettingsPanel.frequencyPanel.frequencyPanelNotActive();
+				SettingsPanel.fileNamePanel.fileNamePanelActive();
+				SettingsPanel.scanPanel.scanPanelActive();
 			}
 		}
 	}

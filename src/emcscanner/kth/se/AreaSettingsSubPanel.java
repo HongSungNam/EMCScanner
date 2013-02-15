@@ -104,7 +104,7 @@ public class AreaSettingsSubPanel extends JPanel {
 		headerButton.setDisabledIcon(HEADER_DISABLED_GRAY_IMAGE_ICON);
 		headerButton.setPressedIcon(HEADER_ENABLED_PREST_IMAGE_ICON);
 		headerButton.setRolloverIcon(HEADER_ENABLED_ROLLOVER_IMAGE_ICON);
-		headerButton.addActionListener(new headerButtonActionListener(this.STAGE));
+		headerButton.addActionListener(new HeaderButtonActionListener(this.STAGE));
 		
 		/* Creates a Label for the step numbers. */
 		stepLabel.setPreferredSize(STEP_LABEL_DIMENSION);
@@ -190,6 +190,7 @@ public class AreaSettingsSubPanel extends JPanel {
 	 * ACTIVE
 	 */
 	public void areaPanelActive(){
+		
 		DISPLAY_HELP_VIDEO = true;
 		
 		MainPanel.setLeftStage(Program.cameraPanel);
@@ -248,7 +249,7 @@ public class AreaSettingsSubPanel extends JPanel {
 	/**
 	 * NOT ACTIVE
 	 */
-	public void areaNotPanelActive(){
+	public void areaPanelNotActive(){
 		/* Don't show Glass Panel and turn inactive */
 		MainFrame.GET_AREA_BOOLEAN = false;
 

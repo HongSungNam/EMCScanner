@@ -27,9 +27,9 @@ public class SettingsPanel extends JPanel{
 	/* User selected Frequency values */
 	public static boolean FREQUENCY_SELECTED = false;
 	
-	public static float FREQUENCY_START_SELECTED_VALUE;
-	public static float FREQUENCY_END_SELECTED_VALUE;
-	public static int FREQUENCY_DENSITY_SELECTED_VALUE;
+	public static float frequencyStartUserSelectedFloat;
+	public static float frequencyEndUserSelectedFloat;
+	public static int frequencyDensityUserSelectedInt;
 	
 	/* User selected Area Values */
 	public static boolean AREA_SELECTED = false;
@@ -60,8 +60,7 @@ public class SettingsPanel extends JPanel{
 	public static int stepSizeWidth = 0;
 	
 	/* User selected file name */
-	public static boolean FILE_NAME_SELECTED
-	= false;
+	public static boolean FILE_NAME_SELECTED = false;
 	public static String FILE_NAME;
 	
 	/* Scan viable */
@@ -80,7 +79,7 @@ public class SettingsPanel extends JPanel{
 	public static ScanSettingsSubPanel scanPanel;
 	
 	/* Buttons */
-	public JButton backButton = new JButton();
+	public static JButton backButton = new JButton();
 	
 	/**
 	 * SettingsPanel

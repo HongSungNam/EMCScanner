@@ -191,7 +191,7 @@ public class FrequencySettingsSubPanel extends JPanel {
 		headerButton.setDisabledIcon(HEADER_DISABLED_BLUE_IMAGE_ICON);
 		headerButton.setPressedIcon(HEADER_ENABLED_PREST_IMAGE_ICON);
 		headerButton.setRolloverIcon(HEADER_ENABLED_ROLLOVER_IMAGE_ICON);
-		headerButton.addActionListener(new headerButtonActionListener(this.STAGE));
+		headerButton.addActionListener(new HeaderButtonActionListener(this.STAGE));
 		
 		/* Creates a Label for the step numbers. */
 		stepLabel.setPreferredSize(STEP_LABEL_DIMENSION);
@@ -932,9 +932,9 @@ public class FrequencySettingsSubPanel extends JPanel {
 		DISPLAY_HELP_VIDEO = false;
 		
 		/* Sets the frequency that have been selected to SettingsPanels global variables */
-		SettingsPanel.FREQUENCY_START_SELECTED_VALUE = startValue;
-		SettingsPanel.FREQUENCY_END_SELECTED_VALUE = endValue;
-		SettingsPanel.FREQUENCY_DENSITY_SELECTED_VALUE = densityValue;
+		SettingsPanel.frequencyStartUserSelectedFloat = startValue;
+		SettingsPanel.frequencyEndUserSelectedFloat = endValue;
+		SettingsPanel.frequencyDensityUserSelectedInt = densityValue;
 		
 		/* Sets header button to enabled and green with a new tool tip */
 		headerButton.setToolTipText(HEADER_BUTTON_TOOL_TIP_TEXT);
@@ -972,9 +972,9 @@ public class FrequencySettingsSubPanel extends JPanel {
 		
 		/* Label that shows the frequency that the user has selected */
 		frequencyLabel.setText("<html><font color = rgb(120,200,40)>Selected frequency: </font></html>");
-		frequencyLabelStart.setText("<html>Start = " + SettingsPanel.FREQUENCY_START_SELECTED_VALUE + " MHz,</html>");
-		frequencyLabelEnd.setText("<html>End = " + SettingsPanel.FREQUENCY_END_SELECTED_VALUE + " MHz,</html>");
-		frequencyLabelDensity.setText("<html>Density = "+ SettingsPanel.FREQUENCY_DENSITY_SELECTED_VALUE + "</html>");
+		frequencyLabelStart.setText("<html>Start = " + SettingsPanel.frequencyStartUserSelectedFloat + " MHz,</html>");
+		frequencyLabelEnd.setText("<html>End = " + SettingsPanel.frequencyEndUserSelectedFloat + " MHz,</html>");
+		frequencyLabelDensity.setText("<html>Density = "+ SettingsPanel.frequencyDensityUserSelectedInt + "</html>");
 		frequencyLabel.setVisible(true);
 	}
 }

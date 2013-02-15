@@ -4,6 +4,7 @@ import static com.googlecode.javacv.cpp.opencv_highgui.cvSaveImage;
 import static com.googlecode.javacv.cpp.opencv_imgproc.CV_INTER_LANCZOS4;
 import static com.googlecode.javacv.cpp.opencv_imgproc.cvResize;
 
+import java.awt.Graphics;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -11,9 +12,12 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -26,9 +30,47 @@ public class ScanSettingsSubPanel extends JPanel {
 	/* Positions taken from the table */
 	private int MesurmentPosX = 10000;
 	private int MesurmentPosY = 5000;
+	private int ALPHA = 200;
+	
+	/* Array with frequency to be scanned */
+	float[] frequency = null; 
+	
+	/* scan variables */
+	private int hy;
+	private int wx;
+	private int nX;
+	private int nY;
+	private int sizeY;
+	private int sizeX;
+	public int x = 0;
+	public int y = 0;
+	
+	public int STAGE = 5;
+	
+	private int xMoved = 0;
+	private int yMoved = 0;
+	
+	/* Boolean */
+	public boolean scanAreaChanged = false;
+	private boolean moveStartPosToMesurmentPosBoolean = false;
+	
+	public boolean scanActive = false;
+	
+	public static boolean HEADER_BUTTON_ENABLED = false;
+	
+	public boolean scanStoped = false;
+	
+	public boolean changeWay = false;
 	
 	private boolean moveFX;
 	private boolean moveUY;
+	
+	private boolean scanX = true;
+	private boolean scanY = true;
+	
+	public boolean pauseScanX = false;
+	
+	public boolean scanNeverStarted = true;
 
 	/* Panels- Containers for setting up GUI */
 	public JPanel stepContiner = new JPanel(new BorderLayout());
@@ -49,24 +91,24 @@ public class ScanSettingsSubPanel extends JPanel {
 	
 	/* Imports the different images for the different button stages. */	
 	/* Import the images for the header button */
-	public ImageIcon HEADER_ENABLED_IMAGE_ICON 	 		= new ImageIcon("image/PanelGreenScan.png");
-	public ImageIcon HEADER_ENABLED_ROLLOVER_IMAGE_ICON = new ImageIcon("image/PanelGreenScanRollover.png");
-	public ImageIcon HEADER_DISABLED_GRAY_IMAGE_ICON 	= new ImageIcon("image/PanelGrayScan.png");
-	public ImageIcon HEADER_ENABLED_PREST_IMAGE_ICON 	= new ImageIcon("image/PanelGreenScanPrest.png");
-	public ImageIcon HEADER_DISABLED_BLUE_IMAGE_ICON 	= new ImageIcon("image/PanelBlueScan.png");
+	public ImageIcon HEADER_ENABLED_IMAGE_ICON 	 			= new ImageIcon("image/PanelGreenScan.png");
+	public ImageIcon HEADER_ENABLED_ROLLOVER_IMAGE_ICON 	= new ImageIcon("image/PanelGreenScanRollover.png");
+	public ImageIcon HEADER_DISABLED_GRAY_IMAGE_ICON 		= new ImageIcon("image/PanelGrayScan.png");
+	public ImageIcon HEADER_ENABLED_PREST_IMAGE_ICON 		= new ImageIcon("image/PanelGreenScanPrest.png");
+	public ImageIcon HEADER_DISABLED_BLUE_IMAGE_ICON 		= new ImageIcon("image/PanelBlueScan.png");
 	public ImageIcon HEADER_DISABLED_DARK_GREEN_IMAGE_ICON 	= new ImageIcon("image/PanelDarkGreenScan.png"); 
 	
-	public ImageIcon START_SCAN_ENABLED_IMAGE_ICON 	 	= new ImageIcon("image/ButtonStartScan.png");
-	public ImageIcon START_SCAN_ENABLED_PREST_IMAGE_ICON= new ImageIcon("image/ButtonStartScanPrest.png");
-	public ImageIcon START_SCAN_DISABLED_IMAGE_ICON 	= new ImageIcon("image/ButtonScanStarted.png");
+	public ImageIcon START_SCAN_ENABLED_IMAGE_ICON 	 		= new ImageIcon("image/ButtonStartScan.png");
+	public ImageIcon START_SCAN_ENABLED_PREST_IMAGE_ICON	= new ImageIcon("image/ButtonStartScanPrest.png");
+	public ImageIcon START_SCAN_DISABLED_IMAGE_ICON 		= new ImageIcon("image/ButtonScanStarted.png");
 	
-	public ImageIcon PAUSED_SCAN_ENABLED_IMAGE_ICON 	= new ImageIcon("image/ButtonPauseScan.png");
-	public ImageIcon PAUSED_SCAN_ENABLED_PREST_IMAGE_ICON= new ImageIcon("image/ButtonPauseScanPrest.png");
-	public ImageIcon PAUSED_SCAN_DISABLED_IMAGE_ICON 	= new ImageIcon("image/ButtonPauseScanNotEnabled.png"); 
+	public ImageIcon PAUSED_SCAN_ENABLED_IMAGE_ICON 		= new ImageIcon("image/ButtonPauseScan.png");
+	public ImageIcon PAUSED_SCAN_ENABLED_PREST_IMAGE_ICON	= new ImageIcon("image/ButtonPauseScanPrest.png");
+	public ImageIcon PAUSED_SCAN_DISABLED_IMAGE_ICON 		= new ImageIcon("image/ButtonPauseScanNotEnabled.png"); 
 	
-	public ImageIcon STOP_SCAN_ENABLED_IMAGE_ICON 		= new ImageIcon("image/ButtonStopScan.png");
-	public ImageIcon STOP_SCAN_ENABLED_PREST_IMAGE_ICON = new ImageIcon("image/ButtonStopScanPrest.png");
-	public ImageIcon STOP_SCAN_DISABLED_IMAGE_ICON 		= new ImageIcon("image/ButtonStopScanNotEnabled.png");
+	public ImageIcon STOP_SCAN_ENABLED_IMAGE_ICON 			= new ImageIcon("image/ButtonStopScan.png");
+	public ImageIcon STOP_SCAN_ENABLED_PREST_IMAGE_ICON		= new ImageIcon("image/ButtonStopScanPrest.png");
+	public ImageIcon STOP_SCAN_DISABLED_IMAGE_ICON 			= new ImageIcon("image/ButtonStopScanNotEnabled.png");
 	
 	/* Strings */
 	public String HEADER_BUTTON_TOOL_TIP_TEXT 	= "Pres to scan ";
@@ -78,9 +120,6 @@ public class ScanSettingsSubPanel extends JPanel {
 	public String STEP_TEXT_DARK_GREEN  		= "<html> <font color = rgb(120,200,40)>Scan</font></html>";
 
 	private String SCAN_DONE 					= "<html><p align=center>Scaning Done</p></html>";
-	
-	/* Boolean */
-	public static boolean HEADER_BUTTON_ENABLED = false;
 	
 	/* Buttons */
 	public static JButton headerButton 	= new JButton();
@@ -137,19 +176,7 @@ public class ScanSettingsSubPanel extends JPanel {
 		headerButton.setDisabledIcon(HEADER_DISABLED_GRAY_IMAGE_ICON);
 		headerButton.setPressedIcon(HEADER_ENABLED_PREST_IMAGE_ICON);
 		headerButton.setRolloverIcon(HEADER_ENABLED_ROLLOVER_IMAGE_ICON);
-		headerButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (FrequencySettingsSubPanel.NEXT_BUTTON_ENABLED)
-				{
-					SettingsPanel.areaPanel.areaNotPanelActive();
-					SettingsPanel.densityPanel.densityPanelNotActive();
-					SettingsPanel.frequencyPanel.frequencyPanelNotActive();
-					SettingsPanel.fileNamePanel.fileNamePanelActive();
-					SettingsPanel.scanPanel.scanPanelActive();
-				}
-			}
-		});
+		headerButton.addActionListener(new HeaderButtonActionListener(this.STAGE));
 		/* Next JButton */
 		startScanButton.setOpaque(false);
 		startScanButton.setContentAreaFilled(false);
@@ -161,68 +188,7 @@ public class ScanSettingsSubPanel extends JPanel {
 		startScanButton.setDisabledIcon(START_SCAN_DISABLED_IMAGE_ICON);
 		startScanButton.setPressedIcon(START_SCAN_ENABLED_PREST_IMAGE_ICON);
 		startScanButton.setDisabledSelectedIcon(Program.NEXT_BUTTON_GRAY_PREST_IMAGE_ICON);
-		startScanButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				
-				colorImage = IplImage.create(SettingsPanel.CROPT_PHOTO_DIMENSION.width * Program.TIONDELS_MILLI_METER_PIXEL, SettingsPanel.CROPT_PHOTO_DIMENSION.height * Program.TIONDELS_MILLI_METER_PIXEL, 8/*SettingsPanel.photo.depth()*/, 4/*SettingsPanel.photo.nChannels()*/);
-				buffImage = colorImage.getBufferedImage();
-				int alpha = new java.awt.Color((int)255, (int)255, (int)255, (int)0).getRGB();
-
-				for (int yi = 0; yi < buffImage.getHeight(); yi++) {
-					for (int xi = 0; xi < buffImage.getWidth(); xi++){
-						buffImage.setRGB(xi, yi, alpha);
-					}
-				}
-				/*
-				IplImage colorImage2 = IplImage.create(1000, 4000, SettingsPanel.photo.depth(), SettingsPanel.photo.nChannels());
-				BufferedImage buffImage2 = colorImage2.getBufferedImage();
-				
-				double wave = 380.0;
-				for (int xi = 0; xi < 1000; xi++){
-					for (int yi = 0; yi < 4000; yi++) {
-						buffImage2.setRGB(xi, yi, wavelengthToColorConverter(wave));
-						wave += 0.1;
-					}
-					wave = 380;
-				}
-
-				colorImage2 = IplImage.createFrom(buffImage2);
-		    	cvSaveImage("webcam photo/ColorPalet.png", colorImage2);
-				*/
-		        
-		        SettingsPanel.FILE_NAME_SELECTED = true;
-
-				SettingsPanel.frequencyPanel.frequencyPanelNotActive();
-				SettingsPanel.areaPanel.areaNotPanelActive();
-				SettingsPanel.densityPanel.densityPanelNotActive();
-				SettingsPanel.fileNamePanel.fileNamePanelNotActive();
-				
-				FrequencySettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.frequencyPanel.HEADER_DISABLED_DARK_GREEN_IMAGE_ICON);
-				AreaSettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.areaPanel.HEADER_DISABLED_DARK_GREEN_IMAGE_ICON);
-				DensitySettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.densityPanel.HEADER_DISABLED_DARK_GREEN_IMAGE_ICON);
-				FileNameSettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.fileNamePanel.HEADER_DISABLED_DARK_GREEN_IMAGE_ICON);
-				
-				FrequencySettingsSubPanel.headerButton.setEnabled(false);
-				AreaSettingsSubPanel.headerButton.setEnabled(false);
-				DensitySettingsSubPanel.headerButton.setEnabled(false);
-				FileNameSettingsSubPanel.headerButton.setEnabled(false);
-
-				startScanButton.setEnabled(false);
-				stopScanButton.setEnabled(true);
-				pauseScanButton.setEnabled(true);
-				
-				int delay = 100;
-
-		        Timer timer = new Timer();
-		       
-		        timer.schedule( new TimerTask(){
-		        	public void run() { 
-		        		scan();
-		        	}
-		       	}, delay);
-			}
-		});
+		startScanButton.addActionListener(new NextActionListener());
 		
 		/* Back on step JButton */
 		pauseScanButton.setEnabled(false);
@@ -238,6 +204,8 @@ public class ScanSettingsSubPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				startScanButton.setEnabled(true);
 				pauseScanButton.setEnabled(false);
+
+				pauseScanX = true;
 			}
 		});
 		
@@ -250,29 +218,7 @@ public class ScanSettingsSubPanel extends JPanel {
 		stopScanButton.setOpaque(false);
 		stopScanButton.setContentAreaFilled(false);
 		stopScanButton.setBorderPainted(false);
-		stopScanButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				SettingsPanel.frequencyPanel.frequencyPanelNotActive();
-				SettingsPanel.areaPanel.areaNotPanelActive();
-				SettingsPanel.densityPanel.densityPanelNotActive();
-				SettingsPanel.fileNamePanel.fileNamePanelNotActive();
-				SettingsPanel.scanPanel.scanPanelActive();
-				
-				FrequencySettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.frequencyPanel.HEADER_DISABLED_BLUE_IMAGE_ICON);
-				AreaSettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.areaPanel.HEADER_DISABLED_BLUE_IMAGE_ICON);
-				DensitySettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.densityPanel.HEADER_DISABLED_BLUE_IMAGE_ICON);
-				FileNameSettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.fileNamePanel.HEADER_DISABLED_BLUE_IMAGE_ICON);
-				
-				AreaSettingsSubPanel.headerButton.setEnabled(true);
-				DensitySettingsSubPanel.headerButton.setEnabled(true);
-				FileNameSettingsSubPanel.headerButton.setEnabled(true);
-				
-				startScanButton.setEnabled(true);
-				pauseScanButton.setEnabled(false);
-				stopScanButton.setEnabled(false);
-			}
-		});
+		stopScanButton.addActionListener(new BackActionListener());
 
 		/* Creates a Label for the step numbers. */
 		stepLabel.setPreferredSize(STEP_LABEL_DIMENSION);
@@ -336,7 +282,6 @@ public class ScanSettingsSubPanel extends JPanel {
 		scanPanel.add(inputFeildsAButtons, BorderLayout.SOUTH);
 		scanPanel.add(currentTimeStreamContainer, BorderLayout.CENTER);
 		
-		
 		headerAndPanelContiner.add(scanPanel, BorderLayout.SOUTH);
 
 		stepContiner.add(stepLabel, BorderLayout.NORTH );
@@ -357,7 +302,7 @@ public class ScanSettingsSubPanel extends JPanel {
 		Program.cameraPanel.setVisible(false);
 		Program.imagePanel.setVisible(true);
 		
-		SettingsPanel.setStage(5);
+		SettingsPanel.setStage(this.STAGE);
 		Program.frame.glass.repaint();
 		Program.frame.glass.setVisible(true);
 		
@@ -380,6 +325,7 @@ public class ScanSettingsSubPanel extends JPanel {
 		
 		/* Turns on Panel */
 		scanPanel.setVisible(true);
+
 	}
 	/**
 	 * NOT ACTIVE
@@ -424,14 +370,52 @@ public class ScanSettingsSubPanel extends JPanel {
 			stepContiner.setPreferredSize(STEP_CONTINER_DIMENSION_OFF);
 		}
 	}
-	public void scan(){
-		frequencyOutput();
-		moveStartPosToMesurmentPos();
-		scanValues();
+	/**
+	 * Calls the right methods and starts the scan 
+	 */
+	@SuppressWarnings("null")
+	public void startScan(){
+		numberOfScans();
+		initializeScanValues();
+		if (scanStoped && !scanAreaChanged)
+		{
+			if (yMoved > 0)
+				for (int yi = 0; yi < yMoved; yi++)
+					moveMotorDownY(yi);
+			else if (yMoved < 0)
+				for (int yi = yMoved; yi < 0; yi++)
+					moveMotorUppY(yi);
+			if (xMoved > 0)
+				for (int xi = 0; xi < xMoved; xi++)
+					moveMotorBackX(xi);
+			else if (xMoved < 0)
+				for (int xi = xMoved; xi < 0; xi++)
+					moveMotorForwordX(xi);
+			
+			scanStoped = false;
+		}
+		else
+		{
+			scanStoped = false;
+			moveStartPosToMesurmentPos();
+			moveToStartCeneter();
+			scanAreaChanged = false;
+		}
+		for (int i = 0; i < frequency.length; i++) {
+			frequencyOutput(frequency[i]);
+			scanValues();
+			if (scanStoped)
+				break;
+			else 
+			{
+				restartScanValues();
+				moveUY = !moveUY;
+			}
+		}
 	}
-	private void frequencyOutput(){
+	private void frequencyOutput(float frequency){
 		/* There will be a function sending a string with the frequency that is to be scanned with */
-		System.out.println("Frequency: "+ SettingsPanel.FREQUENCY_START_SELECTED_VALUE);
+		System.out.println("Frequency: "+ frequency);
 	}
 	private int scanInput(){
 		/* Function with an string input and then convert it to integer and return */
@@ -439,22 +423,60 @@ public class ScanSettingsSubPanel extends JPanel {
 		int convertedFromStringInput = (int) (Math.random() * 400 + 380 );
 		return convertedFromStringInput;
 	}
+	/**
+	 * 
+	 * @param i
+	 */
 	private void moveMotorForwordX(int i){
 		/* function for moving the motors 1 step */
-		//System.out.println(" + X " + i);
+		if (!moveStartPosToMesurmentPosBoolean)
+		{
+			xMoved += 1;  
+		//	System.out.println("xMovedForword: " + xMoved);
+		}
 	}
+	/**
+	 * 
+	 * @param i
+	 */
 	private void moveMotorUppY(int i){
 		/* function for moving the motors 1 step */
 		//System.out.println(" + Y " + i);
+		if (!moveStartPosToMesurmentPosBoolean)
+		{
+			yMoved += 1;
+		//	System.out.println("yMovedUpp: " + yMoved);
+		}
 	}
+	/**
+	 * 
+	 * @param i
+	 */
 	private void moveMotorBackX(int i){
 		/* function for moving the motors 1 step */
 		//System.out.println(" - X " + i);
+		if (!moveStartPosToMesurmentPosBoolean)
+		{
+			xMoved -= 1;
+		//	System.out.println("xMovedBackword: " + xMoved);
+		}
 	}
+	/**
+	 * 
+	 * @param i
+	 */
 	private void moveMotorDownY(int i){
 		/* function for moving the motors 1 step */
 		//System.out.println(" - Y " + i);
+		if (!moveStartPosToMesurmentPosBoolean)
+		{
+			yMoved -= 1;
+		//	System.out.println("yMovedDown: " + yMoved);
+		}
 	}
+	/**
+	 * Moves the closest corner of the selected area to the scanners position.
+	 */
 	private void moveStartPosToMesurmentPos(){
 		int mPX = MesurmentPosX;
 		int mPY = MesurmentPosY;
@@ -462,7 +484,7 @@ public class ScanSettingsSubPanel extends JPanel {
 		int eY = (int) (SettingsPanel.TABLE_HEIGHT - (SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_END_Y * Program.TIONDELS_MILLI_METER_PIXEL));
 		int sX = (int) (SettingsPanel.TABLE_WIDTH - (SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_START_X * Program.TIONDELS_MILLI_METER_PIXEL));
 		int sY = (int) (SettingsPanel.TABLE_HEIGHT - (SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_START_Y * Program.TIONDELS_MILLI_METER_PIXEL));
-		
+		moveStartPosToMesurmentPosBoolean = true;
 		if(Math.abs(mPX - eX) > Math.abs(mPX - sX))
 		{
 			if(Math.abs(mPY - eY) > Math.abs(mPY - sY))
@@ -554,229 +576,220 @@ public class ScanSettingsSubPanel extends JPanel {
 			}
 		}
 	}
+	/**
+	 * Scanning Values of each position and gives the user feedback, in the way of colors
+	 */
 	private void scanValues(){
-		int hy = buffImage.getHeight();
-		int wx = buffImage.getWidth();
-		int nX = SettingsPanel.numberOfStepsWidth;
-		int nY = SettingsPanel.numberOfStepsHeight;
-		int sizeY;
-		int sizeX;
-		if (DensitySettingsSubPanel.inputStepBoolean)
-		{
-			sizeY = (int)(buffImage.getHeight() / SettingsPanel.numberOfStepsWidth);
-			sizeX = (int)(buffImage.getWidth() / SettingsPanel.numberOfStepsHeight);
-		}
-		else
-		{
-			sizeY = SettingsPanel.stepSizeHeight;
-			sizeX = SettingsPanel.stepSizeWidth;
-		}
-		/* Two for loops that moves the axis to the middle of the first area */
-		for (int y = 0; y < sizeY / 2; y++)
-		{
-			if (moveUY)
-				moveMotorUppY(y);
-			else
-				moveMotorDownY(y);
-		}
-		for (int x = 0; x < sizeX / 2; x++)
-		{
-			if (moveFX)
-				moveMotorForwordX(x);
-			else
-				moveMotorBackX(x);
-		}
-
 		/* scan the rest of the card algorithm */
-		boolean changeWay = false;
-		for(int y = 0; y < hy; y += sizeY){
+		while (!scanStoped && scanY) {
 			int colorX = 0;
 			int stepX = 0;
-			for(int x = 0; x < wx; x += sizeX ){
-				if(moveFX)
+			x = 0;
+			setScanX(true);
+			while (!scanStoped && scanX) {
+				if (!pauseScanX)
 				{
-					if(changeWay)
+					if(moveFX)
 					{
-						if (x == stepX)
+						if(changeWay)
 						{
-							colorX = wavelengthToColorConverter(scanInput());
-							stepX = stepX + sizeX;
-						}
-						if(moveUY)
-						{
-							for(int xi = 0; xi < sizeX; xi++){
-								if (x + xi < wx)
-								{
-									for(int yi = 0; yi < sizeY; yi++) {
-										if ((hy - y) - yi - 1 > 0)
-										{
-											buffImage.setRGB(xi + x, ((hy - y) - yi - 1), colorX);
+							if (x == stepX)
+							{
+								colorX = wavelengthToColorConverter(scanInput());
+								stepX = stepX + sizeX;
+							}
+							if(moveUY)
+							{
+								Graphics g = buffImage.getGraphics();
+								g.setColor(new Color(colorX));
+								g.fillRect(x, y, sizeX, sizeY);
+								for(int xi = 0; xi < sizeX; xi++){
+									if (x + xi < wx)
+									{
+										for(int yi = 0; yi < sizeY; yi++) {
+											if ((this.hy - this.y) - yi - 1 > 0)
+												buffImage.setRGB(xi + x, ((hy - y) - yi - 1), colorX);
 										}
 									}
+									moveMotorBackX(x);
 								}
-								moveMotorBackX(x);
+							}
+							else
+							{
+								for(int xi = 0; xi < sizeX; xi++){
+									if (x + xi < wx)
+									{
+										for(int yi = 0; yi < sizeY; yi++) {
+											if (this.y + yi < hy)
+												buffImage.setRGB(xi + x, y + yi, colorX);
+										}
+									}
+									moveMotorBackX(x);
+								}
 							}
 						}
 						else
 						{
-							for(int xi = 0; xi < sizeX; xi++){
-								if (x + xi < wx)
-								{
-									for(int yi = 0; yi < sizeY; yi++) {
-										if (y + yi < hy)
-										{
-											buffImage.setRGB(xi + x, y + yi, colorX);
+							if (x == stepX)
+							{
+								colorX = wavelengthToColorConverter(scanInput());
+								stepX = stepX + sizeX;
+							}
+							if(moveUY)
+							{
+								for(int xi = 0; xi < sizeX; xi++){
+									if ((wx - xi - x) - 1 > 0)
+									{
+										for(int yi = 0; yi < sizeY; yi++) {
+											if (((this.hy - this.y) - yi - 1) > 0)
+												buffImage.setRGB((wx - xi - x) - 1, ((hy - y) - yi - 1), colorX);
 										}
 									}
+									moveMotorForwordX(x);
 								}
-								moveMotorBackX(x);
+							}
+							else
+							{
+								for(int xi = 0; xi < sizeX; xi++){
+									if ((wx - xi - x) - 1 > 0)
+									{
+										for(int yi = 0; yi < sizeY; yi++) {
+											if (this.y + yi < hy) 
+												buffImage.setRGB(((wx - xi - x)) - 1, y + yi, colorX);
+										}
+									}
+									moveMotorForwordX(x);
+								}
 							}
 						}
 					}
 					else
 					{
-						if (x == stepX)
+						if(changeWay)
 						{
-							colorX = wavelengthToColorConverter(scanInput());
-							stepX = stepX + sizeX;
-						}
-						if(moveUY)
-						{
-							for(int xi = 0; xi < sizeX; xi++){
-								if ((wx - xi - x) - 1 > 0)
-								{
-									for(int yi = 0; yi < sizeY; yi++) {
-										if (((hy - y) - yi - 1) > 0)
-										{
-											buffImage.setRGB((wx - xi - x) - 1, ((hy - y) - yi - 1), colorX);
+							if (x == stepX)
+							{
+								colorX = wavelengthToColorConverter(scanInput());
+								stepX = stepX + sizeX;
+							}
+							if(moveUY)
+							{
+								for(int xi = 0; xi < sizeX; xi++){
+									if ((wx - xi - x) - 1 > 0)
+									{
+										for(int yi = 0; yi < sizeY; yi++) {
+											if (((this.hy - this.y) - yi - 1) > 0)
+												buffImage.setRGB(((wx - x - xi)) - 1, ((hy - y) - yi - 1), colorX);
 										}
 									}
+									moveMotorForwordX(x);
 								}
-								moveMotorForwordX(x);
 							}
+							else
+							{
+								for(int xi = 0; xi < sizeX; xi++) {
+									if ((wx - xi - x) - 1 > 0)
+									{
+										for(int yi = 0; yi < sizeY; yi++) {
+											if (this.y + yi < hy)
+												buffImage.setRGB(((wx - x - xi)) - 1, y + yi, colorX);
+										}
+									}
+									moveMotorForwordX(x);
+								}
+							}	
 						}
 						else
 						{
-							for(int xi = 0; xi < sizeX; xi++){
-								if ((wx - xi - x) - 1 > 0)
-								{
-									for(int yi = 0; yi < sizeY; yi++) {
-										if (y + yi < hy) 
-										{
-											buffImage.setRGB(((wx - xi - x)) - 1, y + yi, colorX);
+							if (x == stepX)
+							{
+								colorX = wavelengthToColorConverter(scanInput());
+								stepX = stepX + sizeX;
+							}
+							if(moveUY)
+							{
+								for(int xi = 0; xi < sizeX; xi++) {
+									if (x + xi < wx)
+									{
+										for(int yi = 0; yi < sizeY; yi++) {
+											if (((this.hy - this.y) - yi - 1) > 0)
+												buffImage.setRGB(x + xi, (this.hy - this.y) - yi - 1, colorX);
 										}
+									moveMotorBackX(x);
 									}
 								}
-								moveMotorForwordX(x);
+							}
+							else
+							{
+								for(int xi = 0; xi < sizeX; xi++) {
+									if (x + xi < wx)
+									{
+										for(int yi = 0; yi < sizeY; yi++) {
+											if (y + yi < this.hy)
+												buffImage.setRGB(x + xi, y + yi, colorX);
+										}
+									moveMotorBackX(x);
+									}
+								}
 							}
 						}
+					}
+	
+					if ((x > wx && moveFX) || (wx - x < 0 && !moveFX))
+					{
+						x = 0;
+						scanX = false;
+						resizeAPaint();
+					}
+					else {
+						x += sizeX;
+						resizeAPaint();
 					}
 				}
 				else
 				{
-					if(changeWay)
-					{
-						if (x == stepX)
-						{
-							colorX = wavelengthToColorConverter(scanInput());
-							stepX = stepX + sizeX;
-						}
-						if(moveUY)
-						{
-							for(int xi = 0; xi < sizeX; xi++){
-								if ((wx - xi - x) - 1 > 0)
-								{
-									for(int yi = 0; yi < sizeY; yi++) {
-										if (((hy - y) - yi - 1) > 0)
-										{
-											buffImage.setRGB(((wx - x - xi)) - 1, ((hy - y) - yi - 1), colorX);
-										}
-									}
-								}
-								moveMotorForwordX(x);
-							}
-						}
-						else
-						{
-							for(int xi = 0; xi < sizeX; xi++) {
-								if ((wx - xi - x) - 1 > 0)
-								{
-									for(int yi = 0; yi < sizeY; yi++) {
-										if (y + yi < hy)
-										{
-											buffImage.setRGB(((wx - x - xi)) - 1, y + yi, colorX);
-										}
-									}
-								}
-								moveMotorForwordX(x);
-							}
-						}	
-					}
-					else
-					{
-						if (x == stepX)
-						{
-							colorX = wavelengthToColorConverter(scanInput());
-							stepX = stepX + sizeX;
-						}
-						if(moveUY)
-						{
-							for(int xi = 0; xi < sizeX; xi++) {
-								if (x + xi < wx)
-								{
-									for(int yi = 0; yi < sizeY; yi++) {
-										if (((hy - y) - yi - 1) > 0)
-										{
-											buffImage.setRGB(x + xi, (hy - y) - yi - 1, colorX);
-										}
-									}
-								}
-								moveMotorBackX(x);
-							}
-						}
-						else
-						{
-							for(int xi = 0; xi < sizeX; xi++) {
-								if (x + xi < wx)
-								{
-									for(int yi = 0; yi < sizeY; yi++) {
-										if (y + yi < hy)
-										{
-											buffImage.setRGB(x + xi, y + yi, colorX);
-										}
-									}
-								}
-								moveMotorBackX(x);
-							}
-						}
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
 					}
 				}
-				resizeAndPaint();
 			}
+			
 			if (moveUY)
 			{
 				for(int yi = 0; yi < sizeY; yi++ )
-					moveMotorUppY(y);
+					moveMotorUppY(this.y);
 			}
 			else
 			{
 				for(int yi = 0; yi < sizeY; yi++ )
-					moveMotorDownY(y);
+					moveMotorDownY(this.y);
 			}
-
-			if (changeWay)
-				changeWay = false;
-			else
-				changeWay = true;
+			changeWay = !changeWay;
 			
+			y += sizeY;
 			
+			if (y >= hy)
+				setScanY(false);
 		}
-		System.out.println("Area is scaned!");
-		
-		colorImage = IplImage.createFrom(buffImage);
-    	cvSaveImage("webcam photo/Color" + SettingsPanel.FILE_NAME + ".png", colorImage);
-
+		if (!scanStoped)
+		{
+			System.out.println("Area is scaned!");
+			try {
+				File outputfile = new File("webcam photo/Color" + SettingsPanel.FILE_NAME + ".png");
+				ImageIO.write(buffImage, "png", outputfile);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
+	/**
+	 * Takes in a value and returns the corresponding color value.
+	 * 
+	 * @param wave
+	 * @return
+	 */
 	private int wavelengthToColorConverter(double wave){
 		/* Constants */
 		double waveLength = wave;
@@ -786,7 +799,7 @@ public class ScanSettingsSubPanel extends JPanel {
 		double R = 0;
 		double G = 0;
 		double B = 0;
-		double A = 80;
+		double A = ALPHA;
 		
 		if ( 379.9 < waveLength && waveLength < 440)
 		{
@@ -844,41 +857,239 @@ public class ScanSettingsSubPanel extends JPanel {
 		G = adjust(G, factor, intensityMax, gamma);
 		B = adjust(B, factor, intensityMax, gamma);
 		
-		System.out.println(wave);
+		//System.out.println(wave);
 		
 		return new java.awt.Color((int)R, (int)G, (int)B, (int)A).getRGB();
 	}
+	/**
+	 * Adjust the color just by a alitle bitt in the ends so it looks as it should
+	 * @param color
+	 * @param factor
+	 * @param intensityMax
+	 * @param gamma
+	 * @return
+	 */
 	private double adjust(double color, double factor, double intensityMax, double gamma){
 		if (color == 0.0)
 			return 0.0;
 		else
 			return (intensityMax * Math.pow(color * factor, gamma));
 	}
-	private void resizeAndPaint() {
+	/**
+	 * Resizes the image with the in scanned colors.
+	 */
+	public void resizeAPaint() {
+		if (!scanNeverStarted) 
+		{
+	        IplImage ipl = IplImage.create(Program.imagePanel.newWidthPhoto, Program.imagePanel.newHeightPhoto, 16, 4);
+	        
+	        if (scanStoped)
+	        	setBuffImageAlpha();
+	        	
+	        cvResize(IplImage.createFrom(buffImage), ipl, CV_INTER_LANCZOS4);
+	        rezicedBuffImage = ipl.getBufferedImage();
+			        
+			Program.frame.glass.repaint();
+		}
+	}
+	/**
+	 * Moves the scanner point to the center of the first area that we want to scan.
+	 */
+	private void moveToStartCeneter() {
+		/* Two for loops that moves the axis to the middle of the first area */
+		for (int y = 0; y < sizeY / 2; y++)
+		{
+			if (moveUY)
+				moveMotorUppY(y);
+			else
+				moveMotorDownY(y);
+		}
+		for (int x = 0; x < sizeX / 2; x++)
+		{
+			if (moveFX)
+				moveMotorForwordX(x);
+			else
+				moveMotorBackX(x);
+		}
 
-		int widthFrame = Program.cameraPanel.getWidth();
-		int heightFrame = Program.cameraPanel.getHeight();
-        int widthCameraPhoto = buffImage.getWidth();
-        int heightCameraPhoto = buffImage.getHeight();
+		moveStartPosToMesurmentPosBoolean = false;
+	}
+	/**
+	 * Gets the user selected values for the scan.
+	 */
+	private void initializeScanValues() {
+		hy = buffImage.getHeight();
+		wx = buffImage.getWidth();
+		
+		nX = SettingsPanel.numberOfStepsWidth;
+		nY = SettingsPanel.numberOfStepsHeight;
+		
+		if (DensitySettingsSubPanel.inputStepBoolean)
+		{
+			sizeY = (int)(buffImage.getHeight() / SettingsPanel.numberOfStepsHeight);
+			sizeX = (int)(buffImage.getWidth() / SettingsPanel.numberOfStepsWidth);
+		}
+		else
+		{
+			sizeY = SettingsPanel.stepSizeHeight;
+			sizeX = SettingsPanel.stepSizeWidth;
+		}
+	}
+	/**
+	 * Sets the scan background to invisible so that we can see the image bellow 
+	 */
+	public void setBuffImageAlpha() {
+		colorImage = IplImage.create(SettingsPanel.CROPT_PHOTO_DIMENSION.width * Program.TIONDELS_MILLI_METER_PIXEL, SettingsPanel.CROPT_PHOTO_DIMENSION.height * Program.TIONDELS_MILLI_METER_PIXEL, 16/*SettingsPanel.photo.depth()*/, 4/*SettingsPanel.photo.nChannels()*/);
+		buffImage = colorImage.getBufferedImage();
+		int alpha = new java.awt.Color((int)255, (int)255, (int)255, (int)0).getRGB();
 
-        Dimension imgSize2 = new Dimension(widthCameraPhoto, heightCameraPhoto);
-        Dimension boundary2 = new Dimension(widthFrame, heightFrame);
-        /* Changing the scaling of the grabbed camera image */
-        Dimension newImagebunderys1 = CameraPanel.getScaledDimension(imgSize2, boundary2);
-
-        int width  = newImagebunderys1.width;
-        int height  = newImagebunderys1.height;
-        
-        /* Dimension is being updated all the time so we know where to draw the lines  */ 
-        SettingsPanel.PHOTO_VIEW_DIMENSION = newImagebunderys1;
-        
-        IplImage ipl = IplImage.create(width, height, colorImage.depth(), colorImage.nChannels());
-        
-        cvResize(IplImage.createFrom(buffImage), ipl, CV_INTER_LANCZOS4);
-
-        rezicedBuffImage = ipl.getBufferedImage();
-		        
-		Program.frame.glass.repaint();
+		for (int yi = 0; yi < buffImage.getHeight(); yi++) {
+			for (int xi = 0; xi < buffImage.getWidth(); xi++){
+				buffImage.setRGB(xi, yi, alpha);
+			}
+		}
+	}
+	/**
+	 * Function that creates a color pellet for all wave lengths
+	 */
+	public void createColorPalet() {
+		IplImage colorImage2 = IplImage.create(100, 400, SettingsPanel.photo.depth(), SettingsPanel.photo.nChannels());
+		BufferedImage buffImage2 = colorImage2.getBufferedImage();
+		
+		double wave = 380.0;
+		for (int xi = 0; xi < 100; xi++){
+			for (int yi = 0; yi < 400; yi++) {
+				buffImage2.setRGB(xi, yi, wavelengthToColorConverter(wave));
+				wave += 1;
+			}
+			wave = 380;
+		}
+		try {
+			File outputfile = new File("webcam photo/ColorPalet" + SettingsPanel.FILE_NAME + ".png");
+			ImageIO.write(buffImage2, "png", outputfile);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	}
+	/**
+	 * Sets the headers to disabled when scan has started.
+	 */
+	public void headersInactive() {
+		FrequencySettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.frequencyPanel.HEADER_DISABLED_DARK_GREEN_IMAGE_ICON);
+		AreaSettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.areaPanel.HEADER_DISABLED_DARK_GREEN_IMAGE_ICON);
+		DensitySettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.densityPanel.HEADER_DISABLED_DARK_GREEN_IMAGE_ICON);
+		FileNameSettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.fileNamePanel.HEADER_DISABLED_DARK_GREEN_IMAGE_ICON);
+		
+		FrequencySettingsSubPanel.headerButton.setEnabled(false);
+		AreaSettingsSubPanel.headerButton.setEnabled(false);
+		DensitySettingsSubPanel.headerButton.setEnabled(false);
+		FileNameSettingsSubPanel.headerButton.setEnabled(false);
+	}
+	/**
+	 * Changes the buttons so that they are correctly enabled.
+	 * 
+	 * start button disabled
+	 * pause button enabled 
+	 * stop button enabled
+	 */
+	public void buttonsScanActiveStarted() {
+		startScanButton.setEnabled(false);
+		stopScanButton.setEnabled(true);
+		pauseScanButton.setEnabled(true);
+	}
+	/**
+	 * Starts the scan but but lets the headers set enable false
+	 */
+	public void delayedStartScan() {
+		int DELAY = 100;
+	    Timer timer = new Timer();
+	    timer.schedule( new TimerTask(){
+	    	public void run() { 
+	    		startScan();
+	    	}
+	   	}, DELAY);
+	}
+	/**
+	 * 
+	 */
+	public void scanActiveChange(){
+		if (scanActive)
+		{
+			scanAreaChanged = true;
+			scanActive = false;
+		}
+	}
+	public void numberOfScans() {
+		float startF = SettingsPanel.frequencyStartUserSelectedFloat;
+		float endF = SettingsPanel.frequencyEndUserSelectedFloat;
+		int densityI = SettingsPanel.frequencyDensityUserSelectedInt;
+		
+		System.err.println(startF);
+		System.err.println(endF);
+		System.err.println(densityI);
+		
+		if ( startF == endF)
+		{
+			frequency = new float[1];
+			frequency[0] = startF;
+		}
+		else if (startF < endF && densityI == 1)
+		{
+			frequency = new float[2];
+			frequency[0] = startF;
+			frequency[1] = endF;
+		}
+		else
+		{
+			frequency = new float[densityI + 1];
+			for (int i = 0; i <= densityI; i++) {
+				frequency[i] = 	startF + i * ((endF - startF) / densityI);
+			}
+		}
+	}
+	public void restartScanValues() {
+		setScanX(true);
+		setScanY(true);
+		x = 0;
+		y = 0;
+		setBuffImageAlpha();
+	}
+	
+	
+	/**
+	 * 
+	 * @param b
+	 */
+	public void setScanActive(boolean b) {
+		// TODO Auto-generated method stub
+	}
+	/**
+	 * 
+	 * @return
+	 */
+	public boolean isScanX() {
+		return scanX;
+	}
+	/**
+	 * 
+	 * @param scanX
+	 */
+	public void setScanX(boolean scanX) {
+		this.scanX = scanX;
+	}
+	/**
+	 * 
+	 * @return
+	 */
+	public boolean isScanY() {
+		return scanY;
+	}
+	/**
+	 * 
+	 * @param scanY
+	 */
+	public void setScanY(boolean scanY) {
+		this.scanY = scanY;
 	}
 }
 

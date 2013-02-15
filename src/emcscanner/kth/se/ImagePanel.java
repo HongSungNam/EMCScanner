@@ -4,7 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import com.googlecode.javacv.cpp.opencv_core.CvMat;
@@ -23,6 +26,9 @@ public class ImagePanel extends JPanel{
 	private IplImage iplPhoto2;
 	public static boolean IMAGE_TAKEN = false;
 	public static boolean FIRST_TIME_REZISED = true;
+	
+	public int newWidthPhoto;
+	public int newHeightPhoto;
 	
 	public ImagePanel(){
 		this.setLayout(new BorderLayout());
@@ -67,6 +73,10 @@ public class ImagePanel extends JPanel{
         int widthCroptImage = iplPhoto2.width();
         int heightCroptImage = iplPhoto2.height();
         
+
+        /* CROPT_IMAGE SIZE */ 
+        SettingsPanel.CROPT_PHOTO_DIMENSION = new Dimension(widthCroptImage, heightCroptImage);
+        
         /* Creating dimensions for the camera and the panel area 
            Used later for deciding the new dimension that we will resize the image to */
         Dimension imgSize2 = new Dimension(widthCroptImage, heightCroptImage);
@@ -74,16 +84,13 @@ public class ImagePanel extends JPanel{
         /* Changing the scaling of the grabbed camera image */
         Dimension newImagebunderys1 = CameraPanel.getScaledDimension(imgSize2, boundary2);
         
-        /* CROPT_IMAGE SIZE */ 
-        SettingsPanel.CROPT_PHOTO_DIMENSION = new Dimension(widthCroptImage, heightCroptImage);
-        
         /* Dimension is being updated all the time so we know where to draw the lines  */ 
         SettingsPanel.PHOTO_VIEW_DIMENSION = newImagebunderys1;
 
-        int width  = newImagebunderys1.width;
-        int height  = newImagebunderys1.height;
+        newWidthPhoto  = newImagebunderys1.width;
+        newHeightPhoto  = newImagebunderys1.height;
         
-        IplImage ipl = IplImage.create(width, height, photo.depth(), photo.nChannels());
+        IplImage ipl = IplImage.create(newWidthPhoto, newHeightPhoto, photo.depth(), photo.nChannels());
 		
 		cvResize(iplPhoto2, ipl, CV_INTER_LANCZOS4);
 		
