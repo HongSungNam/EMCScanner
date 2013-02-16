@@ -9,6 +9,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -397,8 +398,8 @@ public class ScanSettingsSubPanel extends JPanel {
 		else
 		{
 			scanStoped = false;
-			moveStartPosToMesurmentPos();
-			moveToStartCeneter();
+			//moveStartPosToMesurmentPos();
+			//moveToStartCeneter();
 			scanAreaChanged = false;
 		}
 		for (int i = 0; i < frequency.length; i++) {
@@ -423,17 +424,45 @@ public class ScanSettingsSubPanel extends JPanel {
 		int convertedFromStringInput = (int) (Math.random() * 400 + 380 );
 		return convertedFromStringInput;
 	}
+	
+	private void moveMotorForwordX(int i){
+		moveMotorForwordX(i, 1);
+		try {
+			Thread.sleep(83);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private void moveMotorBackX(int i){
+		moveMotorBackX(i, 1);
+		try {
+			Thread.sleep(75);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	/**
 	 * 
 	 * @param i
 	 */
-	private void moveMotorForwordX(int i){
+	private void moveMotorForwordX(int i, int n){
 		/* function for moving the motors 1 step */
-		if (!moveStartPosToMesurmentPosBoolean)
-		{
-			xMoved += 1;  
-		//	System.out.println("xMovedForword: " + xMoved);
-		}
+		for (int j = 0; j < n; j++)
+			if (!moveStartPosToMesurmentPosBoolean)
+			{
+				xMoved += 1;  
+				//	System.out.println("xMovedForword: " + xMoved);
+				try {
+					Thread.sleep(83);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		
 	}
 	/**
 	 * 
@@ -446,20 +475,34 @@ public class ScanSettingsSubPanel extends JPanel {
 		{
 			yMoved += 1;
 		//	System.out.println("yMovedUpp: " + yMoved);
+			try {
+				Thread.sleep(83);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	/**
 	 * 
 	 * @param i
 	 */
-	private void moveMotorBackX(int i){
+	private void moveMotorBackX(int i, int n){
 		/* function for moving the motors 1 step */
 		//System.out.println(" - X " + i);
-		if (!moveStartPosToMesurmentPosBoolean)
-		{
-			xMoved -= 1;
-		//	System.out.println("xMovedBackword: " + xMoved);
-		}
+		for (int j = 0; j < n; j++)
+			if (!moveStartPosToMesurmentPosBoolean)
+			{
+				xMoved -= 1;
+				//	System.out.println("xMovedBackword: " + xMoved);
+				try {
+					Thread.sleep(83);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		
 	}
 	/**
 	 * 
@@ -472,6 +515,12 @@ public class ScanSettingsSubPanel extends JPanel {
 		{
 			yMoved -= 1;
 		//	System.out.println("yMovedDown: " + yMoved);
+			try {
+				Thread.sleep(83);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	/**
@@ -484,6 +533,7 @@ public class ScanSettingsSubPanel extends JPanel {
 		int eY = (int) (SettingsPanel.TABLE_HEIGHT - (SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_END_Y * Program.TIONDELS_MILLI_METER_PIXEL));
 		int sX = (int) (SettingsPanel.TABLE_WIDTH - (SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_START_X * Program.TIONDELS_MILLI_METER_PIXEL));
 		int sY = (int) (SettingsPanel.TABLE_HEIGHT - (SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_START_Y * Program.TIONDELS_MILLI_METER_PIXEL));
+		
 		moveStartPosToMesurmentPosBoolean = true;
 		if(Math.abs(mPX - eX) > Math.abs(mPX - sX))
 		{
@@ -581,197 +631,61 @@ public class ScanSettingsSubPanel extends JPanel {
 	 */
 	private void scanValues(){
 		/* scan the rest of the card algorithm */
+		Graphics2D g = buffImage.createGraphics();
 		while (!scanStoped && scanY) {
 			int colorX = 0;
-			int stepX = 0;
 			x = 0;
 			setScanX(true);
 			while (!scanStoped && scanX) {
 				if (!pauseScanX)
 				{
-					if(moveFX)
+					colorX = wavelengthToColorConverter(scanInput());
+					
+					g.setColor(new Color(colorX & 255, (colorX >> 8) & 255, (colorX >> 16) & 255, colorX >>> 24));
+					if (moveFX ^ changeWay)
 					{
-						if(changeWay)
-						{
-							if (x == stepX)
-							{
-								colorX = wavelengthToColorConverter(scanInput());
-								stepX = stepX + sizeX;
-							}
-							if(moveUY)
-							{
-								Graphics g = buffImage.getGraphics();
-								g.setColor(new Color(colorX));
-								g.fillRect(x, y, sizeX, sizeY);
-								for(int xi = 0; xi < sizeX; xi++){
-									if (x + xi < wx)
-									{
-										for(int yi = 0; yi < sizeY; yi++) {
-											if ((this.hy - this.y) - yi - 1 > 0)
-												buffImage.setRGB(xi + x, ((hy - y) - yi - 1), colorX);
-										}
-									}
-									moveMotorBackX(x);
-								}
-							}
-							else
-							{
-								for(int xi = 0; xi < sizeX; xi++){
-									if (x + xi < wx)
-									{
-										for(int yi = 0; yi < sizeY; yi++) {
-											if (this.y + yi < hy)
-												buffImage.setRGB(xi + x, y + yi, colorX);
-										}
-									}
-									moveMotorBackX(x);
-								}
-							}
-						}
-						else
-						{
-							if (x == stepX)
-							{
-								colorX = wavelengthToColorConverter(scanInput());
-								stepX = stepX + sizeX;
-							}
-							if(moveUY)
-							{
-								for(int xi = 0; xi < sizeX; xi++){
-									if ((wx - xi - x) - 1 > 0)
-									{
-										for(int yi = 0; yi < sizeY; yi++) {
-											if (((this.hy - this.y) - yi - 1) > 0)
-												buffImage.setRGB((wx - xi - x) - 1, ((hy - y) - yi - 1), colorX);
-										}
-									}
-									moveMotorForwordX(x);
-								}
-							}
-							else
-							{
-								for(int xi = 0; xi < sizeX; xi++){
-									if ((wx - xi - x) - 1 > 0)
-									{
-										for(int yi = 0; yi < sizeY; yi++) {
-											if (this.y + yi < hy) 
-												buffImage.setRGB(((wx - xi - x)) - 1, y + yi, colorX);
-										}
-									}
-									moveMotorForwordX(x);
-								}
-							}
-						}
+						g.fillRect(x, moveUY ? hy - y - 1 : y, sizeX, sizeY);
+						moveMotorBackX(x, sizeX);
 					}
 					else
 					{
-						if(changeWay)
-						{
-							if (x == stepX)
-							{
-								colorX = wavelengthToColorConverter(scanInput());
-								stepX = stepX + sizeX;
-							}
-							if(moveUY)
-							{
-								for(int xi = 0; xi < sizeX; xi++){
-									if ((wx - xi - x) - 1 > 0)
-									{
-										for(int yi = 0; yi < sizeY; yi++) {
-											if (((this.hy - this.y) - yi - 1) > 0)
-												buffImage.setRGB(((wx - x - xi)) - 1, ((hy - y) - yi - 1), colorX);
-										}
-									}
-									moveMotorForwordX(x);
-								}
-							}
-							else
-							{
-								for(int xi = 0; xi < sizeX; xi++) {
-									if ((wx - xi - x) - 1 > 0)
-									{
-										for(int yi = 0; yi < sizeY; yi++) {
-											if (this.y + yi < hy)
-												buffImage.setRGB(((wx - x - xi)) - 1, y + yi, colorX);
-										}
-									}
-									moveMotorForwordX(x);
-								}
-							}	
-						}
-						else
-						{
-							if (x == stepX)
-							{
-								colorX = wavelengthToColorConverter(scanInput());
-								stepX = stepX + sizeX;
-							}
-							if(moveUY)
-							{
-								for(int xi = 0; xi < sizeX; xi++) {
-									if (x + xi < wx)
-									{
-										for(int yi = 0; yi < sizeY; yi++) {
-											if (((this.hy - this.y) - yi - 1) > 0)
-												buffImage.setRGB(x + xi, (this.hy - this.y) - yi - 1, colorX);
-										}
-									moveMotorBackX(x);
-									}
-								}
-							}
-							else
-							{
-								for(int xi = 0; xi < sizeX; xi++) {
-									if (x + xi < wx)
-									{
-										for(int yi = 0; yi < sizeY; yi++) {
-											if (y + yi < this.hy)
-												buffImage.setRGB(x + xi, y + yi, colorX);
-										}
-									moveMotorBackX(x);
-									}
-								}
-							}
-						}
+						g.fillRect(wx - x - 1, moveUY ? hy - y - 1 : y, sizeX, sizeY);
+						moveMotorForwordX(x, sizeX);
 					}
-	
+					
 					if ((x > wx && moveFX) || (wx - x < 0 && !moveFX))
 					{
 						x = 0;
 						scanX = false;
-						resizeAPaint();
 					}
-					else {
+					else
 						x += sizeX;
-						resizeAPaint();
-					}
+					resizeAPaint();
 				}
 				else
-				{
 					try {
 						Thread.sleep(100);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-				}
 			}
 			
 			if (moveUY)
 			{
-				for(int yi = 0; yi < sizeY; yi++ )
+				for (int yi = 0; yi < sizeY; yi++)
 					moveMotorUppY(this.y);
 			}
 			else
 			{
-				for(int yi = 0; yi < sizeY; yi++ )
+				for (int yi = 0; yi < sizeY; yi++)
 					moveMotorDownY(this.y);
 			}
 			changeWay = !changeWay;
 			
-			y += sizeY;
-			
-			if (y >= hy)
+			if (y > hy)
 				setScanY(false);
+
+			y += sizeY;
 		}
 		if (!scanStoped)
 		{
@@ -881,7 +795,7 @@ public class ScanSettingsSubPanel extends JPanel {
 	public void resizeAPaint() {
 		if (!scanNeverStarted) 
 		{
-	        IplImage ipl = IplImage.create(Program.imagePanel.newWidthPhoto, Program.imagePanel.newHeightPhoto, 16, 4);
+	        IplImage ipl = IplImage.create(Program.imagePanel.newWidthPhoto, Program.imagePanel.newHeightPhoto, 8, 4);
 	        
 	        if (scanStoped)
 	        	setBuffImageAlpha();
@@ -926,8 +840,8 @@ public class ScanSettingsSubPanel extends JPanel {
 		
 		if (DensitySettingsSubPanel.inputStepBoolean)
 		{
-			sizeY = (int)(buffImage.getHeight() / SettingsPanel.numberOfStepsHeight);
-			sizeX = (int)(buffImage.getWidth() / SettingsPanel.numberOfStepsWidth);
+			sizeY = buffImage.getHeight() / nY;
+			sizeX = buffImage.getWidth() / nX;
 		}
 		else
 		{
@@ -939,15 +853,14 @@ public class ScanSettingsSubPanel extends JPanel {
 	 * Sets the scan background to invisible so that we can see the image bellow 
 	 */
 	public void setBuffImageAlpha() {
-		colorImage = IplImage.create(SettingsPanel.CROPT_PHOTO_DIMENSION.width * Program.TIONDELS_MILLI_METER_PIXEL, SettingsPanel.CROPT_PHOTO_DIMENSION.height * Program.TIONDELS_MILLI_METER_PIXEL, 16/*SettingsPanel.photo.depth()*/, 4/*SettingsPanel.photo.nChannels()*/);
+		colorImage = IplImage.create(SettingsPanel.CROPT_PHOTO_DIMENSION.width * Program.TIONDELS_MILLI_METER_PIXEL, SettingsPanel.CROPT_PHOTO_DIMENSION.height * Program.TIONDELS_MILLI_METER_PIXEL, 8/*SettingsPanel.photo.depth()*/, 4/*SettingsPanel.photo.nChannels()*/);
 		buffImage = colorImage.getBufferedImage();
-		int alpha = new java.awt.Color((int)255, (int)255, (int)255, (int)0).getRGB();
-
-		for (int yi = 0; yi < buffImage.getHeight(); yi++) {
-			for (int xi = 0; xi < buffImage.getWidth(); xi++){
-				buffImage.setRGB(xi, yi, alpha);
-			}
-		}
+		buffImage.setRGB(0, 0, buffImage.getWidth(), buffImage.getHeight(), new int[buffImage.getWidth() * buffImage.getHeight()], 0, buffImage.getWidth());
+		/*
+		Graphics g = buffImage.getGraphics();
+		g.setColor(new Color(0, 0, 0, 0));
+		g.clearRect(0, 0, buffImage.getWidth(), buffImage.getHeight());
+		*/
 	}
 	/**
 	 * Function that creates a color pellet for all wave lengths
