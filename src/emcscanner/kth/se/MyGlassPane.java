@@ -191,7 +191,7 @@ public class MyGlassPane extends JComponent {
 			}
 			else if (SettingsPanel.getStage() == 5)
 			{
-				g2.drawImage(SettingsPanel.scanPanel.rezicedBuffImage, null, 0, MainFrame.menuBar.getHeight());
+				g2.drawImage(SettingsPanel.scanPanel.scan.rezicedBuffImage, null, 0, MainFrame.menuBar.getHeight());
 			}
 			g2.dispose();
 		}

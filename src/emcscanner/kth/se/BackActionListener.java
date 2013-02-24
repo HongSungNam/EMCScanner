@@ -51,10 +51,10 @@ public class BackActionListener implements ActionListener{
 		if (SettingsPanel.getStage() == 5 && Program.frame.glass.glasPanelActive)
 		{
 			//Program.cameraPanel.DISPLAY_WEB_CAMERA_INPUT = false;
-			if (SettingsPanel.scanPanel.scanActive)
+			if (SettingsPanel.scanPanel.scan.scanActive)
 			{
-				SettingsPanel.scanPanel.setScanX(false);
-				SettingsPanel.scanPanel.setScanY(false);
+				SettingsPanel.scanPanel.scan.setScanX(false);
+				SettingsPanel.scanPanel.scan.setScanY(false);
 				
 				FrequencySettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.frequencyPanel.HEADER_DISABLED_BLUE_IMAGE_ICON);
 				AreaSettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.areaPanel.HEADER_DISABLED_BLUE_IMAGE_ICON);
@@ -70,7 +70,7 @@ public class BackActionListener implements ActionListener{
 				ScanSettingsSubPanel.pauseScanButton.setEnabled(false);
 				ScanSettingsSubPanel.stopScanButton.setEnabled(false);
 				
-				SettingsPanel.scanPanel.scanStoped = true;
+				SettingsPanel.scanPanel.scan.scanStoped = true;
 				
 				SettingsPanel.backButton.setEnabled(true);
 			}

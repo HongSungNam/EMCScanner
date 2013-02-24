@@ -57,7 +57,7 @@ public class NextActionListener implements ActionListener{
 				
 				SettingsPanel.densityPanel.widthDensityInputTextField.grabFocus();
 
-				SettingsPanel.scanPanel.scanActiveChange();
+				SettingsPanel.scanPanel.scan.scanActiveChange();
 			}
 		}
 		else if (SettingsPanel.getStage() == 3 && Program.frame.glass.glasPanelActive)
@@ -89,41 +89,41 @@ public class NextActionListener implements ActionListener{
 				SettingsPanel.densityPanel.densityPanelNotActive();
 				SettingsPanel.fileNamePanel.fileNamePanelNotActive();
 				SettingsPanel.scanPanel.scanPanelActive();
-				SettingsPanel.scanPanel.resizeAPaint();
+				SettingsPanel.scanPanel.scan.resizeAPaint();
 			}
 		}
 		else if (SettingsPanel.getStage() == 5 && Program.frame.glass.glasPanelActive)
 		{
 			if (ScanSettingsSubPanel.startScanButton.isEnabled())
 			{
-				SettingsPanel.scanPanel.scanNeverStarted = false;
-				if (!SettingsPanel.scanPanel.scanStoped && !SettingsPanel.scanPanel.pauseScanX)
+				SettingsPanel.scanPanel.scan.scanNeverStarted = false;
+				if (!SettingsPanel.scanPanel.scan.scanStoped && !SettingsPanel.scanPanel.scan.pauseScanX)
 				{
 					//createColorPalet();
-					SettingsPanel.scanPanel.headersInactive();
-					SettingsPanel.scanPanel.setBuffImageAlpha();
-					SettingsPanel.scanPanel.buttonsScanActiveStarted();
+					SettingsPanel.scanPanel.scan.headersInactive();
+					SettingsPanel.scanPanel.scan.setBuffImageAlpha();
+					SettingsPanel.scanPanel.scan.buttonsScanActiveStarted();
 					SettingsPanel.backButton.setEnabled(false);
-					SettingsPanel.scanPanel.delayedStartScan();
+					SettingsPanel.scanPanel.scan.delayedStartScan();
 					
-					SettingsPanel.scanPanel.scanActive = true;
+					SettingsPanel.scanPanel.scan.scanActive = true;
 				}
-				else if (!SettingsPanel.scanPanel.scanStoped && SettingsPanel.scanPanel.pauseScanX)
+				else if (!SettingsPanel.scanPanel.scan.scanStoped && SettingsPanel.scanPanel.scan.pauseScanX)
 				{
-					SettingsPanel.scanPanel.pauseScanX = false;
-					SettingsPanel.scanPanel.buttonsScanActiveStarted();
+					SettingsPanel.scanPanel.scan.pauseScanX = false;
+					SettingsPanel.scanPanel.scan.buttonsScanActiveStarted();
 				}
-				else if(SettingsPanel.scanPanel.scanStoped)
+				else if(SettingsPanel.scanPanel.scan.scanStoped)
 				{
-					SettingsPanel.scanPanel.pauseScanX = false;
-					SettingsPanel.scanPanel.changeWay = false;
-					SettingsPanel.scanPanel.restartScanValues();
+					SettingsPanel.scanPanel.scan.pauseScanX = false;
+					SettingsPanel.scanPanel.scan.changeWay = false;
+					SettingsPanel.scanPanel.scan.restartScanValues();
 					//SettingsPanel.scanPanel.createColorPalet();
-					SettingsPanel.scanPanel.headersInactive();
-					SettingsPanel.scanPanel.delayedStartScan();
-					SettingsPanel.scanPanel.buttonsScanActiveStarted();
+					SettingsPanel.scanPanel.scan.headersInactive();
+					SettingsPanel.scanPanel.scan.delayedStartScan();
+					SettingsPanel.scanPanel.scan.buttonsScanActiveStarted();
 					SettingsPanel.backButton.setEnabled(false);
-					SettingsPanel.scanPanel.scanActive = true;
+					SettingsPanel.scanPanel.scan.scanActive = true;
 				}
 			}
 		}
