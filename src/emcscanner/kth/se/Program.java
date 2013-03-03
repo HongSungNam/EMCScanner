@@ -43,7 +43,12 @@ public class Program {
 	public static Color LIGHT_GRAY_COLOR 	= new Color(120,120,120);
 	public static Color LIGHT_GRAY_COLOR2 	= new Color(240,240,240);
 	public static Color LIGHT_BLUE_ALPHA_COLOR1 = new Color(100,150,255,0); 
-	public static Color LIGHT_BLUE_ALPHA_COLOR 	= new Color(100,150,255,40); 
+	public static Color LIGHT_BLUE_ALPHA_COLOR 	= new Color(100,150,255,40);
+	
+	public static Color LIGHT_GREEN_ALPHA_COLOR1 = new Color(150,255,80,0); 
+	public static Color LIGHT_GREEN_ALPHA_COLOR = new Color(220,255,180); 
+	public static Color LIGHT_RED_ALPHA_COLOR1 = new Color(255,240,240,0); 
+	public static Color LIGHT_RED_ALPHA_COLOR 	= new Color(255,200,200); 
 
 	/* Light blue border for the float input text field */
 	public static Border LIGHT_BLUE_BORDER 	= BorderFactory.createLineBorder(LIGHT_BLUE_COLOR);
@@ -56,8 +61,6 @@ public class Program {
 	public static Dimension MEDIUM_BUTTON_DIMENSION = new Dimension(100, 50);
 	public static Dimension BUTTON_SMAL_DIMENSION 	= new Dimension(20, 20);
 	
-	
-
 	/**
 	 * This is the main method
 	 * @param args

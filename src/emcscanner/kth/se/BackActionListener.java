@@ -18,7 +18,7 @@ public class BackActionListener implements ActionListener{
 			Program.frame.glass.glasPanelActive = false;
 			Program.startControlPanel.nextButton.grabFocus();
 		}
-		if (SettingsPanel.getStage() == 2 && Program.frame.glass.glasPanelActive)
+		else if (SettingsPanel.getStage() == 2 && Program.frame.glass.glasPanelActive)
 		{
 			//Program.cameraPanel.DISPLAY_WEB_CAMERA_INPUT = true;
 			SettingsPanel.areaPanel.areaPanelNotActive();
@@ -28,7 +28,7 @@ public class BackActionListener implements ActionListener{
 			SettingsPanel.scanPanel.scanPanelNotActive();
 			SettingsPanel.frequencyPanel.startFloatInputTextField.grabFocus();
 		}
-		if (SettingsPanel.getStage() == 3 && Program.frame.glass.glasPanelActive)
+		else if (SettingsPanel.getStage() == 3 && Program.frame.glass.glasPanelActive)
 		{
 			//Program.cameraPanel.DISPLAY_WEB_CAMERA_INPUT = true;
 			SettingsPanel.areaPanel.areaPanelActive();
@@ -38,7 +38,7 @@ public class BackActionListener implements ActionListener{
 			SettingsPanel.scanPanel.scanPanelNotActive();
 			AreaSettingsSubPanel.backButton.grabFocus();
 		}
-		if (SettingsPanel.getStage() == 4 && Program.frame.glass.glasPanelActive)
+		else if (SettingsPanel.getStage() == 4 && Program.frame.glass.glasPanelActive)
 		{
 			//Program.cameraPanel.DISPLAY_WEB_CAMERA_INPUT = false;
 			SettingsPanel.frequencyPanel.frequencyPanelNotActive();
@@ -48,13 +48,15 @@ public class BackActionListener implements ActionListener{
 			SettingsPanel.scanPanel.scanPanelNotActive();
 			SettingsPanel.densityPanel.widthDensityInputTextField.grabFocus();
 		}
-		if (SettingsPanel.getStage() == 5 && Program.frame.glass.glasPanelActive)
+		else if (SettingsPanel.getStage() == 5 && Program.frame.glass.glasPanelActive)
 		{
 			//Program.cameraPanel.DISPLAY_WEB_CAMERA_INPUT = false;
 			if (SettingsPanel.scanPanel.scan.scanActive)
 			{
 				SettingsPanel.scanPanel.scan.setScanX(false);
 				SettingsPanel.scanPanel.scan.setScanY(false);
+				
+				//SettingsPanel.scanPanel.scan.setHeadersInactive(false);
 				
 				FrequencySettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.frequencyPanel.HEADER_DISABLED_BLUE_IMAGE_ICON);
 				AreaSettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.areaPanel.HEADER_DISABLED_BLUE_IMAGE_ICON);
@@ -70,9 +72,9 @@ public class BackActionListener implements ActionListener{
 				ScanSettingsSubPanel.pauseScanButton.setEnabled(false);
 				ScanSettingsSubPanel.stopScanButton.setEnabled(false);
 				
-				SettingsPanel.scanPanel.scan.scanStoped = true;
+				SettingsPanel.scanPanel.scan.setScanStoped(true);
 				
-				SettingsPanel.backButton.setEnabled(true);
+				EndSubSettingsPanel.backButton.setEnabled(true);
 			}
 			else
 			{

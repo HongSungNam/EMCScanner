@@ -77,10 +77,8 @@ public class SettingsPanel extends JPanel{
 	public static DensitySettingsSubPanel densityPanel;
 	public static FileNameSettingsSubPanel fileNamePanel;
 	public static ScanSettingsSubPanel scanPanel;
-	
-	/* Buttons */
-	public static JButton backButton = new JButton();
-	
+	public static EndSubSettingsPanel endPanel;
+		
 	/**
 	 * SettingsPanel
 	 * 
@@ -102,30 +100,16 @@ public class SettingsPanel extends JPanel{
 		densityPanel = new DensitySettingsSubPanel();
 		fileNamePanel = new FileNameSettingsSubPanel();
 		scanPanel = new ScanSettingsSubPanel();
+		endPanel = new EndSubSettingsPanel();
 		
 		settingsContiner.add(frequencyPanel);
 		settingsContiner.add(areaPanel);
 		settingsContiner.add(densityPanel);
 		settingsContiner.add(fileNamePanel);
 		settingsContiner.add(scanPanel);
-		
-		/* Button made for going back to previous views */
-		backButton.setEnabled(true);
-		backButton.setPreferredSize(Program.BUTTON_DIMENSION);
-		backButton.setIcon(Program.BACK_BUTTON_ENABLED_IMAGE_ICON);
-		backButton.setPressedIcon(Program.BACK_BUTTON_BLUE_PREST_IMAGE_ICON);
-		backButton.setOpaque(false);
-		backButton.setContentAreaFilled(false);
-		backButton.setBorderPainted(false);
-		backButton.addActionListener(new BackActionListener());
-		
-		/* Container made for setting backButton in the corner to the bottom */
-		JPanel continer  = 	new JPanel();
-		continer.setLayout(new BorderLayout());
-		continer.add(backButton, BorderLayout.WEST);
+		settingsContiner.add(endPanel);
 		
 		this.add(settingsContiner, BorderLayout.NORTH);
-		this.add(continer, BorderLayout.SOUTH);
 	}
 	public static int getStage() {
 		return stage;

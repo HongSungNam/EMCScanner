@@ -24,7 +24,7 @@ public class Scan {
 	/* Positions taken from the table */
 	private int MesurmentPosX = 10000;
 	private int MesurmentPosY = 5000;
-	private int ALPHA = 200;
+	private int ALPHA = 100;
 	
 	/* scan variables */
 	private int hy;
@@ -33,75 +33,108 @@ public class Scan {
 	private int nY;
 	private int sizeY;
 	private int sizeX;
+	public int frequencyShow;
 
 	/* Scanning position x and y */
-	public int x = 0;
-	public int y = 0;
+	public int x;
+	public int y;
 	/* How much we have moved in Y and X from start */
-	private int xMoved = 0;
-	private int yMoved = 0;
+	private int xMoved;
+	private int yMoved;
 	
 	/* Boolean */
-	public boolean scanAreaChanged = false;
-	private boolean moveStartPosToMesurmentPosBoolean = false;
-	public boolean scanActive = false;
-	public boolean scanStoped = false;
-	public boolean changeWay = false;
+	public boolean scanAreaChanged;
+	private boolean moveStartPosToMesurmentPosBoolean;
+	public boolean scanActive;
+	private boolean scanStoped;
+	public boolean changeWay;
 	private boolean moveFX;
 	private boolean moveUY;
-	private boolean scanX = true;
-	private boolean scanY = true;
-	public boolean pauseScanX = false;
-	public boolean scanNeverStarted = true;
+	private boolean scanX;
+	private boolean scanY;
+	public boolean pauseScanX;
+	public boolean scanNeverStarted;
+	private boolean scanDone;
+	public boolean headersInactive;
 	
 	/* Strings */
 	protected static String DEFULT_FILE_FREQUENCY_OUTPUT_LOCATION = "user data/frequency ";
 
 	/* Color image is going to contain colors from scanner*/
 	public IplImage colorImage;
-	public BufferedImage buffImage;
+	public BufferedImage[] buffImage;
 	public BufferedImage rezicedBuffImage;
 	
 	/* File Creation */
 	private FileOutputStream[] fileFrequencyOutputArray;
     private PrintStream[] fileFrequencyPrint;
     
+    public Scan() {
+    	/* Scanning position x and y */
+    	x = 0;
+    	y = 0;
+    	/* How much we have moved in Y and X from start */
+    	xMoved = 0;
+    	yMoved = 0;
+
+    	/* Boolean */
+    	scanAreaChanged = false;
+    	moveStartPosToMesurmentPosBoolean = false;
+    	scanActive = false;
+    	setScanStoped(false);
+    	changeWay = false;
+    	scanX = true;
+    	scanY = true;
+    	pauseScanX = false;
+    	scanNeverStarted = true;
+    	setScanDone(false);
+
+    	setHeadersInactive(false);
+    }
 	/**
 	 * Calls the right methods and starts the scan 
 	 */
 	public void startScan(){
-		numberOfScans();
 		initializeScanValues();
-		if (scanStoped && !scanAreaChanged)
+		if (isScanStoped() && !scanAreaChanged)
 		{
 			if (yMoved > 0)
 				for (int yi = 0; yi < yMoved; yi++)
-					moveMotorDownY(yi);
+					moveMotorDY(yi);
 			else if (yMoved < 0)
 				for (int yi = yMoved; yi < 0; yi++)
-					moveMotorUppY(yi);
+					moveMotorUY(yi);
 			if (xMoved > 0)
 				for (int xi = 0; xi < xMoved; xi++)
-					moveMotorBackX(xi);
+					moveMotorBX(xi);
 			else if (xMoved < 0)
 				for (int xi = xMoved; xi < 0; xi++)
-					moveMotorForwordX(xi);
+					moveMotorFX(xi);
 			
-			scanStoped = false;
+			setScanStoped(false);
 		}
 		else
 		{
-			scanStoped = false;
+			setScanStoped(false);
 			moveStartPosToMesurmentPos();
 			moveToStartCeneter();
 			scanAreaChanged = false;
 		}
 		scanValues();
 	}
+	/**
+	 * 
+	 * @param frequency
+	 */
 	private void frequencyOutput(float frequency){
 		/* There will be a function sending a string with the frequency that is to be scanned with */
-		System.out.println("Frequency: " + frequency);
+		//System.out.println("Frequency: " + frequency);
 	}
+	/**
+	 * 
+	 * @param f
+	 * @return
+	 */
 	private int scanInput(int f){
 		/* Function with an string input and then convert it to integer and return */
 		/* We will get values between 100 and -100 i think */
@@ -111,102 +144,96 @@ public class Scan {
 		return convertedFromStringInput;
 	}
 	
-	private void moveMotorForwordX(int i){
-		moveMotorForwordX(i, 1);
-		/*try {
+	private void doubleSleep(){
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	private void singleSleep(){
+		try {
 			Thread.sleep(83);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}*/
-	}
-
-	private void moveMotorBackX(int i){
-		moveMotorBackX(i, 1);
-		/*try {
-			Thread.sleep(75);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
+		}
 	}
 	/**
-	 * 
-	 * @param i
+	 * Function for moving the motors 1 step up and 1 step forward
 	 */
-	private void moveMotorForwordX(int i, int n){
-		/* function for moving the motors 1 step */
-		for (int j = 0; j < n; j++)
-			if (!moveStartPosToMesurmentPosBoolean)
-			{
-				xMoved += 1;  
-				//	System.out.println("xMovedForword: " + xMoved);
-				/*try {
-					Thread.sleep(83);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}*/
-			}
-		
+	private void moveMotorFXUY(){
+		//doubleSleep();
 	}
 	/**
-	 * 
+	 * Function for moving the motors 1 step down and 1 step forward
+	 */
+	private void moveMotorFXDY(){
+		//doubleSleep();
+	}
+	/**
+	 * Function for moving the motors 1 step up and 1 step backward
+	 */
+	private void moveMotorBXUY(){
+		//doubleSleep();
+	}
+	/**
+	 * Function for moving the motors 1 step down and 1 step backward
+	 */
+	private void moveMotorBXDY(){
+		//doubleSleep();
+	}
+	
+	/**
+	 * Function for moving the motors 1 step up Y
 	 * @param i
 	 */
-	private void moveMotorUppY(int i){
-		/* function for moving the motors 1 step */
-		//System.out.println(" + Y " + i);
+	private void moveMotorUY(int i){
 		if (!moveStartPosToMesurmentPosBoolean)
-		{
 			yMoved += 1;
-		//	System.out.println("yMovedUpp: " + yMoved);
-			/*try {
-				Thread.sleep(83);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}*/
-		}
+		//singleSleep();
 	}
 	/**
-	 * 
+	 * Function for moving the motors 1 step down Y
 	 * @param i
 	 */
-	private void moveMotorBackX(int i, int n){
-		/* function for moving the motors 1 step */
-		//System.out.println(" - X " + i);
+	private void moveMotorDY(int i){
+		if (!moveStartPosToMesurmentPosBoolean)
+			yMoved -= 1;
+		//singleSleep();
+	}
+	/**
+	 * @param i
+	 */
+	private void moveMotorFX(int i){
+		moveMotorFX(i, 1);
+	}
+	/**
+	 * Function for moving the motors 1 step forward X
+	 * @param i
+	 */
+	private void moveMotorFX(int i, int n){
 		for (int j = 0; j < n; j++)
 			if (!moveStartPosToMesurmentPosBoolean)
-			{
-				xMoved -= 1;
-				//	System.out.println("xMovedBackword: " + xMoved);
-				/*try {
-					Thread.sleep(83);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}*/
-			}	
+				xMoved += 1;
+		//singleSleep();
 	}
 	/**
-	 * 
 	 * @param i
 	 */
-	private void moveMotorDownY(int i){
-		/* function for moving the motors 1 step */
-		//System.out.println(" - Y " + i);
-		if (!moveStartPosToMesurmentPosBoolean)
-		{
-			yMoved -= 1;
-		//	System.out.println("yMovedDown: " + yMoved);
-		/*	try {
-				Thread.sleep(83);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}*/
-		}
+	private void moveMotorBX(int i){
+		moveMotorBX(i, 1);
+	}
+	/**
+	 * Function for moving the motors n steps back X
+	 * @param i
+	 */
+	private void moveMotorBX(int i, int n){
+		for (int j = 0; j < n; j++)
+			if (!moveStartPosToMesurmentPosBoolean)
+				xMoved -= 1;
+		//singleSleep();
 	}
 	/**
 	 * Moves the closest corner of the selected area to the scanners position.
@@ -220,94 +247,74 @@ public class Scan {
 		int sY = (int) (SettingsPanel.TABLE_HEIGHT - (SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_START_Y * Program.TIONDELS_MILLI_METER_PIXEL));
 		
 		moveStartPosToMesurmentPosBoolean = true;
-		if(Math.abs(mPX - eX) > Math.abs(mPX - sX))
+		
+		int dEX = mPX - eX;
+		int dSX = mPX - sX;
+		int dEY = mPY - eY;
+		int dSY = mPY - sY;
+		int dY;
+		int dX;
+		int x = 0;
+		int y = 0;	
+		
+		if ((Math.abs(dEX) < (Math.abs(dSX))))
 		{
-			if(Math.abs(mPY - eY) > Math.abs(mPY - sY))
-			{
-				moveUY = false;
-				for (int i = 0; i <= Math.abs(mPY - sY); i++){
-					if ((mPY - sY) > 0){
-						moveMotorUppY(i);
-					}
-					else if ((mPY - sY) == 0){
-						// Do nothing
-					}
-					else {
-						moveMotorDownY(i);
-					}
-				}
-			}
-			else
-			{
-				moveUY = true;
-				for (int i = 0; i <= Math.abs(mPY - eY); i++){
-					if ((mPY - eY) > 0){
-						moveMotorUppY(i);
-					}
-					else if ((mPY - eY) == 0){
-						// Do nothing
-					}
-					else {
-						moveMotorDownY(i);
-					}
-				}
-			}
 			moveFX = false;
-			for (int i = 0; i <= Math.abs(mPX - sX); i++){
-				if ((mPX - sX) > 0){
-					moveMotorForwordX(i);
-				}
-				else if ((mPX - sX) == 0){
-					// Do nothing
-				}
-				else {
-					moveMotorBackX(i);
-				}
-			}
+			dX = dEX;
 		}
 		else
 		{
-			if(Math.abs(mPY - eY) > Math.abs(mPY - sY))
+			moveFX = true;
+			dX = dSX;
+		}
+		if ((Math.abs(dEY) < (Math.abs(dSY))))
+		{
+			moveUY = true;
+			dY = dEY;
+		}
+		else 
+		{
+			moveUY = false;
+			dY = dSY;
+		}
+		boolean moveXStoped = false;
+		boolean moveYStoped = false;
+		while (!moveXStoped || !moveYStoped){
+			if (x < Math.abs(dX) && y < Math.abs(dY))
 			{
-				moveUY = false;
-				for (int i = 0; i <= Math.abs(mPY - sY); i++){
-					if ((mPY - sY) > 0){
-						moveMotorUppY(i);
-					}
-					else if ((mPY - sY) == 0){
-						// Do nothing
-					}
-					else {
-						moveMotorDownY(i);
-					}
-				}
+				if (moveFX && moveUY)
+					moveMotorFXUY();
+				else if (!moveFX && moveUY)
+					moveMotorBXUY();
+				else if (moveFX && !moveUY)
+					moveMotorFXDY();
+				else
+					moveMotorBXDY();
+				x++;
+				y++;
 			}
 			else
 			{
-				moveUY = true;
-				for (int i = 0; i <= Math.abs(mPY - eY); i++){
-					if ((mPY - eY) > 0){
-						moveMotorUppY(i);
-					}
-					else if ((mPY - eY) == 0){
-						// Do nothing
-					}
-					else {
-						moveMotorDownY(i);
-					}
+				if (x < Math.abs(dX))
+				{
+					if (moveFX)
+						moveMotorFX(x);
+					else
+						moveMotorBX(x);
+					x++;
 				}
-			}
-			moveFX = true;
-			for (int i = 0; i <= Math.abs(mPX - eX); i++){
-				if ((mPX - eX) > 0){
-					moveMotorForwordX(i);
+				else 
+					moveXStoped = true;
+				if (y < Math.abs(dY))
+				{	
+					if (moveUY)
+						moveMotorUY(y);
+					else
+						moveMotorDY(y);
+					y++;
 				}
-				else if ((mPX - eX) == 0){
-					// Do nothing
-				}
-				else {
-					moveMotorBackX(i);
-				}
+				else
+					moveYStoped = true;
 			}
 		}
 	}
@@ -316,43 +323,85 @@ public class Scan {
 	 */
 	private void scanValues(){
 		/* scan the rest of the card algorithm */
-		Graphics2D g = buffImage.createGraphics();
-		while (!scanStoped && scanY) {
-			int colorX = 0;
+		Graphics2D[] g = new Graphics2D[frequency.length];
+		for (int i = 0; i < frequency.length; i++)
+			g[i] = buffImage[i].createGraphics();
+		boolean startX = false;
+		
+		if (moveUY)
+			y = hy - sizeY;
+		else
+			y = 0;
+		
+		if (moveFX)
 			x = 0;
+		else 
+			x = wx;
+		
+		while (!isScanStoped() && scanY) {
+			int colorX[] = new int[frequency.length];
 			setScanX(true);
-			while (!scanStoped && scanX) {
+			
+			scanX = true;
+			while (!isScanStoped() && scanX) {
 				if (!pauseScanX)
 				{
 					for (int i = 0; i < frequency.length; i++) {
 						frequencyOutput(frequency[i]);
-						if (frequency.length == 1 && i == 0)
-							colorX = wavelengthToColorConverter(scanInput(i));
-						else if (frequency.length == 2 && i == 0)
-							colorX = wavelengthToColorConverter(scanInput(i));
-						else if (i == (int)((frequency.length / 2) - 1))
-							colorX = wavelengthToColorConverter(scanInput(i));
-					}
-					g.setColor(new Color(colorX & 255, (colorX >> 8) & 255, (colorX >> 16) & 255, colorX >>> 24));
-					if (moveFX ^ changeWay)
-					{
-						g.fillRect(x, moveUY ? hy - y - 1 : y, sizeX, sizeY);
-						moveMotorBackX(x, sizeX);
-					}
-					else
-					{
-						g.fillRect(wx - x - 1, moveUY ? hy - y - 1 : y, sizeX, sizeY);
-						moveMotorForwordX(x, sizeX);
-					}
+						
+						colorX[i] = wavelengthToColorConverter(scanInput(i));
+						g[i].setColor(new Color(colorX[i] & 255, (colorX[i] >> 8) & 255, (colorX[i] >> 16) & 255, colorX[i] >>> 24));
+						
+						if (moveFX ^ changeWay)
+						{
+							if (startX)
+								g[i].fillRect(x - sizeX, y, sizeX, sizeY);
+							g[i].fillRect(x, y, sizeX, sizeY);
+	
+							if (moveUY && y - sizeY < 0)
+								g[i].fillRect(x, y - sizeY, sizeX, sizeY);
+							else if (!moveUY && y > hy)
+								g[i].fillRect(x, y + sizeY, sizeX, sizeY);
+							
+							moveMotorBX(x, sizeX);
+						}
+						else
+						{
+							if (startX)
+								g[i].fillRect(x + sizeX, y, sizeX, sizeY);
+							g[i].fillRect(x, y, sizeX, sizeY);
+							
+							if (moveUY && y - sizeY < 0)
+								g[i].fillRect(x, y - sizeY, sizeX, sizeY);
+							else if (!moveUY && y > hy)
+								g[i].fillRect(x, y + sizeY, sizeX, sizeY);
+							
+							moveMotorFX(x, sizeX);
+						}
+						startX = false;
+						if (moveFX ^ changeWay)
+							x += sizeX;
+						else
+							x -= sizeX;
+	
+						
+						if (moveFX ^ changeWay && x > wx - sizeX) 
+						{
+							scanX = false;
+							g[i].fillRect(x, y, sizeX, sizeY);
+							x -= sizeX;
+							startX = true;
+						}
+						if (!moveFX ^ changeWay && x < 0)
+						{
+							scanX = false;
+							g[i].fillRect(x, y, sizeX, sizeY);
+							x += sizeX;
+							startX = true;
+						}
 					
-					if ((x > wx - sizeX && moveFX) || (wx - x < sizeX && !moveFX))
-					{
-						x = 0;
-						scanX = false;
+						resizeAPaint();
 					}
-					else
-						x += sizeX;
-					resizeAPaint();
 				}
 				else
 					try {
@@ -363,38 +412,52 @@ public class Scan {
 			}
 			
 			if (moveUY)
-			{
 				for (int yi = 0; yi < sizeY; yi++)
-					moveMotorUppY(this.y);
-			}
+					moveMotorUY(this.y);
 			else
-			{
 				for (int yi = 0; yi < sizeY; yi++)
-					moveMotorDownY(this.y);
-			}
-			changeWay = !changeWay;
+					moveMotorDY(this.y);
 			
-			if (y > hy - sizeY)
-				setScanY(false);
+			changeWay = !changeWay;
 
+			if (moveUY)
+				y -= sizeY;
+			else
+				y += sizeY;
+			
+			if (moveUY && y < 0)
+				setScanY(false);
+			else if (!moveUY && y > hy - sizeY)
+				setScanY(false);
+				
+			
 			for (int i = 0; i < frequency.length; i++)
 				fileFrequencyPrint[i].println("");
-			y += sizeY;
+
 		}
-		if (!scanStoped)
+		if (!isScanStoped())
 		{
-			System.out.println("Area is scaned!");
+			//System.out.println("Area is scanned!");
+			setScanDone(true);
+			SettingsPanel.scanPanel.scanPanelActive();
+			new CreatePdf();
 			for (int i = 0; i < frequency.length; i++) {
 				fileFrequencyPrint[i].flush();
 				fileFrequencyPrint[i].close();
 			}
 			try {
 				File outputfile = new File("webcam photo/Color" + SettingsPanel.FILE_NAME + ".png");
-				ImageIO.write(buffImage, "png", outputfile);
+				ImageIO.write(buffImage[frequency.length/2], "png", outputfile);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
+	}
+	public void setScanDone(boolean b) {
+		scanDone = b;
+	}
+	public boolean getScanDone() {
+		return scanDone;
 	}
 	/**
 	 * Takes in a value and returns the corresponding color value.
@@ -495,10 +558,10 @@ public class Scan {
 		{
 	        IplImage ipl = IplImage.create(Program.imagePanel.newWidthPhoto, Program.imagePanel.newHeightPhoto, 8, 4);
 	        
-	        if (scanStoped)
+	        if (isScanStoped())
 	        	setBuffImageAlpha();
 	        	
-	        cvResize(IplImage.createFrom(buffImage), ipl, CV_INTER_LANCZOS4);
+	        cvResize(IplImage.createFrom(buffImage[frequency.length/2]), ipl, CV_INTER_LANCZOS4);
 	        rezicedBuffImage = ipl.getBufferedImage();
 			        
 			Program.frame.glass.repaint();
@@ -512,16 +575,16 @@ public class Scan {
 		for (int y = 0; y < sizeY / 2; y++)
 		{
 			if (moveUY)
-				moveMotorUppY(y);
+				moveMotorUY(y);
 			else
-				moveMotorDownY(y);
+				moveMotorDY(y);
 		}
 		for (int x = 0; x < sizeX / 2; x++)
 		{
 			if (moveFX)
-				moveMotorForwordX(x);
+				moveMotorFX(x);
 			else
-				moveMotorBackX(x);
+				moveMotorBX(x);
 		}
 
 		moveStartPosToMesurmentPosBoolean = false;
@@ -530,16 +593,17 @@ public class Scan {
 	 * Gets the user selected values for the scan.
 	 */
 	private void initializeScanValues() {
-		hy = buffImage.getHeight();
-		wx = buffImage.getWidth();
+		System.out.println(frequency.length/2);
+		hy = buffImage[frequencyShow].getHeight();
+		wx = buffImage[frequencyShow].getWidth();
 		
 		nX = SettingsPanel.numberOfStepsWidth;
 		nY = SettingsPanel.numberOfStepsHeight;
 		
 		if (DensitySettingsSubPanel.inputStepBoolean)
 		{
-			sizeY = buffImage.getHeight() / nY;
-			sizeX = buffImage.getWidth() / nX;
+			sizeY = buffImage[frequencyShow].getHeight() / nY;
+			sizeX = buffImage[frequencyShow].getWidth() / nX;
 		}
 		else
 		{
@@ -551,9 +615,14 @@ public class Scan {
 	 * Sets the scan background to invisible so that we can see the image bellow 
 	 */
 	public void setBuffImageAlpha() {
+		buffImage = new BufferedImage[frequency.length];
+		
 		colorImage = IplImage.create(SettingsPanel.CROPT_PHOTO_DIMENSION.width * Program.TIONDELS_MILLI_METER_PIXEL, SettingsPanel.CROPT_PHOTO_DIMENSION.height * Program.TIONDELS_MILLI_METER_PIXEL, 8/*SettingsPanel.photo.depth()*/, 4/*SettingsPanel.photo.nChannels()*/);
-		buffImage = colorImage.getBufferedImage();
-		buffImage.setRGB(0, 0, buffImage.getWidth(), buffImage.getHeight(), new int[buffImage.getWidth() * buffImage.getHeight()], 0, buffImage.getWidth());
+
+		for (int i = 0; i < frequency.length; i++) { 
+			buffImage[i] = colorImage.getBufferedImage();
+			buffImage[i].setRGB(0, 0, buffImage[i].getWidth(), buffImage[i].getHeight(), new int[buffImage[i].getWidth() * buffImage[i].getHeight()], 0, buffImage[i].getWidth());
+		}
 	}
 	/**
 	 * Function that creates a color pellet for all wave lengths
@@ -590,6 +659,8 @@ public class Scan {
 		AreaSettingsSubPanel.headerButton.setEnabled(false);
 		DensitySettingsSubPanel.headerButton.setEnabled(false);
 		FileNameSettingsSubPanel.headerButton.setEnabled(false);
+		
+		setHeadersInactive(true);
 	}
 	/**
 	 * Changes the buttons so that they are correctly enabled.
@@ -634,12 +705,14 @@ public class Scan {
 		{
 			frequency = new float[1];
 			frequency[0] = startF;
+			frequencyShow = 0;
 		}
 		else if (startF < endF && densityI == 1)
 		{
 			frequency = new float[2];
 			frequency[0] = startF;
 			frequency[1] = endF;
+			frequencyShow = 0;
 		}
 		else
 		{
@@ -647,34 +720,28 @@ public class Scan {
 			for (int i = 0; i < densityI; i++) {
 				frequency[i] = 	startF + i * ((endF - startF) / (densityI - 1));
 			}
+			frequencyShow = densityI/2;
 		}
 		fileFrequencyOutputArray = new FileOutputStream[frequency.length];
 		fileFrequencyPrint = new PrintStream[frequency.length];
 		for (int f = 0; f < frequency.length; f++) {
 			try {
-				fileFrequencyOutputArray[f] = new FileOutputStream(DEFULT_FILE_FREQUENCY_OUTPUT_LOCATION + SettingsPanel.FILE_NAME + " " + frequency[f] + ".txt", true);
+				fileFrequencyOutputArray[f] = new FileOutputStream(DEFULT_FILE_FREQUENCY_OUTPUT_LOCATION + SettingsPanel.FILE_NAME + " " + frequency[f] + ".txt", false);
 				fileFrequencyPrint[f] = new PrintStream(fileFrequencyOutputArray[f]);
-				
 			} catch (IOException e) {
 				 System.err.println ("Error writing to file");
 			}
 		}
 	}
+	/**
+	 * When restarting the scan you need to restart these values
+	 */
 	public void restartScanValues() {
 		setScanX(true);
 		setScanY(true);
 		x = 0;
 		y = 0;
 		setBuffImageAlpha();
-	}
-	
-	
-	/**
-	 * 
-	 * @param b
-	 */
-	public void setScanActive(boolean b) {
-		// TODO Auto-generated method stub
 	}
 	/**
 	 * 
@@ -703,5 +770,33 @@ public class Scan {
 	 */
 	public void setScanY(boolean scanY) {
 		this.scanY = scanY;
+	}
+	/**
+	 * 
+	 * @return
+	 */
+	public boolean isScanStoped() {
+		return scanStoped;
+	}
+	/**
+	 * 
+	 * @param scanStoped
+	 */
+	public void setScanStoped(boolean scanStoped) {
+		this.scanStoped = scanStoped;
+	}
+	/**
+	 * 
+	 * @return
+	 */
+	public boolean isHeadersInactive() {
+		return headersInactive;
+	}
+	/**
+	 * 
+	 * @param headersInactive
+	 */
+	public void setHeadersInactive(boolean headersInactive) {
+		this.headersInactive = headersInactive;
 	}
 }

@@ -52,7 +52,8 @@ public class ScanSettingsSubPanel extends JPanel {
 	public JPanel stepContiner = new JPanel(new BorderLayout());
 	public JPanel headerAndPanelContiner = new JPanel(new BorderLayout());
 	public JPanel scanPanel = new JPanel(new BorderLayout());
-	public JPanel continer1 = new JPanel(new BorderLayout());
+	public JPanel buttonContiner1 = new JPanel(new BorderLayout());
+	public JPanel buttonContiner2 = new JPanel(new BorderLayout());
     private JPanel inputFeildsAButtons 	= new JPanel(new BorderLayout());
     private JPanel currentLevelContainer = new JPanel(new BorderLayout());
     private JPanel centerTimeStremContainer = new JPanel(new BorderLayout());
@@ -86,11 +87,23 @@ public class ScanSettingsSubPanel extends JPanel {
 	public ImageIcon STOP_SCAN_ENABLED_PREST_IMAGE_ICON		= new ImageIcon("image/ButtonStopScanPrest.png");
 	public ImageIcon STOP_SCAN_DISABLED_IMAGE_ICON 			= new ImageIcon("image/ButtonStopScanNotEnabled.png");
 	
+
+	public ImageIcon RESTART_ENABLED_IMAGE_ICON				= new ImageIcon("image/Restart.png");
+	public ImageIcon RESTART_PREST_ENABLED_IMAGE_ICON 		= new ImageIcon("image/RestartPrest.png");
+
+	public ImageIcon RESCAN_ENABLED_IMAGE_ICON				= new ImageIcon("image/Rescan.png");
+	public ImageIcon RESCAN_PREST_ENABLED_IMAGE_ICON 		= new ImageIcon("image/RescanPrest.png");
+	
+	public ImageIcon SAVE_ENABLED_IMAGE_ICON				= new ImageIcon("image/Save.png");
+	public ImageIcon SAVE_PREST_ENABLED_IMAGE_ICON 			= new ImageIcon("image/SavePrest.png");
+	
 	/* Buttons */
 	public static JButton headerButton 	= new JButton();
 	public static JButton startScanButton = new JButton();
 	public static JButton stopScanButton = new JButton();
 	public static JButton pauseScanButton = new JButton();
+	public static JButton rescanButton = new JButton();
+	public static JButton saveButton = new JButton();
 	
 	/* Labels */
 	public JLabel stepLabel = new JLabel(STEP_TEXT_GRAY);
@@ -136,6 +149,7 @@ public class ScanSettingsSubPanel extends JPanel {
 		headerButton.setPressedIcon(HEADER_ENABLED_PREST_IMAGE_ICON);
 		headerButton.setRolloverIcon(HEADER_ENABLED_ROLLOVER_IMAGE_ICON);
 		headerButton.addActionListener(new HeaderButtonActionListener(this.STAGE));
+		
 		/* Next JButton */
 		startScanButton.setOpaque(false);
 		startScanButton.setContentAreaFilled(false);
@@ -158,15 +172,7 @@ public class ScanSettingsSubPanel extends JPanel {
 		pauseScanButton.setOpaque(false);
 		pauseScanButton.setContentAreaFilled(false);
 		pauseScanButton.setBorderPainted(false);
-		pauseScanButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				startScanButton.setEnabled(true);
-				pauseScanButton.setEnabled(false);
-
-				scan.pauseScanX = true;
-			}
-		});
+		pauseScanButton.addActionListener(new PauseScanActionListener());
 		
 		/* Back on step JButton */
 		stopScanButton.setEnabled(false);
@@ -178,6 +184,31 @@ public class ScanSettingsSubPanel extends JPanel {
 		stopScanButton.setContentAreaFilled(false);
 		stopScanButton.setBorderPainted(false);
 		stopScanButton.addActionListener(new BackActionListener());
+		
+		/* Back on step JButton */
+		rescanButton.setEnabled(true);
+		rescanButton.setPreferredSize(Program.MEDIUM_BUTTON_DIMENSION);
+		rescanButton.setIcon(RESCAN_ENABLED_IMAGE_ICON);
+		rescanButton.setPressedIcon(RESCAN_PREST_ENABLED_IMAGE_ICON);
+		rescanButton.setOpaque(false);
+		rescanButton.setContentAreaFilled(false);
+		rescanButton.setBorderPainted(false);
+		rescanButton.addActionListener(new RescanActionListener());
+		
+		/* Back on step JButton */
+		saveButton.setEnabled(true);
+		saveButton.setPreferredSize(Program.MEDIUM_BUTTON_DIMENSION);
+		saveButton.setIcon(SAVE_ENABLED_IMAGE_ICON);
+		saveButton.setPressedIcon(SAVE_PREST_ENABLED_IMAGE_ICON);
+		saveButton.setOpaque(false);
+		saveButton.setContentAreaFilled(false);
+		saveButton.setBorderPainted(false);
+		saveButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
 
 		/* Creates a Label for the step numbers. */
 		stepLabel.setPreferredSize(STEP_LABEL_DIMENSION);
@@ -194,7 +225,8 @@ public class ScanSettingsSubPanel extends JPanel {
 		headerAndPanelContiner.add(headerButton, BorderLayout.NORTH );
 		headerAndPanelContiner.setPreferredSize(HEADER_AND_PANEL_CONTINER_DIMENSION_OFF);
 
-		continer1.setBackground(Color.WHITE);
+		buttonContiner1.setBackground(Color.WHITE);
+		buttonContiner2.setBackground(Color.WHITE);
 		scanPanel.setBackground(Color.WHITE);
 		inputFeildsAButtons.setBackground(Color.WHITE);
 		currentLevelContainer.setBackground(Color.WHITE);
@@ -207,15 +239,20 @@ public class ScanSettingsSubPanel extends JPanel {
 		timeNorthPanel.setBackground(Program.LIGHT_BLUE_ALPHA_COLOR);
 		timeNorthCeneterPanel.setBackground(Program.LIGHT_BLUE_ALPHA_COLOR1);
 		timeNorthLablePanel.setBackground(Program.LIGHT_BLUE_ALPHA_COLOR1);
+		
 		streamingContinaer.setBackground(Program.LIGHT_BLUE_ALPHA_COLOR);
 		
 		timeNorthPanel.setBorder(Program.LIGHT_BLUE_BORDER);
 		streamingContinaer.setBorder(Program.LIGHT_BLUE_BORDER);
 
+		
 		/* Setting containers Layouts for the right GUI look. */
-		continer1.add(stopScanButton, BorderLayout.WEST);
-		continer1.add(pauseScanButton, BorderLayout.CENTER);
-		continer1.add(startScanButton, BorderLayout.EAST);
+		buttonContiner1.add(stopScanButton, BorderLayout.WEST);
+		buttonContiner1.add(pauseScanButton, BorderLayout.CENTER);
+		buttonContiner1.add(startScanButton, BorderLayout.EAST);
+		
+		buttonContiner2.add(rescanButton, BorderLayout.WEST);
+		buttonContiner2.add(saveButton, BorderLayout.EAST);
 		
 		currentLevelContainer.add(CurrentLevelLabel);
 		
@@ -236,8 +273,7 @@ public class ScanSettingsSubPanel extends JPanel {
 		centerTimeStremContainer.add(timePanel, BorderLayout.CENTER);
 		centerTimeStremContainer.add(streamingPanel, BorderLayout.NORTH);
 		currentTimeStreamContainer.add(centerTimeStremContainer, BorderLayout.CENTER);
-
-        inputFeildsAButtons.add(continer1, BorderLayout.SOUTH);
+        
 		scanPanel.add(inputFeildsAButtons, BorderLayout.SOUTH);
 		scanPanel.add(currentTimeStreamContainer, BorderLayout.CENTER);
 		
@@ -264,19 +300,14 @@ public class ScanSettingsSubPanel extends JPanel {
 		SettingsPanel.setStage(this.STAGE);
 		Program.frame.glass.repaint();
 		Program.frame.glass.setVisible(true);
-		
-		/* Sets active color Blue for header, labels and borders*/
-		headerButton.setEnabled(HEADER_BUTTON_ENABLED = false);
-		headerButton.setDisabledIcon(HEADER_DISABLED_BLUE_IMAGE_ICON);
-		
-		stepLabel.setText(STEP_TEXT_LIGHT_BLUE);
-		scanPanel.setBorder(Program.LIGHT_BLUE_BORDER);
-		
+
 		/* Shows buttons and labels */
 		startScanButton.setVisible(true);
 		pauseScanButton.setVisible(true);
 		stopScanButton.setVisible(true);
-
+		rescanButton.setVisible(true);
+		saveButton.setVisible(true);
+		
 		/* Changing size of panels when button has been pressed*/	
 		scanPanel.setPreferredSize(SCAN_PANEL_DIMENSION_ACTIVE);
 		headerAndPanelContiner.setPreferredSize(HEADER_AND_PANEL_CONTINER_DIMENSION_ACTIVE);
@@ -285,6 +316,51 @@ public class ScanSettingsSubPanel extends JPanel {
 		/* Turns on Panel */
 		scanPanel.setVisible(true);
 
+		if (scan.getScanDone())
+		{
+	        inputFeildsAButtons.remove(buttonContiner1);
+	        inputFeildsAButtons.add(buttonContiner2, BorderLayout.SOUTH);
+			
+			/* Sets active color Blue for header, labels and borders*/
+			headerButton.setEnabled(HEADER_BUTTON_ENABLED = false);
+			headerButton.setDisabledIcon(HEADER_ENABLED_IMAGE_ICON);
+
+			/* panel and step label color blue */
+			stepLabel.setText(STEP_TEXT_DARK_GREEN);
+			scanPanel.setBorder(Program.GREEN_BORDER);
+			
+			EndSubSettingsPanel.backButton.setEnabled(true);
+			
+			timeNorthPanel.setBackground(Program.LIGHT_GREEN_ALPHA_COLOR);
+			timeNorthCeneterPanel.setBackground(Program.LIGHT_GREEN_ALPHA_COLOR1);
+			timeNorthLablePanel.setBackground(Program.LIGHT_GREEN_ALPHA_COLOR1);
+			
+			streamingContinaer.setBackground(Program.LIGHT_RED_ALPHA_COLOR);
+			
+			timeNorthPanel.setBorder(Program.GREEN_BORDER);
+			streamingContinaer.setBorder(Program.RED_BORDER);
+		}
+		else 
+		{
+	        inputFeildsAButtons.remove(buttonContiner2);
+	        inputFeildsAButtons.add(buttonContiner1, BorderLayout.SOUTH);
+			
+			/* Sets active color Blue for header, labels and borders*/
+			headerButton.setEnabled(HEADER_BUTTON_ENABLED = false);
+			headerButton.setDisabledIcon(HEADER_DISABLED_BLUE_IMAGE_ICON);
+			
+			/* panel and step label color blue */
+			stepLabel.setText(STEP_TEXT_LIGHT_BLUE);
+			scanPanel.setBorder(Program.LIGHT_BLUE_BORDER);
+			
+			timeNorthPanel.setBackground(Program.LIGHT_BLUE_ALPHA_COLOR);
+			timeNorthCeneterPanel.setBackground(Program.LIGHT_BLUE_ALPHA_COLOR1);
+			timeNorthLablePanel.setBackground(Program.LIGHT_BLUE_ALPHA_COLOR1);
+			streamingContinaer.setBackground(Program.LIGHT_BLUE_ALPHA_COLOR);
+			
+			timeNorthPanel.setBorder(Program.LIGHT_BLUE_BORDER);
+			streamingContinaer.setBorder(Program.LIGHT_BLUE_BORDER);
+		}
 	}
 	/**
 	 * NOT ACTIVE
@@ -297,6 +373,9 @@ public class ScanSettingsSubPanel extends JPanel {
 		startScanButton.setVisible(false);
 		pauseScanButton.setVisible(false);
 		stopScanButton.setVisible(false);
+		//restartButton.setVisible(false);
+		rescanButton.setVisible(false);
+		saveButton.setVisible(false);
 
 		if (SettingsPanel.SCAN_DONE)
 		{

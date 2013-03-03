@@ -96,24 +96,25 @@ public class NextActionListener implements ActionListener{
 		{
 			if (ScanSettingsSubPanel.startScanButton.isEnabled())
 			{
+				SettingsPanel.scanPanel.scan.numberOfScans();
 				SettingsPanel.scanPanel.scan.scanNeverStarted = false;
-				if (!SettingsPanel.scanPanel.scan.scanStoped && !SettingsPanel.scanPanel.scan.pauseScanX)
+				if (!SettingsPanel.scanPanel.scan.isScanStoped() && !SettingsPanel.scanPanel.scan.pauseScanX)
 				{
 					//createColorPalet();
 					SettingsPanel.scanPanel.scan.headersInactive();
 					SettingsPanel.scanPanel.scan.setBuffImageAlpha();
 					SettingsPanel.scanPanel.scan.buttonsScanActiveStarted();
-					SettingsPanel.backButton.setEnabled(false);
+					EndSubSettingsPanel.backButton.setEnabled(false);
 					SettingsPanel.scanPanel.scan.delayedStartScan();
 					
 					SettingsPanel.scanPanel.scan.scanActive = true;
 				}
-				else if (!SettingsPanel.scanPanel.scan.scanStoped && SettingsPanel.scanPanel.scan.pauseScanX)
+				else if (!SettingsPanel.scanPanel.scan.isScanStoped() && SettingsPanel.scanPanel.scan.pauseScanX)
 				{
 					SettingsPanel.scanPanel.scan.pauseScanX = false;
 					SettingsPanel.scanPanel.scan.buttonsScanActiveStarted();
 				}
-				else if(SettingsPanel.scanPanel.scan.scanStoped)
+				else if(SettingsPanel.scanPanel.scan.isScanStoped())
 				{
 					SettingsPanel.scanPanel.scan.pauseScanX = false;
 					SettingsPanel.scanPanel.scan.changeWay = false;
@@ -122,58 +123,65 @@ public class NextActionListener implements ActionListener{
 					SettingsPanel.scanPanel.scan.headersInactive();
 					SettingsPanel.scanPanel.scan.delayedStartScan();
 					SettingsPanel.scanPanel.scan.buttonsScanActiveStarted();
-					SettingsPanel.backButton.setEnabled(false);
+					EndSubSettingsPanel.backButton.setEnabled(false);
 					SettingsPanel.scanPanel.scan.scanActive = true;
 				}
 			}
 		}
 		else
-		{
+		{			
 			MainFrame.mainPanel.add(Program.settingsPanel, BorderLayout.EAST);
 			MainFrame.mainPanel.add(Program.cameraPanel, BorderLayout.CENTER);
 			Program.frame.glass.glasPanelActive = true;
-			if (SettingsPanel.getStage() == 1)
+			if (!SettingsPanel.scanPanel.scan.headersInactive)
 			{
-				SettingsPanel.frequencyPanel.frequencyPanelActive();
-				SettingsPanel.areaPanel.areaPanelNotActive();
-				SettingsPanel.densityPanel.densityPanelNotActive();
-				SettingsPanel.fileNamePanel.fileNamePanelNotActive();
-				SettingsPanel.scanPanel.scanPanelNotActive();
-				SettingsPanel.frequencyPanel.startFloatInputTextField.grabFocus();
+				if (SettingsPanel.getStage() == 1)
+				{
+					SettingsPanel.frequencyPanel.frequencyPanelActive();
+					SettingsPanel.areaPanel.areaPanelNotActive();
+					SettingsPanel.densityPanel.densityPanelNotActive();
+					SettingsPanel.fileNamePanel.fileNamePanelNotActive();
+					SettingsPanel.scanPanel.scanPanelNotActive();
+					SettingsPanel.frequencyPanel.startFloatInputTextField.grabFocus();
+				}
+				else if (SettingsPanel.getStage() == 2)
+				{
+					SettingsPanel.frequencyPanel.frequencyPanelNotActive();
+					SettingsPanel.areaPanel.areaPanelActive();
+					SettingsPanel.densityPanel.densityPanelNotActive();
+					SettingsPanel.fileNamePanel.fileNamePanelNotActive();
+					SettingsPanel.scanPanel.scanPanelNotActive();
+					AreaSettingsSubPanel.backButton.grabFocus();
+				}
+				else if (SettingsPanel.getStage() == 3)
+				{
+					SettingsPanel.frequencyPanel.frequencyPanelNotActive();
+					SettingsPanel.areaPanel.areaPanelNotActive();
+					SettingsPanel.densityPanel.densityPanelActive();
+					SettingsPanel.fileNamePanel.fileNamePanelNotActive();
+					SettingsPanel.scanPanel.scanPanelNotActive();
+					SettingsPanel.densityPanel.widthDensityInputTextField.grabFocus();
+				}
+				else if (SettingsPanel.getStage() == 4)
+				{
+					SettingsPanel.frequencyPanel.frequencyPanelNotActive();
+					SettingsPanel.areaPanel.areaPanelNotActive();
+					SettingsPanel.densityPanel.densityPanelNotActive();
+					SettingsPanel.fileNamePanel.fileNamePanelActive();
+					SettingsPanel.scanPanel.scanPanelNotActive();
+					SettingsPanel.fileNamePanel.fileNameInputTextField.grabFocus();
+				}
+				else if (SettingsPanel.getStage() == 5)
+				{
+					SettingsPanel.frequencyPanel.frequencyPanelNotActive();
+					SettingsPanel.areaPanel.areaPanelNotActive();
+					SettingsPanel.densityPanel.densityPanelNotActive();
+					SettingsPanel.fileNamePanel.fileNamePanelNotActive();
+					SettingsPanel.scanPanel.scanPanelActive();
+				}
 			}
-			else if (SettingsPanel.getStage() == 2)
+			else
 			{
-				SettingsPanel.frequencyPanel.frequencyPanelNotActive();
-				SettingsPanel.areaPanel.areaPanelActive();
-				SettingsPanel.densityPanel.densityPanelNotActive();
-				SettingsPanel.fileNamePanel.fileNamePanelNotActive();
-				SettingsPanel.scanPanel.scanPanelNotActive();
-				AreaSettingsSubPanel.backButton.grabFocus();
-			}
-			else if (SettingsPanel.getStage() == 3)
-			{
-				SettingsPanel.frequencyPanel.frequencyPanelNotActive();
-				SettingsPanel.areaPanel.areaPanelNotActive();
-				SettingsPanel.densityPanel.densityPanelActive();
-				SettingsPanel.fileNamePanel.fileNamePanelNotActive();
-				SettingsPanel.scanPanel.scanPanelNotActive();
-				SettingsPanel.densityPanel.widthDensityInputTextField.grabFocus();
-			}
-			else if (SettingsPanel.getStage() == 4)
-			{
-				SettingsPanel.frequencyPanel.frequencyPanelNotActive();
-				SettingsPanel.areaPanel.areaPanelNotActive();
-				SettingsPanel.densityPanel.densityPanelNotActive();
-				SettingsPanel.fileNamePanel.fileNamePanelActive();
-				SettingsPanel.scanPanel.scanPanelNotActive();
-				SettingsPanel.fileNamePanel.fileNameInputTextField.grabFocus();
-			}
-			else if (SettingsPanel.getStage() == 5)
-			{
-				SettingsPanel.frequencyPanel.frequencyPanelNotActive();
-				SettingsPanel.areaPanel.areaPanelNotActive();
-				SettingsPanel.densityPanel.densityPanelNotActive();
-				SettingsPanel.fileNamePanel.fileNamePanelNotActive();
 				SettingsPanel.scanPanel.scanPanelActive();
 			}
 		}

@@ -23,7 +23,7 @@ public class ImagePanel extends JPanel{
 	public ColorPanel colorPanel = new ColorPanel(buffImg);
 	
 	public IplImage photo;
-	private IplImage iplPhoto2;
+	public IplImage iplPhoto2;
 	public static boolean IMAGE_TAKEN = false;
 	public static boolean FIRST_TIME_REZISED = true;
 	
