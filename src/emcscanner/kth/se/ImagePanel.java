@@ -4,10 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
-import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import com.googlecode.javacv.cpp.opencv_core.CvMat;
@@ -20,6 +17,7 @@ import static com.googlecode.javacv.cpp.opencv_imgproc.*;
 
 public class ImagePanel extends JPanel{
 	public static BufferedImage buffImg = null;
+	public static IplImage showPhoto;
 	public ColorPanel colorPanel = new ColorPanel(buffImg);
 	
 	public IplImage photo;
@@ -66,6 +64,7 @@ public class ImagePanel extends JPanel{
 		CvMat photo2 = cvGetSubRect(this.photo.asCvMat(), rectangleImage, rect); 
 
 		iplPhoto2 = photo2.asIplImage();
+		
     	cvSaveImage("webcam photo/WebCameraPhoto.png", iplPhoto2);
     	
 		int widthPhotoArea = Program.cameraPanel.getWidth();
@@ -95,7 +94,7 @@ public class ImagePanel extends JPanel{
 		cvResize(iplPhoto2, ipl, CV_INTER_LANCZOS4);
 		
 		this.photo = ipl;
-		
+        
 		colorPanel.theCamera = ipl.getBufferedImage();
 		
 		ImagePanel.IMAGE_TAKEN = true;

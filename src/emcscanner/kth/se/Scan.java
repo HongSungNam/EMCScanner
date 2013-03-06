@@ -22,8 +22,8 @@ public class Scan {
 	float[] frequency = null; 
 	
 	/* Positions taken from the table */
-	private int MesurmentPosX = 10000;
-	private int MesurmentPosY = 5000;
+	private int MesurmentPosX = 1000 * Program.TIONDELS_MILLI_METER_PIXEL;
+	private int MesurmentPosY = 500 * Program.TIONDELS_MILLI_METER_PIXEL;
 	private int ALPHA = 100;
 	
 	/* scan variables */
@@ -322,86 +322,92 @@ public class Scan {
 	 * Scanning Values of each position and gives the user feedback, in the way of colors
 	 */
 	private void scanValues(){
+		boolean startX = true;
+		int dx = 0;
+		int minXD = 0;
+		int maxDX = (int)(wx / sizeX);;
+
+		int dy = 0;
+		int minYD = 0;
+		int maxDY = (int)(hy / sizeY);
+		
+		
 		/* scan the rest of the card algorithm */
 		Graphics2D[] g = new Graphics2D[frequency.length];
 		for (int i = 0; i < frequency.length; i++)
 			g[i] = buffImage[i].createGraphics();
-		boolean startX = false;
 		
 		if (moveUY)
-			y = hy - sizeY;
+			dy = maxDY - 1;
 		else
-			y = 0;
+			dy = minYD;
 		
 		if (moveFX)
-			x = 0;
+			dx = minXD;
 		else 
-			x = wx;
+			dx = maxDX;
 		
 		while (!isScanStoped() && scanY) {
-			int colorX[] = new int[frequency.length];
+			int colorX = 0;
 			setScanX(true);
 			
-			scanX = true;
 			while (!isScanStoped() && scanX) {
 				if (!pauseScanX)
 				{
 					for (int i = 0; i < frequency.length; i++) {
 						frequencyOutput(frequency[i]);
-						
-						colorX[i] = wavelengthToColorConverter(scanInput(i));
-						g[i].setColor(new Color(colorX[i] & 255, (colorX[i] >> 8) & 255, (colorX[i] >> 16) & 255, colorX[i] >>> 24));
+						colorX = wavelengthToColorConverter(scanInput(i));
+						g[i].setColor(new Color(colorX & 255, (colorX >> 8) & 255, (colorX >> 16) & 255, colorX >>> 24));
 						
 						if (moveFX ^ changeWay)
 						{
-							if (startX)
-								g[i].fillRect(x - sizeX, y, sizeX, sizeY);
-							g[i].fillRect(x, y, sizeX, sizeY);
-	
-							if (moveUY && y - sizeY < 0)
-								g[i].fillRect(x, y - sizeY, sizeX, sizeY);
-							else if (!moveUY && y > hy)
-								g[i].fillRect(x, y + sizeY, sizeX, sizeY);
+							g[i].fillRect(dx * sizeX, dy * sizeY, sizeX, sizeY);			
+							if (dx + 1 == maxDX)
+							{
+								g[i].fillRect((dx + 1) * sizeX, dy * sizeY, sizeX, sizeY);
+								if (dy == maxDY - 1)
+									g[i].fillRect((dx + 1) * sizeX, (dy + 1) * sizeY, sizeX, sizeY);
+							}
+								
+							if (dy == maxDY - 1)
+								g[i].fillRect(dx * sizeX, (dy + 1) * sizeY, sizeX, sizeY);
 							
-							moveMotorBX(x, sizeX);
+							moveMotorBX(dx*sizeX, sizeX * 10);
 						}
 						else
 						{
+							g[i].fillRect(dx * sizeX - sizeX, dy * sizeY, sizeX, sizeY);
 							if (startX)
-								g[i].fillRect(x + sizeX, y, sizeX, sizeY);
-							g[i].fillRect(x, y, sizeX, sizeY);
+							{
+								g[i].fillRect(dx * sizeX, dy * sizeY, sizeX, sizeY);
+								if (dy == maxDY - 1)
+									g[i].fillRect(dx * sizeX, (dy + 1) * sizeY, sizeX, sizeY);
+							}
+
+							if (dy == maxDY - 1)
+								g[i].fillRect(dx * sizeX - sizeX, (dy + 1) * sizeY, sizeX, sizeY);
 							
-							if (moveUY && y - sizeY < 0)
-								g[i].fillRect(x, y - sizeY, sizeX, sizeY);
-							else if (!moveUY && y > hy)
-								g[i].fillRect(x, y + sizeY, sizeX, sizeY);
-							
-							moveMotorFX(x, sizeX);
+							moveMotorFX(dx * sizeX, sizeX * 10);
 						}
-						startX = false;
-						if (moveFX ^ changeWay)
-							x += sizeX;
-						else
-							x -= sizeX;
-	
-						
-						if (moveFX ^ changeWay && x > wx - sizeX) 
-						{
-							scanX = false;
-							g[i].fillRect(x, y, sizeX, sizeY);
-							x -= sizeX;
-							startX = true;
-						}
-						if (!moveFX ^ changeWay && x < 0)
-						{
-							scanX = false;
-							g[i].fillRect(x, y, sizeX, sizeY);
-							x += sizeX;
-							startX = true;
-						}
-					
-						resizeAPaint();
 					}
+					if (moveFX ^ changeWay)
+						dx += 1;
+					else
+						dx -= 1;
+					
+					if (moveFX ^ changeWay && dx == maxDX || dx == minXD) 
+					{
+						scanX = false;
+						//d -= 1;
+					}
+					if (moveFX ^ changeWay && dx == maxDX || dx == minXD)
+					{
+						scanX = false;
+						//d += 1;
+					}
+					startX = false;
+				
+					resizeAPaint();
 				}
 				else
 					try {
@@ -411,25 +417,28 @@ public class Scan {
 					}
 			}
 			
+			startX = true;
+			
 			if (moveUY)
 				for (int yi = 0; yi < sizeY; yi++)
-					moveMotorUY(this.y);
+					moveMotorUY(dy * 10);
 			else
 				for (int yi = 0; yi < sizeY; yi++)
-					moveMotorDY(this.y);
+					moveMotorDY(dy * 10);
 			
 			changeWay = !changeWay;
 
 			if (moveUY)
-				y -= sizeY;
+				dy -= 1;
 			else
-				y += sizeY;
+				dy += 1;
 			
-			if (moveUY && y < 0)
+			if (moveUY && dy < minYD)
 				setScanY(false);
-			else if (!moveUY && y > hy - sizeY)
+			else if (!moveUY && dy > maxDY - 1)
 				setScanY(false);
 				
+			
 			
 			for (int i = 0; i < frequency.length; i++)
 				fileFrequencyPrint[i].println("");
@@ -437,7 +446,6 @@ public class Scan {
 		}
 		if (!isScanStoped())
 		{
-			//System.out.println("Area is scanned!");
 			setScanDone(true);
 			SettingsPanel.scanPanel.scanPanelActive();
 			new CreatePdf();
@@ -532,8 +540,6 @@ public class Scan {
 		G = adjust(G, factor, intensityMax, gamma);
 		B = adjust(B, factor, intensityMax, gamma);
 		
-		//System.out.println(wave);
-		
 		return new java.awt.Color((int)R, (int)G, (int)B, (int)A).getRGB();
 	}
 	/**
@@ -593,7 +599,6 @@ public class Scan {
 	 * Gets the user selected values for the scan.
 	 */
 	private void initializeScanValues() {
-		System.out.println(frequency.length/2);
 		hy = buffImage[frequencyShow].getHeight();
 		wx = buffImage[frequencyShow].getWidth();
 		
@@ -618,9 +623,9 @@ public class Scan {
 		buffImage = new BufferedImage[frequency.length];
 		
 		colorImage = IplImage.create(SettingsPanel.CROPT_PHOTO_DIMENSION.width * Program.TIONDELS_MILLI_METER_PIXEL, SettingsPanel.CROPT_PHOTO_DIMENSION.height * Program.TIONDELS_MILLI_METER_PIXEL, 8/*SettingsPanel.photo.depth()*/, 4/*SettingsPanel.photo.nChannels()*/);
-
+		
 		for (int i = 0; i < frequency.length; i++) { 
-			buffImage[i] = colorImage.getBufferedImage();
+			buffImage[i] = colorImage.clone().getBufferedImage();
 			buffImage[i].setRGB(0, 0, buffImage[i].getWidth(), buffImage[i].getHeight(), new int[buffImage[i].getWidth() * buffImage[i].getHeight()], 0, buffImage[i].getWidth());
 		}
 	}

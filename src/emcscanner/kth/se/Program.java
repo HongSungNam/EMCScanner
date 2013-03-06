@@ -21,7 +21,7 @@ public class Program {
 	public static ImagePanel imagePanel;
 	public static MainFrame frame;
 
-	public static int TIONDELS_MILLI_METER_PIXEL = 10;
+	public static int TIONDELS_MILLI_METER_PIXEL = 1;
 	
 	/* Image Icon next button */
 	public static ImageIcon NEXT_BUTTON_ENABLED_IMAGE_ICON 		= new ImageIcon("image/ButtonBlueNext.png");

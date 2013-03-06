@@ -18,9 +18,9 @@ import com.googlecode.javacv.cpp.opencv_core.IplImage;
  */
 public class SettingsPanel extends JPanel{
 	/* Real life in table dimensions in one tenth of a millimeter that is taken in by the camera */
-	static int TABLE_WIDTH = 19200; 			// Temporary
-	static int TABLE_HEIGHT = 10800;			// Temporary
-	public Dimension TABLE_DIMENSION = new Dimension(19200, 10800);
+	static int TABLE_WIDTH = 1920; 			// Temporary
+	static int TABLE_HEIGHT = 1080;			// Temporary
+	public Dimension TABLE_DIMENSION = new Dimension(1920, 1080);
 	
 	private static int stage = 1;
 	

@@ -3,6 +3,9 @@ package emcscanner.kth.se;
 import static com.googlecode.javacv.cpp.opencv_imgproc.CV_INTER_LANCZOS4;
 import static com.googlecode.javacv.cpp.opencv_imgproc.cvResize;
 
+import com.googlecode.javacv.cpp.opencv_core.IplImage;
+import static com.googlecode.javacv.cpp.opencv_highgui.*;
+
 import java.awt.image.BufferedImage;
 import java.io.DataInputStream;
 import java.io.File;
@@ -11,7 +14,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
 
-import com.googlecode.javacv.cpp.opencv_core.IplImage;
 import com.itextpdf.text.Anchor;
 import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.Chapter;
@@ -26,31 +28,55 @@ import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfWriter;
 
 public class CreatePdf {
-	private static String FILE = "user data/PDF/ITextTest.pdf";
+	private static String FILE = "user data/PDF/ITextTest";
 	private static Font HEADER_FONT = new Font(Font.FontFamily.TIMES_ROMAN, 24, Font.BOLD);
 	private static Font CAT_FONT = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
 	//private static Font redFont = new Font(Font.FontFamily.TIMES_ROMAN, 12,Font.NORMAL, BaseColor.RED);
 	//private static Font subFont = new Font(Font.FontFamily.TIMES_ROMAN, 16,Font.BOLD);
 	private static Font SMALL_BOLD_FONT = new Font(Font.FontFamily.TIMES_ROMAN, 12,Font.BOLD);
+	private static IplImage photo;
 
 	/**
 	 * 
 	 */
 	public CreatePdf() {
+		int i = 0;
+		boolean validFileName = true;
+		
+		validFileName = true;
+		int width = SettingsPanel.scanPanel.scan.buffImage[SettingsPanel.scanPanel.scan.frequency.length/2].getWidth() + 0;
+		int height = SettingsPanel.scanPanel.scan.buffImage[SettingsPanel.scanPanel.scan.frequency.length/2].getHeight() + 600;
+		
+		if (width < 400)
+			width = 600;
+		if (height < 800)
+			height = 800;
+		
+		Rectangle pagesize = new Rectangle(width, height);
+        Document document = new Document(pagesize, 36f, 72f, 108f, 180f);
+        while(true)
+		{
+			try {
+		        if (i == 0)
+					PdfWriter.getInstance(document, new FileOutputStream(FILE + ".pdf"));
+				else
+					PdfWriter.getInstance(document, new FileOutputStream(FILE + i + ".pdf"));
+			} catch (Exception e) {
+				i++;
+				validFileName = false;
+		    }
+			if (validFileName)
+				break;
+		}
+		document.open();
+		addMetaData(document);
 		try {
-			Rectangle pagesize = new Rectangle(SettingsPanel.scanPanel.scan.buffImage[SettingsPanel.scanPanel.scan.frequency.length/2].getWidth() + 0, 
-											   SettingsPanel.scanPanel.scan.buffImage[SettingsPanel.scanPanel.scan.frequency.length/2].getHeight() + 600);
-	        Document document = new Document(pagesize, 36f, 72f, 108f, 180f);
-	        
-			PdfWriter.getInstance(document, new FileOutputStream(FILE));
-			document.open();
-			addMetaData(document);
 			addTitlePage(document);
 			addContent(document);
-			document.close();
-		} catch (Exception e) {
+		} catch (DocumentException e) {
 			e.printStackTrace();
-	    }
+		}
+		document.close();
 	}
 	
 	/**
@@ -92,8 +118,9 @@ public class CreatePdf {
 		preface.add(emptyline);
 		document.add(preface);
 		
+
+		photo = cvLoadImage("webcam photo/WebCameraPhoto.png");
 		Image frontPageImage = coloredPhoto(SettingsPanel.scanPanel.scan.frequency.length/2);
-		
 		frontPageImage.setAlignment(Element.ALIGN_CENTER);
 		document.add(frontPageImage);
 		
@@ -150,18 +177,13 @@ public class CreatePdf {
 		    	String s = new String(buffer, "UTF-8");
 		    	Paragraph p = new Paragraph(s);
 		    	catPart.add(p);
-		    	catPart.newPage();
-		    	
-		    	Image frequencyImage = coloredPhoto(i);
-		    	frequencyImage.setAlignment(Element.ALIGN_CENTER);
-		    	catPart.add(frequencyImage);
-		    	catPart.newPage();
-		    	
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+		    Image frequencyImageI = coloredPhoto(i);
+	    	catPart.add(frequencyImageI);
+	    	catPart.newPage();	
 	    }
-
 	    // Now add all this to the document
 	    document.add(catPart);
 	}
@@ -179,9 +201,8 @@ public class CreatePdf {
 	 * Resizes the Photo when needed to 
 	 */
 	public static Image coloredPhoto(int i){	
-		Image frequencyImage = null;
 		
-		IplImage photo = Program.imagePanel.iplPhoto2;
+		Image frequencyImage = null;
 		
         int width  = photo.width() * Program.TIONDELS_MILLI_METER_PIXEL;
         int height  = photo.height() * Program.TIONDELS_MILLI_METER_PIXEL;
