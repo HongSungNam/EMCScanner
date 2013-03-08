@@ -20,6 +20,8 @@ public class Program {
 	public static ManualPanel manualPanel;
 	public static ImagePanel imagePanel;
 	public static MainFrame frame;
+	
+	public static SetPanelStage setPanelStage;
 
 	public static int TIONDELS_MILLI_METER_PIXEL = 1;
 	

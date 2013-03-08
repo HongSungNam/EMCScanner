@@ -14,6 +14,6 @@ public class MainBackActionListener implements ActionListener{
 		Program.settingsPanel.setVisible(false);
 
 		Program.frame.glass.glasPanelActive = false;
-		Program.startControlPanel.nextButton.grabFocus();
+		Program.startControlPanel.getNextButton().grabFocus();
 	}
 }

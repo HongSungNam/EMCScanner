@@ -18,14 +18,14 @@ import com.googlecode.javacv.cpp.opencv_core.IplImage;
  */
 public class SettingsPanel extends JPanel{
 	/* Real life in table dimensions in one tenth of a millimeter that is taken in by the camera */
-	static int TABLE_WIDTH = 1920; 			// Temporary
-	static int TABLE_HEIGHT = 1080;			// Temporary
-	public Dimension TABLE_DIMENSION = new Dimension(1920, 1080);
-	
+	private static int TABLE_WIDTH = 1920; 			// Temporary
+	private static int TABLE_HEIGHT = 1080;			// Temporary
 	private static int stage = 1;
+
+	private Dimension TABLE_DIMENSION = new Dimension(1920, 1080);
 	
 	/* User selected Frequency values */
-	public static boolean FREQUENCY_SELECTED = false;
+	private static boolean FREQUENCY_SELECTED = false;
 	
 	public static float frequencyStartUserSelectedFloat;
 	public static float frequencyEndUserSelectedFloat;
@@ -78,15 +78,16 @@ public class SettingsPanel extends JPanel{
 	public static FileNameSettingsSubPanel fileNamePanel;
 	public static ScanSettingsSubPanel scanPanel;
 	public static EndSubSettingsPanel endPanel;
-		
+
+	private Dimension settingsPanelDimension = new Dimension((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth()/3), 0);
+	
 	/**
 	 * SettingsPanel
-	 * 
 	 * 
 	 */
 	public SettingsPanel() {
 		this.setLayout(new BorderLayout());
-		this.setPreferredSize(new Dimension((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth()/4), 0));
+		this.setPreferredSize(settingsPanelDimension);
 		
 		this.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 0, Program.LIGHT_GRAY_COLOR));
 		
@@ -116,5 +117,29 @@ public class SettingsPanel extends JPanel{
 	}
 	public static void setStage(int stage) {
 		SettingsPanel.stage = stage;
+	}
+	public static int getTABLE_WIDTH() {
+		return TABLE_WIDTH;
+	}
+	public static void setTABLE_WIDTH(int tABLE_WIDTH) {
+		TABLE_WIDTH = tABLE_WIDTH;
+	}
+	public static int getTABLE_HEIGHT() {
+		return TABLE_HEIGHT;
+	}
+	public static void setTABLE_HEIGHT(int tABLE_HEIGHT) {
+		TABLE_HEIGHT = tABLE_HEIGHT;
+	}
+	public Dimension getTABLE_DIMENSION() {
+		return TABLE_DIMENSION;
+	}
+	public void setTABLE_DIMENSION(Dimension tABLE_DIMENSION) {
+		TABLE_DIMENSION = tABLE_DIMENSION;
+	}
+	public static boolean isFREQUENCY_SELECTED() {
+		return FREQUENCY_SELECTED;
+	}
+	public static void setFREQUENCY_SELECTED(boolean fREQUENCY_SELECTED) {
+		FREQUENCY_SELECTED = fREQUENCY_SELECTED;
 	}
 }

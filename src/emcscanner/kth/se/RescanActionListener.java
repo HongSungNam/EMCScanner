@@ -8,7 +8,7 @@ public class RescanActionListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		SettingsPanel.scanPanel.scan.setScanDone(false);
 		SettingsPanel.scanPanel.scan.setScanStoped(true);
-		SettingsPanel.scanPanel.scanPanelActive();
+		SetPanelActive.scanPanelActive();
 		
 		SettingsPanel.scanPanel.scan.setScanX(false);
 		SettingsPanel.scanPanel.scan.setScanY(false);

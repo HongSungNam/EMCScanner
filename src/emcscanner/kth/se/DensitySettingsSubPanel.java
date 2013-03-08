@@ -339,10 +339,10 @@ public class DensitySettingsSubPanel extends JPanel {
 		continer1.add(nextButton, BorderLayout.EAST);
 		continer1.add(backButton, BorderLayout.WEST);
 		
-        inputFeildsAButtons.add(continer1, BorderLayout.SOUTH);
-        inputFeildsAButtons.add(imputFeildsContainer, BorderLayout.NORTH);
+        getInputFeildsAButtons().add(continer1, BorderLayout.SOUTH);
+        getInputFeildsAButtons().add(imputFeildsContainer, BorderLayout.NORTH);
 
-		densityPanel.add(inputFeildsAButtons, BorderLayout.SOUTH);
+		densityPanel.add(getInputFeildsAButtons(), BorderLayout.SOUTH);
 		densityPanel.add(colorDensityVideoPanel, BorderLayout.CENTER);
 		
 		densityPanel.add(densitySelectedLabel, BorderLayout.EAST);
@@ -469,177 +469,10 @@ public class DensitySettingsSubPanel extends JPanel {
 			Program.frame.glass.repaint();
     	}
     }
-	/**
-	 * ACTIVE
-	 */
-	public void densityPanelActive() {
-		DISPLAY_HELP_VIDEO = true;
-		
-		MainPanel.setLeftStage(Program.imagePanel);
-
-		Program.settingsPanel.setVisible(true);
-		Program.manualPanel.setVisible(false);
-		Program.startControlPanel.setVisible(false);
-		Program.cameraPanel.setVisible(false);
-		Program.imagePanel.setVisible(true);
-		
-		SettingsPanel.setStage(this.STAGE);
-		
-		Program.frame.glass.setVisible(VISIBLE);
-		
-		/* Shows the help video when made active */
-		DISPLAY_HELP_VIDEO = VISIBLE;
-		
-		/* Sets active color Blue for header, labels and borders*/
-		headerButton.setEnabled(HEADER_BUTTON_ENABLED = false);
-		headerButton.setDisabledIcon(HEADER_DISABLED_BLUE_IMAGE_ICON);
-		stepLabel.setText(STEP_TEXT_LIGHT_BLUE);
-		densityPanel.setBorder(Program.LIGHT_BLUE_BORDER);
-		
-		/* Shows buttons and labels */
-		nextButton.setVisible(VISIBLE);
-		backButton.setVisible(VISIBLE);
-		colorDensityVideoPanel.setVisible(VISIBLE);
-		heightDensityInputTextField.setVisible(VISIBLE);
-		widthDensityInputTextField.setVisible(VISIBLE);
-		scanDensityLabel.setVisible(VISIBLE);
-	    widthLabel.setVisible(VISIBLE);
-	    heightLabel.setVisible(VISIBLE);
-	    widthLabel0.setVisible(VISIBLE);
-	    heightLabel0.setVisible(VISIBLE);
-	    heightLabelValue.setVisible(VISIBLE);
-	    widthLabelValue.setVisible(VISIBLE);
-	    noteLabel.setVisible(VISIBLE);
-	    inputFeildsAButtons.setVisible(VISIBLE);
-		
-		/* Changing size of panels when button has been pressed*/	
-		densityPanel.setPreferredSize(DENSITY_PANEL_DIMENSION_ACTIVE);
-
-		/* Changing size of panels when button has been pressed*/	
-		densityPanel.setPreferredSize(DENSITY_PANEL_DIMENSION_ACTIVE);
-		headerAndPanelContiner.setPreferredSize(HEADER_AND_PANEL_CONTINER_DIMENSION_ACTIVE);
-		stepContiner.setPreferredSize(STEP_CONTINER_DIMENSION_ACTIVE);
-		
-		/* Turns on Panel */
-		densityPanel.setVisible(true);
-
-
-    	
-		/* Doesn't show label */
-		densitySelectedLabel.setVisible(NOT_VISIBLE);
-		
-		int value = (NUMBER_OF_LINES_WIDTH+1);
-		int value2 = (NUMBER_OF_LINES_HEIGHT+1);
-		if (value > ((SettingsPanel.AREA_SELECTED_END_X - SettingsPanel.AREA_SELECTED_START_X + 1) * Program.TIONDELS_MILLI_METER_PIXEL))
-		{
-			widthLabel.setText("<html> <font color = rgb(255,0,0)> Width: </font></html>");
-			widthLabelValue.setText("<html><font color = rgb(255,0,0)>" + (int)((SettingsPanel.AREA_SELECTED_END_X - SettingsPanel.AREA_SELECTED_START_X + 1) * Program.TIONDELS_MILLI_METER_PIXEL) + " &gt&nbsp</font></html>");
-			widthLabel0.setText("<html> &nbsp&gt 0&nbsp</html>");
-			widthDensityInputTextField.setBorder(Program.RED_BORDER);
-			WIDTH_ENTERD_CORRECTLY = false;
-		}
-		else if (value <= 0)
-		{
-			widthLabel.setText("<html> <font color = rgb(255,0,0)> Width: </font></html>");
-			widthLabelValue.setText("<html>" + (int)((SettingsPanel.AREA_SELECTED_END_X - SettingsPanel.AREA_SELECTED_START_X + 1) * Program.TIONDELS_MILLI_METER_PIXEL)  + " &gt&nbsp</html>");
-			widthLabel0.setText("<html><font color = rgb(255,0,0)> &nbsp&gt 0&nbsp</font></html>");
-			widthDensityInputTextField.setBorder(Program.RED_BORDER);
-			WIDTH_ENTERD_CORRECTLY = false;
-		}
-		else
-		{
-			widthLabel.setText("<html><font color = rgb(100,150,255)> Width: </font></html>");
-			widthLabelValue.setText("<html>" + (int)((SettingsPanel.AREA_SELECTED_END_X - SettingsPanel.AREA_SELECTED_START_X + 1)* Program.TIONDELS_MILLI_METER_PIXEL) + " &gt&nbsp</html>");
-			widthLabel0.setText("<html> &nbsp&gt 0&nbsp </html>");
-    	}
-		if (value2 > ((SettingsPanel.AREA_SELECTED_END_Y - SettingsPanel.AREA_SELECTED_START_Y + 1) * Program.TIONDELS_MILLI_METER_PIXEL))
-		{
-			heightLabel.setText("<html> <font color = rgb(255,0,0)> Height: </html> </font>");
-			heightLabelValue.setText("<html> <font color = rgb(255,0,0)>" + (int)((SettingsPanel.AREA_SELECTED_END_Y - SettingsPanel.AREA_SELECTED_START_Y + 1) * Program.TIONDELS_MILLI_METER_PIXEL) + " &gt&nbsp</font></html>");
-			heightLabel0.setText("<html> &nbsp&gt 0&nbsp</html>");
-			heightDensityInputTextField.setBorder(Program.RED_BORDER);
-			HEIGHT_ENTERD_CORRECTLY = false;
-		}
-		else if (value2 <= 0)
-		{
-			heightLabel.setText("<html> <font color = rgb(255,0,0)> Height: </html> </font>");
-			heightLabelValue.setText("<html>" + (int)((SettingsPanel.AREA_SELECTED_END_Y - SettingsPanel.AREA_SELECTED_START_Y + 1) * Program.TIONDELS_MILLI_METER_PIXEL) + " &gt&nbsp</html>");
-			heightLabel0.setText("<html><font color = rgb(255,0,0)> &nbsp&gt 0&nbsp</font></html>");
-			heightDensityInputTextField.setBorder(Program.RED_BORDER);
-			HEIGHT_ENTERD_CORRECTLY = false;
-		}
-		else
-		{
-			heightLabel.setText("<html> <font color = rgb(100,150,255)> Height: </font></html> ");
-	    	heightLabelValue.setText("<html>" + (int)((SettingsPanel.AREA_SELECTED_END_Y - SettingsPanel.AREA_SELECTED_START_Y + 1)* Program.TIONDELS_MILLI_METER_PIXEL) + " &gt&nbsp</html>");
-	    	heightLabel0.setText("<html> &nbsp&gt 0&nbsp</html>");
-		}
-		Program.frame.glass.repaint();
-		
-		
+	public JPanel getInputFeildsAButtons() {
+		return inputFeildsAButtons;
 	}
-	/**
-	 * NOT ACTIVE
-	 */
-	public void densityPanelNotActive(){
-		DISPLAY_HELP_VIDEO = false;
-		/* Sets header button to enabled and green with a new tool tip */
-		headerButton.setToolTipText(HEADER_BUTTON_TOOL_TIP_TEXT);
-		
-		/* For showing videos */
-		DISPLAY_HELP_VIDEO = NOT_VISIBLE;
-		
-		/* Sets video and buttons not visible */
-		nextButton.setVisible(NOT_VISIBLE);
-		backButton.setVisible(NOT_VISIBLE);
-		colorDensityVideoPanel.setVisible(NOT_VISIBLE);
-		heightDensityInputTextField.setVisible(NOT_VISIBLE);
-		widthDensityInputTextField.setVisible(NOT_VISIBLE);
-		scanDensityLabel.setVisible(NOT_VISIBLE);
-	    widthLabel.setVisible(NOT_VISIBLE);
-	    heightLabel.setVisible(NOT_VISIBLE);
-	    widthLabel0.setVisible(NOT_VISIBLE);
-	    heightLabel0.setVisible(NOT_VISIBLE);
-	    heightLabelValue.setVisible(NOT_VISIBLE);
-	    widthLabelValue.setVisible(NOT_VISIBLE);
-	    noteLabel.setVisible(NOT_VISIBLE);
-	    inputFeildsAButtons.setVisible(NOT_VISIBLE);
-		
-		if (SettingsPanel.DENSITY_SELECTED)
-		{
-			/* Sets step label green when button has been pressed */
-			stepLabel.setText(STEP_TEXT_DARK_GREEN);
-			
-			/* AreaPanel and header Green */
-			densityPanel.setBorder(Program.GREEN_BORDER);
-			densityPanel.setVisible(VISIBLE);
-			headerButton.setEnabled(HEADER_BUTTON_ENABLED = true);
-			
-			/* Changing size of panels when button has been pressed*/	
-			densityPanel.setPreferredSize(DENSITY_PANEL_DIMENSION_DONE);
-			headerAndPanelContiner.setPreferredSize(HEADER_AND_PANEL_CONTINER_DIMENSION_DONE);
-			stepContiner.setPreferredSize(STEP_CONTINER_DIMENSION_DONE);
-			
-			densitySelectedLabel.setText("<html><font color = rgb(120,200,40)> Density selected:</font> Width: " + SettingsPanel.DENSITY_SELECTED_WIDTH + 
-										 ", Height: " + SettingsPanel.DENSITY_SELECTED_HEIGHT + "&nbsp</html>");
-			densitySelectedLabel.setVisible(VISIBLE);
-		}
-		else
-		{
-			/* Sets step label gray when button has been pressed */
-			stepLabel.setText(STEP_TEXT_GRAY);
-			
-			/* Sets density panel to invisible */
-			densityPanel.setVisible(NOT_VISIBLE);
-			
-			/* Sets Header button gray */
-			headerButton.setDisabledIcon(HEADER_DISABLED_GRAY_IMAGE_ICON);
-			headerButton.setEnabled(HEADER_BUTTON_ENABLED = false);
-			
-			/* Changing size of panels when button has been pressed*/	
-			densityPanel.setPreferredSize(DENSITY_PANEL_DIMENSION_OFF);
-			headerAndPanelContiner.setPreferredSize(HEADER_AND_PANEL_CONTINER_DIMENSION_OFF);
-			stepContiner.setPreferredSize(STEP_CONTINER_DIMENSION_OFF);
-		}
+	public void setInputFeildsAButtons(JPanel inputFeildsAButtons) {
+		this.inputFeildsAButtons = inputFeildsAButtons;
 	}
 }

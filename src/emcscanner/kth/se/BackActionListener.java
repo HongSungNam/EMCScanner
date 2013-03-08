@@ -8,7 +8,6 @@ public class BackActionListener implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		if (SettingsPanel.getStage() == 1 && Program.frame.glass.glasPanelActive)
 		{
-			//Program.cameraPanel.DISPLAY_WEB_CAMERA_INPUT = false;
 			Program.manualPanel.setVisible(true);
 			Program.startControlPanel.setVisible(true);
 			Program.cameraPanel.setVisible(false);
@@ -16,36 +15,21 @@ public class BackActionListener implements ActionListener{
 			Program.settingsPanel.setVisible(false);
 			
 			Program.frame.glass.glasPanelActive = false;
-			Program.startControlPanel.nextButton.grabFocus();
+			Program.startControlPanel.getNextButton().grabFocus();
 		}
 		else if (SettingsPanel.getStage() == 2 && Program.frame.glass.glasPanelActive)
 		{
-			//Program.cameraPanel.DISPLAY_WEB_CAMERA_INPUT = true;
-			SettingsPanel.areaPanel.areaPanelNotActive();
-			SettingsPanel.frequencyPanel.frequencyPanelActive();
-			SettingsPanel.densityPanel.densityPanelNotActive();
-			SettingsPanel.fileNamePanel.fileNamePanelNotActive();
-			SettingsPanel.scanPanel.scanPanelNotActive();
+			StageActive.stageActive(1);
 			SettingsPanel.frequencyPanel.startFloatInputTextField.grabFocus();
 		}
 		else if (SettingsPanel.getStage() == 3 && Program.frame.glass.glasPanelActive)
 		{
-			//Program.cameraPanel.DISPLAY_WEB_CAMERA_INPUT = true;
-			SettingsPanel.areaPanel.areaPanelActive();
-			SettingsPanel.frequencyPanel.frequencyPanelNotActive();
-			SettingsPanel.densityPanel.densityPanelNotActive();
-			SettingsPanel.fileNamePanel.fileNamePanelNotActive();
-			SettingsPanel.scanPanel.scanPanelNotActive();
+			StageActive.stageActive(2);
 			AreaSettingsSubPanel.backButton.grabFocus();
 		}
 		else if (SettingsPanel.getStage() == 4 && Program.frame.glass.glasPanelActive)
 		{
-			//Program.cameraPanel.DISPLAY_WEB_CAMERA_INPUT = false;
-			SettingsPanel.frequencyPanel.frequencyPanelNotActive();
-			SettingsPanel.areaPanel.areaPanelNotActive();
-			SettingsPanel.densityPanel.densityPanelActive();
-			SettingsPanel.fileNamePanel.fileNamePanelNotActive();
-			SettingsPanel.scanPanel.scanPanelNotActive();
+			StageActive.stageActive(3);
 			SettingsPanel.densityPanel.widthDensityInputTextField.grabFocus();
 		}
 		else if (SettingsPanel.getStage() == 5 && Program.frame.glass.glasPanelActive)
@@ -78,11 +62,7 @@ public class BackActionListener implements ActionListener{
 			}
 			else
 			{
-				SettingsPanel.frequencyPanel.frequencyPanelActive();
-				SettingsPanel.areaPanel.areaPanelNotActive();
-				SettingsPanel.densityPanel.densityPanelNotActive();
-				SettingsPanel.fileNamePanel.fileNamePanelNotActive();
-				SettingsPanel.scanPanel.scanPanelNotActive();
+				StageActive.stageActive(1);
 				SettingsPanel.frequencyPanel.startFloatInputTextField.grabFocus();
 			}
 		}

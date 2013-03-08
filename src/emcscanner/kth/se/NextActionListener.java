@@ -12,18 +12,15 @@ public class NextActionListener implements ActionListener{
 			if (FrequencySettingsSubPanel.nextButton.isEnabled())
 			{
 				//Program.cameraPanel.DISPLAY_WEB_CAMERA_INPUT = true;
-				SettingsPanel.FREQUENCY_SELECTED = true;
+				SettingsPanel.setFREQUENCY_SELECTED(true);
 				
 				SettingsPanel.frequencyStartUserSelectedFloat = SettingsPanel.frequencyPanel.startValue;
 				SettingsPanel.frequencyEndUserSelectedFloat = SettingsPanel.frequencyPanel.endValue;
 				SettingsPanel.frequencyDensityUserSelectedInt = SettingsPanel.frequencyPanel.densityValue;
 				
 				/* Adding the next step */
-				SettingsPanel.frequencyPanel.frequencyPanelNotActive();
-				SettingsPanel.areaPanel.areaPanelActive();
-				SettingsPanel.densityPanel.densityPanelNotActive();
-				SettingsPanel.fileNamePanel.fileNamePanelNotActive();
-				SettingsPanel.scanPanel.scanPanelNotActive();
+				StageActive.stageActive(2);
+				
 				AreaSettingsSubPanel.backButton.grabFocus();
 			}
 		}
@@ -39,12 +36,8 @@ public class NextActionListener implements ActionListener{
 						" x Hight: " +(int) (SettingsPanel.AREA_SELECTED_END_Y - SettingsPanel.AREA_SELECTED_START_Y + 1) + "&nbsp</html>");
 
 				SettingsPanel.AREA_SELECTED_CAMERA_DIMENSION = Program.cameraPanel.CAMERA_VIEW_BOUNDERYS_DIMENSION;
-				
-				SettingsPanel.areaPanel.areaPanelNotActive();
-				SettingsPanel.densityPanel.densityPanelActive();
-				SettingsPanel.frequencyPanel.frequencyPanelNotActive();
-				SettingsPanel.fileNamePanel.fileNamePanelNotActive();
-				SettingsPanel.scanPanel.scanPanelNotActive();
+
+				StageActive.stageActive(3);
 						
 				CameraPanel.SAVE_IMAGE = true;
 				try {
@@ -68,12 +61,9 @@ public class NextActionListener implements ActionListener{
 				SettingsPanel.DENSITY_SELECTED_WIDTH = SettingsPanel.densityPanel.NUMBER_OF_LINES_WIDTH + 1;
 				SettingsPanel.DENSITY_SELECTED_HEIGHT = SettingsPanel.densityPanel.NUMBER_OF_LINES_HEIGHT + 1;
 				SettingsPanel.DENSITY_SELECTED = true;
+
+				StageActive.stageActive(4);
 				
-				SettingsPanel.densityPanel.densityPanelNotActive();
-				SettingsPanel.areaPanel.areaPanelNotActive();
-				SettingsPanel.frequencyPanel.frequencyPanelNotActive();
-				SettingsPanel.fileNamePanel.fileNamePanelActive();
-				SettingsPanel.scanPanel.scanPanelNotActive();
 				SettingsPanel.fileNamePanel.fileNameInputTextField.grabFocus();
 			}
 		}
@@ -84,11 +74,8 @@ public class NextActionListener implements ActionListener{
 				//Program.cameraPanel.DISPLAY_WEB_CAMERA_INPUT = false;
 				SettingsPanel.FILE_NAME_SELECTED = true;
 				
-				SettingsPanel.frequencyPanel.frequencyPanelNotActive();
-				SettingsPanel.areaPanel.areaPanelNotActive();
-				SettingsPanel.densityPanel.densityPanelNotActive();
-				SettingsPanel.fileNamePanel.fileNamePanelNotActive();
-				SettingsPanel.scanPanel.scanPanelActive();
+				StageActive.stageActive(5);
+				
 				SettingsPanel.scanPanel.scan.resizeAPaint();
 			}
 		}
@@ -137,53 +124,29 @@ public class NextActionListener implements ActionListener{
 			{
 				if (SettingsPanel.getStage() == 1)
 				{
-					SettingsPanel.frequencyPanel.frequencyPanelActive();
-					SettingsPanel.areaPanel.areaPanelNotActive();
-					SettingsPanel.densityPanel.densityPanelNotActive();
-					SettingsPanel.fileNamePanel.fileNamePanelNotActive();
-					SettingsPanel.scanPanel.scanPanelNotActive();
+					StageActive.stageActive(1);
 					SettingsPanel.frequencyPanel.startFloatInputTextField.grabFocus();
 				}
 				else if (SettingsPanel.getStage() == 2)
 				{
-					SettingsPanel.frequencyPanel.frequencyPanelNotActive();
-					SettingsPanel.areaPanel.areaPanelActive();
-					SettingsPanel.densityPanel.densityPanelNotActive();
-					SettingsPanel.fileNamePanel.fileNamePanelNotActive();
-					SettingsPanel.scanPanel.scanPanelNotActive();
+					StageActive.stageActive(2);
 					AreaSettingsSubPanel.backButton.grabFocus();
 				}
 				else if (SettingsPanel.getStage() == 3)
 				{
-					SettingsPanel.frequencyPanel.frequencyPanelNotActive();
-					SettingsPanel.areaPanel.areaPanelNotActive();
-					SettingsPanel.densityPanel.densityPanelActive();
-					SettingsPanel.fileNamePanel.fileNamePanelNotActive();
-					SettingsPanel.scanPanel.scanPanelNotActive();
+					StageActive.stageActive(3);
 					SettingsPanel.densityPanel.widthDensityInputTextField.grabFocus();
 				}
 				else if (SettingsPanel.getStage() == 4)
 				{
-					SettingsPanel.frequencyPanel.frequencyPanelNotActive();
-					SettingsPanel.areaPanel.areaPanelNotActive();
-					SettingsPanel.densityPanel.densityPanelNotActive();
-					SettingsPanel.fileNamePanel.fileNamePanelActive();
-					SettingsPanel.scanPanel.scanPanelNotActive();
+					StageActive.stageActive(4);
 					SettingsPanel.fileNamePanel.fileNameInputTextField.grabFocus();
 				}
 				else if (SettingsPanel.getStage() == 5)
-				{
-					SettingsPanel.frequencyPanel.frequencyPanelNotActive();
-					SettingsPanel.areaPanel.areaPanelNotActive();
-					SettingsPanel.densityPanel.densityPanelNotActive();
-					SettingsPanel.fileNamePanel.fileNamePanelNotActive();
-					SettingsPanel.scanPanel.scanPanelActive();
-				}
+					StageActive.stageActive(5);
 			}
 			else
-			{
-				SettingsPanel.scanPanel.scanPanelActive();
-			}
+				SetPanelActive.scanPanelActive();
 		}
 	}
 }

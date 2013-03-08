@@ -36,14 +36,15 @@ public class CameraPanel extends JPanel{
 	
 	public IplImage phototaken;
 	
-	
 	public static boolean DISPLAY_WEB_CAMERA_INPUT = true;
 	public static boolean stopCamera = false;
 	public static boolean SAVE_IMAGE = false;
 	
+	private Dimension cameraPanelDimension = new Dimension((int) (2*Toolkit.getDefaultToolkit().getScreenSize().getWidth()/3), 0);
+	
 	public CameraPanel() {
 		this.setLayout(new BorderLayout());
-		this.setPreferredSize(new Dimension((int) (3*Toolkit.getDefaultToolkit().getScreenSize().getWidth()/4), 0));
+		this.setPreferredSize(getCameraPanelDimension());
         try {
         	/* There exists many different types of frame grabbers. 
         	   This one is the one that is working for this camera. */
@@ -424,5 +425,11 @@ public class CameraPanel extends JPanel{
 				SettingsPanel.AREA_SELECTED_END_Y = Program.frame.glass.cursorPressed.y;
 			}
 		}
+	}
+	public Dimension getCameraPanelDimension() {
+		return cameraPanelDimension;
+	}
+	public void setCameraPanelDimension(Dimension cameraPanelDimension) {
+		this.cameraPanelDimension = cameraPanelDimension;
 	}
 }

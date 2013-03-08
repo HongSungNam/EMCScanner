@@ -30,7 +30,7 @@ public class ImagePanel extends JPanel{
 	
 	public ImagePanel(){
 		this.setLayout(new BorderLayout());
-		this.setPreferredSize(new Dimension((int) (3*Toolkit.getDefaultToolkit().getScreenSize().getWidth()/4), 0));
+		this.setPreferredSize(Program.cameraPanel.getCameraPanelDimension());
 	}
 	
 	public void setPhoto(){

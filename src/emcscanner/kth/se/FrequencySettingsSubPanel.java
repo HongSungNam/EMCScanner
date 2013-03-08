@@ -87,7 +87,7 @@ public class FrequencySettingsSubPanel extends JPanel {
 	public String STEP_TEXT_LIGHT_BLUE  = "<html> <font color = rgb(100,150,255)>Step 1/4</font></html>";
 	public String STEP_TEXT_DARK_GREEN  = "<html> <font color = rgb(120,200,40)>Step 1/4</font></html>";
 	
-	public String PANEL_INFORMATION = "This is where you can shoose the desired frequency.";
+	public static String PANEL_INFORMATION = "This is where you can shoose the desired frequency.";
 	public String NEXT_BUTTON_TOOL_TIP_TEXT = "You need to write a number between 0.1 and 6000 befor you can continue";
 	
 	public String HEADER_BUTTON_TOOL_TIP_TEXT = "Press to reselect The frequency";
@@ -119,7 +119,7 @@ public class FrequencySettingsSubPanel extends JPanel {
 	public int frequencyInputLimit = 6;
 	public int densityValue = 0;
 	public int densityEndValue = 1;
-	public int STAGE = 1; //This stage
+	public static int STAGE = 1; //This stage
 	
 	/* JLabel */
 	public JLabel stepLabel 			= new JLabel(STEP_TEXT_LIGHT_BLUE);
@@ -870,111 +870,5 @@ public class FrequencySettingsSubPanel extends JPanel {
 		headerAndPanelContiner.add(frequencyPanel, BorderLayout.EAST);
 		
 		this.add(headerAndPanelContiner);
-	}
-	
-	/**
-	 * ACTIVE
-	 */
-	public void frequencyPanelActive() {
-		SettingsPanel.setStage(this.STAGE);
-		
-		DISPLAY_HELP_VIDEO = true;
-
-		Program.settingsPanel.setVisible(true);
-		Program.cameraPanel.setVisible(true);
-		Program.manualPanel.setVisible(false);
-		Program.startControlPanel.setVisible(false);
-		Program.imagePanel.setVisible(false);
-		
-		MainPanel.setLeftStage(Program.cameraPanel);
-		Program.frame.glass.setVisible(false);
-		
-		/* Sets header back to blue */
-		headerButton.setToolTipText(PANEL_INFORMATION);
-		headerButton.setEnabled(false);
-		
-		/* Turns on */ 
-		startFloatInputTextField.setVisible(true);
-		startMoreThenLabel.setVisible(true);
-		startLessThenLabel.setVisible(true);
-		nextButton.setVisible(true);
-		/* Containers for setting up GUI */
-		continer1.setVisible(true);
-		continer2.setVisible(true);
-		startTextFeildContainer.setVisible(true);
-		continer4.setVisible(true);
-		continer5.setVisible(true);
-		continer6.setVisible(true);
-		startFrequensyContainer.setVisible(true);
-		backButton.setVisible(true);
-		endFrequensyContainer.setVisible(true);
-		endCheckBox.setVisible(true);
-		colorFrequensyVideoPanel.setVisible(true);
-		
-		/* New Active dimensions */
-		frequencyPanel.setPreferredSize(FREQUENCY_PANEL_DIMENSION_ACTIVE);
-		headerAndPanelContiner.setPreferredSize(HEADER_AND_PANEL_CONTINER_DIMENSION_ACTIVE);
-		stepContiner.setPreferredSize(STEP_CONTINER_DIMENSION_ACTIVE);
-		
-		/* Sets Active colors light blue to border and text */
-		stepLabel.setText(STEP_TEXT_LIGHT_BLUE);
-		frequencyPanel.setBorder(Program.LIGHT_BLUE_BORDER);
-		
-		/* Turns off */
-		frequencyLabel.setVisible(false);
-		SettingsPanel.FREQUENCY_SELECTED = false;
-	}
-	
-	/**
-	 * NOT ACTIVE
-	 */
-	public void frequencyPanelNotActive(){
-		DISPLAY_HELP_VIDEO = false;
-		
-		/* Sets the frequency that have been selected to SettingsPanels global variables */
-		SettingsPanel.frequencyStartUserSelectedFloat = startValue;
-		SettingsPanel.frequencyEndUserSelectedFloat = endValue;
-		SettingsPanel.frequencyDensityUserSelectedInt = densityValue;
-		
-		/* Sets header button to enabled and green with a new tool tip */
-		headerButton.setToolTipText(HEADER_BUTTON_TOOL_TIP_TEXT);
-		headerButton.setEnabled(true);
-		
-		/* Green Borders */
-		frequencyPanel.setBorder(Program.GREEN_BORDER);
-
-		/* Sets step button, text and text input not visible when when next button has been pressed */
-		startFloatInputTextField.setVisible(false);
-		startMoreThenLabel.setVisible(false);
-		startLessThenLabel.setVisible(false);
-		nextButton.setVisible(false);
-		
-		/* Containers for setting up GUI */
-		continer1.setVisible(false);
-		continer2.setVisible(false);
-		startTextFeildContainer.setVisible(false);
-		continer4.setVisible(false);
-		continer5.setVisible(false);
-		continer6.setVisible(false);
-		startFrequensyContainer.setVisible(false);
-		backButton.setVisible(false);
-		endFrequensyContainer.setVisible(false);
-		endCheckBox.setVisible(false);
-		colorFrequensyVideoPanel.setVisible(false);
-		
-		/* Sets step Label green when button has been pressed*/
-		stepLabel.setText(STEP_TEXT_DARK_GREEN);
-		
-		/* Changing size of panels when button has been pressed*/	
-		frequencyPanel.setPreferredSize(FREQUENCY_PANEL_DIMENSION_OFF);
-		headerAndPanelContiner.setPreferredSize(HEADER_AND_PANEL_CONTINER_DIMENSION_OFF);
-		stepContiner.setPreferredSize(STEP_CONTINER_DIMENSION_OFF);
-		
-		/* Label that shows the frequency that the user has selected */
-		frequencyLabel.setText("<html><font color = rgb(120,200,40)>Selected frequency: </font></html>");
-		frequencyLabelStart.setText("<html>Start = " + SettingsPanel.frequencyStartUserSelectedFloat + " MHz,</html>");
-		frequencyLabelEnd.setText("<html>End = " + SettingsPanel.frequencyEndUserSelectedFloat + " MHz,</html>");
-		frequencyLabelDensity.setText("<html>Density = "+ SettingsPanel.frequencyDensityUserSelectedInt + "</html>");
-		frequencyLabel.setVisible(true);
 	}
 }

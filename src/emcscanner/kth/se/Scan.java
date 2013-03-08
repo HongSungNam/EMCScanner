@@ -241,10 +241,10 @@ public class Scan {
 	private void moveStartPosToMesurmentPos(){
 		int mPX = MesurmentPosX;
 		int mPY = MesurmentPosY;
-		int eX = (int) (SettingsPanel.TABLE_WIDTH - (SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_END_X * Program.TIONDELS_MILLI_METER_PIXEL));
-		int eY = (int) (SettingsPanel.TABLE_HEIGHT - (SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_END_Y * Program.TIONDELS_MILLI_METER_PIXEL));
-		int sX = (int) (SettingsPanel.TABLE_WIDTH - (SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_START_X * Program.TIONDELS_MILLI_METER_PIXEL));
-		int sY = (int) (SettingsPanel.TABLE_HEIGHT - (SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_START_Y * Program.TIONDELS_MILLI_METER_PIXEL));
+		int eX = (int) (SettingsPanel.getTABLE_WIDTH() - (SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_END_X * Program.TIONDELS_MILLI_METER_PIXEL));
+		int eY = (int) (SettingsPanel.getTABLE_HEIGHT() - (SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_END_Y * Program.TIONDELS_MILLI_METER_PIXEL));
+		int sX = (int) (SettingsPanel.getTABLE_WIDTH() - (SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_START_X * Program.TIONDELS_MILLI_METER_PIXEL));
+		int sY = (int) (SettingsPanel.getTABLE_HEIGHT() - (SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_START_Y * Program.TIONDELS_MILLI_METER_PIXEL));
 		
 		moveStartPosToMesurmentPosBoolean = true;
 		
@@ -447,7 +447,7 @@ public class Scan {
 		if (!isScanStoped())
 		{
 			setScanDone(true);
-			SettingsPanel.scanPanel.scanPanelActive();
+			SetPanelActive.scanPanelActive();
 			new CreatePdf();
 			for (int i = 0; i < frequency.length; i++) {
 				fileFrequencyPrint[i].flush();

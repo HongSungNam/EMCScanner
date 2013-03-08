@@ -51,7 +51,8 @@ public class FileNameSettingsSubPanel extends JPanel {
 	public String STEP_TEXT_LIGHT_BLUE  						= "<html> <font color = rgb(100,150,255)>Step 4/4</font></html>";
 	public String STEP_TEXT_DARK_GREEN  						= "<html> <font color = rgb(120,200,40)>Step 4/4</font></html>";
 
-	public String NOTE_TEXT										= "<html><p align=center><font color = rgb(255,0,0)> Note: </font>Write a name for the result file that will contain the scan result.<br>"
+	public String NOTE_TEXT										= "<html><p align=center><font color = rgb(255,0,0)> Note: " +
+			"													   </font>Write a name for the result file that will contain the scan result.<br>"
 																+ "<font color = rgb(255,0,0)>OBS!&nbsp</font>The file name shall not contain eny of thes caracters ?, \\, /, *, &lt, &gt, :, \", |, _, -</align><html>";
 	/* Boolean */
 	public static boolean HEADER_BUTTON_ENABLED 				= false;
@@ -191,20 +192,20 @@ public class FileNameSettingsSubPanel extends JPanel {
 		continer1.add(backButton, BorderLayout.WEST);
 		continer1.add(nextButton, BorderLayout.EAST);
 		
-        imputFeildsContainer.setBackground(Color.WHITE);
+        getImputFeildsContainer().setBackground(Color.WHITE);
 		continer1.setBackground(Color.WHITE);
 		fileNamePanel.setBackground(Color.WHITE);
-		inputFeildsAButtons.setBackground(Color.WHITE);
-		inputContainer.setBackground(Color.WHITE);
+		getInputFeildsAButtons().setBackground(Color.WHITE);
+		getInputContainer().setBackground(Color.WHITE);
 
-		inputContainer.add(fileNameInputTextField);
+		getInputContainer().add(fileNameInputTextField);
 		
-		imputFeildsContainer.add(noteLabel, BorderLayout.NORTH);
-        imputFeildsContainer.add(inputContainer, BorderLayout.SOUTH);
+		getImputFeildsContainer().add(noteLabel, BorderLayout.NORTH);
+        getImputFeildsContainer().add(getInputContainer(), BorderLayout.SOUTH);
         
-        inputFeildsAButtons.add(continer1, BorderLayout.SOUTH);
-        inputFeildsAButtons.add(imputFeildsContainer, BorderLayout.NORTH);
-		fileNamePanel.add(inputFeildsAButtons, BorderLayout.SOUTH);
+        getInputFeildsAButtons().add(continer1, BorderLayout.SOUTH);
+        getInputFeildsAButtons().add(getImputFeildsContainer(), BorderLayout.NORTH);
+		fileNamePanel.add(getInputFeildsAButtons(), BorderLayout.SOUTH);
 		fileNamePanel.add(fileNameSelectedLabel, BorderLayout.EAST);
 		headerAndPanelContiner.add(fileNamePanel, BorderLayout.SOUTH);
 		
@@ -213,103 +214,23 @@ public class FileNameSettingsSubPanel extends JPanel {
 		
 		this.add(headerAndPanelContiner);
 	}
-	/**
-	 * ACTIVE
-	 */
-	public void fileNamePanelActive() {
-		
-		MainPanel.setLeftStage(Program.imagePanel);
-
-		Program.settingsPanel.setVisible(true);
-		Program.manualPanel.setVisible(false);
-		Program.startControlPanel.setVisible(false);
-		Program.cameraPanel.setVisible(false);
-		Program.imagePanel.setVisible(true);
-		
-		SettingsPanel.setStage(this.STAGE);
-		Program.frame.glass.repaint();
-		Program.frame.glass.setVisible(true);
-		
-		
-		/* Sets active color Blue for header, labels and borders*/
-		headerButton.setEnabled(HEADER_BUTTON_ENABLED = false);
-		headerButton.setDisabledIcon(HEADER_DISABLED_BLUE_IMAGE_ICON);
-		stepLabel.setText(STEP_TEXT_LIGHT_BLUE);
-		fileNamePanel.setBorder(Program.LIGHT_BLUE_BORDER);
-		
-		/* Shows buttons and labels */
-		nextButton.setVisible(true);
-		backButton.setVisible(true);
-		fileNameInputTextField.setVisible(true);
-		imputFeildsContainer.setVisible(true);
-		inputFeildsAButtons.setVisible(true);
-		inputContainer.setVisible(true);
-		
-		/* Changing size of panels when button has been pressed*/	
-		fileNamePanel.setPreferredSize(FILE_NAME_PANEL_DIMENSION_ACTIVE);
-		headerAndPanelContiner.setPreferredSize(HEADER_AND_PANEL_CONTINER_DIMENSION_ACTIVE);
-		stepContiner.setPreferredSize(STEP_CONTINER_DIMENSION_ACTIVE);
-		
-		/* Turns on Panel */
-		fileNamePanel.setVisible(true);
-		
-		/* Doesn't show label */
-		fileNameSelectedLabel.setVisible(false);
-		
+	
+	public JPanel getImputFeildsContainer() {
+		return imputFeildsContainer;
 	}
-	/**
-	 * NOT ACTIVE
-	 */
-	public void fileNamePanelNotActive(){		
-		/* Sets header button to enabled and green with a new tool tip */
-		headerButton.setToolTipText(HEADER_BUTTON_TOOL_TIP_TEXT);
-			
-		/* Sets video and buttons not visible */
-		nextButton.setVisible(false);
-		backButton.setVisible(false);
-		fileNameInputTextField.setVisible(false);
-		imputFeildsContainer.setVisible(false);
-		inputFeildsAButtons.setVisible(false);
-		inputContainer.setVisible(false);
-		
-		if (SettingsPanel.FILE_NAME_SELECTED)
-		{
-			/* Sets step label green when button has been pressed */
-			stepLabel.setText(STEP_TEXT_DARK_GREEN);
-
-			/* Sets density panel to visible */
-			fileNamePanel.setVisible(true);
-			
-			/* AreaPanel and header Green */
-			fileNamePanel.setBorder(Program.GREEN_BORDER);
-			fileNamePanel.setVisible(true);
-			headerButton.setEnabled(HEADER_BUTTON_ENABLED = true);
-			
-			/* Changing size of panels when button has been pressed*/	
-			fileNamePanel.setPreferredSize(FILE_NAME_DENSITY_PANEL_DIMENSION_DONE);
-			headerAndPanelContiner.setPreferredSize(HEADER_AND_PANEL_CONTINER_DIMENSION_DONE);
-			stepContiner.setPreferredSize(STEP_CONTINER_DIMENSION_DONE);
-			
-			fileNameSelectedLabel.setText("<html><font color = rgb(120,200,40)>Choosen file name: </font>" + fileNameInputTextField.getText() + "&nbsp</html>");
-			
-			fileNameSelectedLabel.setVisible(true);
-		}
-		else
-		{
-			/* Sets step label gray when button has been pressed */
-			stepLabel.setText(STEP_TEXT_GRAY);
-			
-			/* Sets density panel to invisible */
-			fileNamePanel.setVisible(false);
-			
-			/* Sets Header button gray */
-			headerButton.setDisabledIcon(HEADER_DISABLED_GRAY_IMAGE_ICON);
-			headerButton.setEnabled(HEADER_BUTTON_ENABLED = false);
-			
-			/* Changing size of panels when button has been pressed*/	
-			fileNamePanel.setPreferredSize(FILE_NAME_DENSITY_PANEL_DIMENSION_OFF);
-			headerAndPanelContiner.setPreferredSize(HEADER_AND_PANEL_CONTINER_DIMENSION_OFF);
-			stepContiner.setPreferredSize(STEP_CONTINER_DIMENSION_OFF);
-		}
+	public void setImputFeildsContainer(JPanel imputFeildsContainer) {
+		this.imputFeildsContainer = imputFeildsContainer;
+	}
+	public JPanel getInputFeildsAButtons() {
+		return inputFeildsAButtons;
+	}
+	public void setInputFeildsAButtons(JPanel inputFeildsAButtons) {
+		this.inputFeildsAButtons = inputFeildsAButtons;
+	}
+	public JPanel getInputContainer() {
+		return inputContainer;
+	}
+	public void setInputContainer(JPanel inputContainer) {
+		this.inputContainer = inputContainer;
 	}
 }

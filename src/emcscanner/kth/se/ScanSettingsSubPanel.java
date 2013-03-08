@@ -1,31 +1,15 @@
 package emcscanner.kth.se;
 
-import static com.googlecode.javacv.cpp.opencv_highgui.cvSaveImage;
-import static com.googlecode.javacv.cpp.opencv_imgproc.CV_INTER_LANCZOS4;
-import static com.googlecode.javacv.cpp.opencv_imgproc.cvResize;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
-import com.googlecode.javacv.cpp.opencv_core.IplImage;
 
 
 public class ScanSettingsSubPanel extends JPanel {
@@ -218,8 +202,8 @@ public class ScanSettingsSubPanel extends JPanel {
 		currentLevelNorthContainer.setPreferredSize(new Dimension(160, 40)); // fixa 
 		currentLevelContainer.setPreferredSize(new Dimension(160, 40));// fixa 
 		
-		streamingContinaer.setPreferredSize(new Dimension(140, 60));// fixa 
-		timeNorthPanel.setPreferredSize(new Dimension(140, 60));// fixa 
+		getStreamingContinaer().setPreferredSize(new Dimension(140, 60));// fixa 
+		getTimeNorthPanel().setPreferredSize(new Dimension(140, 60));// fixa 
 		
 		/* A panel for the Header and the sup settings panels. */
 		headerAndPanelContiner.add(headerButton, BorderLayout.NORTH );
@@ -228,7 +212,7 @@ public class ScanSettingsSubPanel extends JPanel {
 		buttonContiner1.setBackground(Color.WHITE);
 		buttonContiner2.setBackground(Color.WHITE);
 		scanPanel.setBackground(Color.WHITE);
-		inputFeildsAButtons.setBackground(Color.WHITE);
+		getInputFeildsAButtons().setBackground(Color.WHITE);
 		currentLevelContainer.setBackground(Color.WHITE);
 		centerTimeStremContainer.setBackground(Color.WHITE);
 		currentTimeStreamContainer.setBackground(Color.WHITE);
@@ -236,14 +220,14 @@ public class ScanSettingsSubPanel extends JPanel {
 		currentLevelNorthContainer.setBackground(Color.WHITE);
 		timePanel.setBackground(Color.WHITE);
 
-		timeNorthPanel.setBackground(Program.LIGHT_BLUE_ALPHA_COLOR);
-		timeNorthCeneterPanel.setBackground(Program.LIGHT_BLUE_ALPHA_COLOR1);
-		timeNorthLablePanel.setBackground(Program.LIGHT_BLUE_ALPHA_COLOR1);
+		getTimeNorthPanel().setBackground(Program.LIGHT_BLUE_ALPHA_COLOR);
+		getTimeNorthCeneterPanel().setBackground(Program.LIGHT_BLUE_ALPHA_COLOR1);
+		getTimeNorthLablePanel().setBackground(Program.LIGHT_BLUE_ALPHA_COLOR1);
 		
-		streamingContinaer.setBackground(Program.LIGHT_BLUE_ALPHA_COLOR);
+		getStreamingContinaer().setBackground(Program.LIGHT_BLUE_ALPHA_COLOR);
 		
-		timeNorthPanel.setBorder(Program.LIGHT_BLUE_BORDER);
-		streamingContinaer.setBorder(Program.LIGHT_BLUE_BORDER);
+		getTimeNorthPanel().setBorder(Program.LIGHT_BLUE_BORDER);
+		getStreamingContinaer().setBorder(Program.LIGHT_BLUE_BORDER);
 
 		
 		/* Setting containers Layouts for the right GUI look. */
@@ -259,22 +243,22 @@ public class ScanSettingsSubPanel extends JPanel {
 		currentLevelNorthContainer.add(currentLevelContainer, BorderLayout.NORTH);
 		currentTimeStreamContainer.add(currentLevelNorthContainer, BorderLayout.WEST);
 		
-		timeNorthLablePanel.add(timeLabel);
+		getTimeNorthLablePanel().add(timeLabel);
 		
-		timeNorthCeneterPanel.add(CALCULATED_TIME_LEFT_LABEL, BorderLayout.NORTH);
-		timeNorthCeneterPanel.add(timeNorthLablePanel, BorderLayout.SOUTH);
+		getTimeNorthCeneterPanel().add(CALCULATED_TIME_LEFT_LABEL, BorderLayout.NORTH);
+		getTimeNorthCeneterPanel().add(getTimeNorthLablePanel(), BorderLayout.SOUTH);
 
-		timeNorthPanel.add(timeNorthCeneterPanel, BorderLayout.SOUTH);
-		timePanel.add(timeNorthPanel);
+		getTimeNorthPanel().add(getTimeNorthCeneterPanel(), BorderLayout.SOUTH);
+		timePanel.add(getTimeNorthPanel());
 
-		streamingContinaer.add(STREAMING_PROCESS_LABEL);
-		streamingPanel.add(streamingContinaer);
+		getStreamingContinaer().add(STREAMING_PROCESS_LABEL);
+		streamingPanel.add(getStreamingContinaer());
 		
 		centerTimeStremContainer.add(timePanel, BorderLayout.CENTER);
 		centerTimeStremContainer.add(streamingPanel, BorderLayout.NORTH);
 		currentTimeStreamContainer.add(centerTimeStremContainer, BorderLayout.CENTER);
         
-		scanPanel.add(inputFeildsAButtons, BorderLayout.SOUTH);
+		scanPanel.add(getInputFeildsAButtons(), BorderLayout.SOUTH);
 		scanPanel.add(currentTimeStreamContainer, BorderLayout.CENTER);
 		
 		headerAndPanelContiner.add(scanPanel, BorderLayout.SOUTH);
@@ -285,128 +269,44 @@ public class ScanSettingsSubPanel extends JPanel {
 
 		scanPanel.setVisible(false);
 	}
-	/**
-	 * ACTIVE
-	 */
-	public void scanPanelActive() {
-		MainPanel.setLeftStage(Program.imagePanel);
-
-		Program.settingsPanel.setVisible(true);
-		Program.manualPanel.setVisible(false);
-		Program.startControlPanel.setVisible(false);
-		Program.cameraPanel.setVisible(false);
-		Program.imagePanel.setVisible(true);
-		
-		SettingsPanel.setStage(this.STAGE);
-		Program.frame.glass.repaint();
-		Program.frame.glass.setVisible(true);
-
-		/* Shows buttons and labels */
-		startScanButton.setVisible(true);
-		pauseScanButton.setVisible(true);
-		stopScanButton.setVisible(true);
-		rescanButton.setVisible(true);
-		saveButton.setVisible(true);
-		
-		/* Changing size of panels when button has been pressed*/	
-		scanPanel.setPreferredSize(SCAN_PANEL_DIMENSION_ACTIVE);
-		headerAndPanelContiner.setPreferredSize(HEADER_AND_PANEL_CONTINER_DIMENSION_ACTIVE);
-		stepContiner.setPreferredSize(STEP_CONTINER_DIMENSION_ACTIVE);
-		
-		/* Turns on Panel */
-		scanPanel.setVisible(true);
-
-		if (scan.getScanDone())
-		{
-	        inputFeildsAButtons.remove(buttonContiner1);
-	        inputFeildsAButtons.add(buttonContiner2, BorderLayout.SOUTH);
-			
-			/* Sets active color Blue for header, labels and borders*/
-			headerButton.setEnabled(HEADER_BUTTON_ENABLED = false);
-			headerButton.setDisabledIcon(HEADER_ENABLED_IMAGE_ICON);
-
-			/* panel and step label color blue */
-			stepLabel.setText(STEP_TEXT_DARK_GREEN);
-			scanPanel.setBorder(Program.GREEN_BORDER);
-			
-			EndSubSettingsPanel.backButton.setEnabled(true);
-			
-			timeNorthPanel.setBackground(Program.LIGHT_GREEN_ALPHA_COLOR);
-			timeNorthCeneterPanel.setBackground(Program.LIGHT_GREEN_ALPHA_COLOR1);
-			timeNorthLablePanel.setBackground(Program.LIGHT_GREEN_ALPHA_COLOR1);
-			
-			streamingContinaer.setBackground(Program.LIGHT_RED_ALPHA_COLOR);
-			
-			timeNorthPanel.setBorder(Program.GREEN_BORDER);
-			streamingContinaer.setBorder(Program.RED_BORDER);
-		}
-		else 
-		{
-	        inputFeildsAButtons.remove(buttonContiner2);
-	        inputFeildsAButtons.add(buttonContiner1, BorderLayout.SOUTH);
-			
-			/* Sets active color Blue for header, labels and borders*/
-			headerButton.setEnabled(HEADER_BUTTON_ENABLED = false);
-			headerButton.setDisabledIcon(HEADER_DISABLED_BLUE_IMAGE_ICON);
-			
-			/* panel and step label color blue */
-			stepLabel.setText(STEP_TEXT_LIGHT_BLUE);
-			scanPanel.setBorder(Program.LIGHT_BLUE_BORDER);
-			
-			timeNorthPanel.setBackground(Program.LIGHT_BLUE_ALPHA_COLOR);
-			timeNorthCeneterPanel.setBackground(Program.LIGHT_BLUE_ALPHA_COLOR1);
-			timeNorthLablePanel.setBackground(Program.LIGHT_BLUE_ALPHA_COLOR1);
-			streamingContinaer.setBackground(Program.LIGHT_BLUE_ALPHA_COLOR);
-			
-			timeNorthPanel.setBorder(Program.LIGHT_BLUE_BORDER);
-			streamingContinaer.setBorder(Program.LIGHT_BLUE_BORDER);
-		}
+	public JPanel getTimeNorthPanel() {
+		return timeNorthPanel;
 	}
-	/**
-	 * NOT ACTIVE
-	 */
-	public void scanPanelNotActive(){	
-		/* Sets header button to enabled and green with a new tool tip */
-		headerButton.setToolTipText(HEADER_BUTTON_TOOL_TIP_TEXT);
-		
-		/* Sets video and buttons not visible */
-		startScanButton.setVisible(false);
-		pauseScanButton.setVisible(false);
-		stopScanButton.setVisible(false);
-		//restartButton.setVisible(false);
-		rescanButton.setVisible(false);
-		saveButton.setVisible(false);
 
-		if (SettingsPanel.SCAN_DONE)
-		{
-			/* Sets step label green when button has been pressed */
-			stepLabel.setText(STEP_TEXT_DARK_GREEN);
+	public void setTimeNorthPanel(JPanel timeNorthPanel) {
+		this.timeNorthPanel = timeNorthPanel;
+	}
 
-			/* Sets density panel to visible */
-			scanPanel.setVisible(true);
-			
-			/* AreaPanel and header Green */
-			scanPanel.setBorder(Program.GREEN_BORDER);
-			scanPanel.setVisible(true);
-			headerButton.setEnabled(HEADER_BUTTON_ENABLED = true);
-		}
-		else
-		{
-			/* Sets step label gray when button has been pressed */
-			stepLabel.setText(STEP_TEXT_GRAY);
+	public JPanel getStreamingContinaer() {
+		return streamingContinaer;
+	}
 
-			/* Sets density panel to invisible */
-			scanPanel.setVisible(false);
-			
-			/* Sets Header button gray */
-			headerButton.setDisabledIcon(HEADER_DISABLED_GRAY_IMAGE_ICON);
-			headerButton.setEnabled(HEADER_BUTTON_ENABLED = false);
+	public void setStreamingContinaer(JPanel streamingContinaer) {
+		this.streamingContinaer = streamingContinaer;
+	}
 
-			/* Changing size of panels when button has been pressed*/	
-			scanPanel.setPreferredSize(SCAN_PANEL_DIMENSION_OFF);
-			headerAndPanelContiner.setPreferredSize(HEADER_AND_PANEL_CONTINER_DIMENSION_OFF);
-			stepContiner.setPreferredSize(STEP_CONTINER_DIMENSION_OFF);
-		}
+	public JPanel getInputFeildsAButtons() {
+		return inputFeildsAButtons;
+	}
+
+	public void setInputFeildsAButtons(JPanel inputFeildsAButtons) {
+		this.inputFeildsAButtons = inputFeildsAButtons;
+	}
+
+	public JPanel getTimeNorthCeneterPanel() {
+		return timeNorthCeneterPanel;
+	}
+
+	public void setTimeNorthCeneterPanel(JPanel timeNorthCeneterPanel) {
+		this.timeNorthCeneterPanel = timeNorthCeneterPanel;
+	}
+
+	public JPanel getTimeNorthLablePanel() {
+		return timeNorthLablePanel;
+	}
+
+	public void setTimeNorthLablePanel(JPanel timeNorthLablePanel) {
+		this.timeNorthLablePanel = timeNorthLablePanel;
 	}
 }
 
