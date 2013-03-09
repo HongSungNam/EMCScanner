@@ -24,7 +24,7 @@ public class StartControlPanel extends JPanel {
 	
 	private String buttonToolTipText = "You need to write a number between 0.1 and 6000 befor you can continue";
 	
-	private JButton nextButton = new JButton();
+	private static JButton nextButton = new JButton();
 	
 	/* Panel made for setting button at the bottom right corner */
 	private JPanel container = new JPanel(new BorderLayout());
@@ -51,17 +51,16 @@ public class StartControlPanel extends JPanel {
 		getNextButton().setFocusable(true);
 		getNextButton().setIcon(nextButtonEnabledIcon);
 		getNextButton().setPressedIcon(nextButtonBlueNextPrestIcon);
-		getNextButton().addActionListener(new NextActionListener());
 		
 		/* Adds Next Button in the right corner at the bottom */
 		container.add(getNextButton(), BorderLayout.SOUTH);
 		this.add(container, BorderLayout.EAST);
 	}
-	public JButton getNextButton() {
+	public static JButton getNextButton() {
 		return nextButton;
 	}
 	public void setNextButton(JButton nextButton) {
-		this.nextButton = nextButton;
+		StartControlPanel.nextButton = nextButton;
 	}
 }
 

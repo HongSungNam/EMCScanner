@@ -9,6 +9,6 @@ public class PauseScanActionListener implements ActionListener {
 		ScanSettingsSubPanel.startScanButton.setEnabled(true);
 		ScanSettingsSubPanel.pauseScanButton.setEnabled(false);
 
-		SettingsPanel.scanPanel.scan.pauseScanX = true;
+		SettingsPanel.scanPanel.scan.setPauseScanX(true);
 	}		
 }

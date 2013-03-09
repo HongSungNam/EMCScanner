@@ -44,8 +44,8 @@ public class CreatePdf {
 		boolean validFileName = true;
 		
 		validFileName = true;
-		int width = SettingsPanel.scanPanel.scan.buffImage[SettingsPanel.scanPanel.scan.frequency.length/2].getWidth() + 0;
-		int height = SettingsPanel.scanPanel.scan.buffImage[SettingsPanel.scanPanel.scan.frequency.length/2].getHeight() + 600;
+		int width = SettingsPanel.scanPanel.scan.getBuffImage()[SettingsPanel.scanPanel.scan.frequency.length/2].getWidth() + 0;
+		int height = SettingsPanel.scanPanel.scan.getBuffImage()[SettingsPanel.scanPanel.scan.frequency.length/2].getHeight() + 600;
 		
 		if (width < 400)
 			width = 600;
@@ -138,19 +138,19 @@ public class CreatePdf {
 	    Paragraph emptyline = new Paragraph();
 	    catPart.add(emptyline);
 	    
-	    catPart.add(new Paragraph("File Name:\u00a0" + SettingsPanel.FILE_NAME));
+	    catPart.add(new Paragraph("File Name:\u00a0" + SettingsPanel.getFILE_NAME()));
 	    addEmptyLine(emptyline, 1);
-	    catPart.add(new Paragraph("Frequency Start Value:\u00a0" + SettingsPanel.frequencyStartUserSelectedFloat));
-	    catPart.add(new Paragraph("Frequency End Value:\u00a0" + SettingsPanel.frequencyEndUserSelectedFloat));
-	    catPart.add(new Paragraph("Frequency dencity:\u00a0" + SettingsPanel.frequencyDensityUserSelectedInt));
+	    catPart.add(new Paragraph("Frequency Start Value:\u00a0" + SettingsPanel.getFrequencyStartUserSelectedFloat()));
+	    catPart.add(new Paragraph("Frequency End Value:\u00a0" + SettingsPanel.getFrequencyEndUserSelectedFloat()));
+	    catPart.add(new Paragraph("Frequency dencity:\u00a0" + SettingsPanel.getFrequencyDensityUserSelectedInt()));
 	    addEmptyLine(emptyline, 1);
 	    catPart.add(new Paragraph("Area Selected:\u00a0"));
-	    catPart.add(new Paragraph("\u00a0\u00a0\u00a0Width:\u00a0" + SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_WIDTH));
-	    catPart.add(new Paragraph("\u00a0\u00a0\u00a0Height:\u00a0" + SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_HEIGHT));
+	    catPart.add(new Paragraph("\u00a0\u00a0\u00a0Width:\u00a0" + SettingsPanel.getAREA_SELECTED_IMAGE_DEPENDENT_WIDTH()));
+	    catPart.add(new Paragraph("\u00a0\u00a0\u00a0Height:\u00a0" + SettingsPanel.getAREA_SELECTED_IMAGE_DEPENDENT_HEIGHT()));
 
 	    catPart.add(new Paragraph("Density Selected:\u00a0"));
-	    catPart.add(new Paragraph("\u00a0\u00a0\u00a0Width:\u00a0" + SettingsPanel.DENSITY_SELECTED_WIDTH));
-	    catPart.add(new Paragraph("\u00a0\u00a0\u00a0Height:\u00a0" + SettingsPanel.DENSITY_SELECTED_HEIGHT));
+	    catPart.add(new Paragraph("\u00a0\u00a0\u00a0Width:\u00a0" + SettingsPanel.getDENSITY_SELECTED_WIDTH()));
+	    catPart.add(new Paragraph("\u00a0\u00a0\u00a0Height:\u00a0" + SettingsPanel.getDENSITY_SELECTED_HEIGHT()));
 	    
 	    // Now add all this to the document
 	    document.add(catPart);
@@ -169,8 +169,8 @@ public class CreatePdf {
 	    	catPart.add(new Paragraph("Frequency number " + (i + 1) + ":\u00a0\u00a0" + String.valueOf(SettingsPanel.scanPanel.scan.frequency[i]+ " MHz") ));
 	    	catPart.add(Chunk.NEWLINE);
 		    try {
-		    	textFile[i] =  new FileInputStream(Scan.DEFULT_FILE_FREQUENCY_OUTPUT_LOCATION + SettingsPanel.FILE_NAME + " " + SettingsPanel.scanPanel.scan.frequency[i] + ".txt");
-		    	File f = new File(Scan.DEFULT_FILE_FREQUENCY_OUTPUT_LOCATION + SettingsPanel.FILE_NAME + " " + SettingsPanel.scanPanel.scan.frequency[i] + ".txt");
+		    	textFile[i] =  new FileInputStream(Scan.DEFULT_FILE_FREQUENCY_OUTPUT_LOCATION + SettingsPanel.getFILE_NAME() + " " + SettingsPanel.scanPanel.scan.frequency[i] + ".txt");
+		    	File f = new File(Scan.DEFULT_FILE_FREQUENCY_OUTPUT_LOCATION + SettingsPanel.getFILE_NAME() + " " + SettingsPanel.scanPanel.scan.frequency[i] + ".txt");
 		    	byte[] buffer = new byte[(int) f.length()];
 		    	new DataInputStream(textFile[i]).readFully(buffer);
 		    	textFile[i].close();
@@ -212,7 +212,7 @@ public class CreatePdf {
         cvResize(photo, ipl, CV_INTER_LANCZOS4);
         
         BufferedImage tempBuff = ipl.getBufferedImage();
-        tempBuff.createGraphics().drawImage(SettingsPanel.scanPanel.scan.buffImage[i], null, 0, 0);
+        tempBuff.createGraphics().drawImage(SettingsPanel.scanPanel.scan.getBuffImage()[i], null, 0, 0);
 		
 		try {
 			frequencyImage = Image.getInstance(tempBuff, null);

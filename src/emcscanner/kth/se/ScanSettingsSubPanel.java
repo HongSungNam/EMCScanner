@@ -11,9 +11,18 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-
+/**
+ * 
+ * @author Jonas
+ *
+ */
 public class ScanSettingsSubPanel extends JPanel {
-	public int STAGE = 5;
+	/**
+	 * Scan Settings Sub Panel ID
+	 */
+	private static final long serialVersionUID = 481270079447897262L;
+
+	public static int STAGE = 5;
 	
 	/* Scan */
 	public Scan scan = new Scan();
@@ -23,7 +32,6 @@ public class ScanSettingsSubPanel extends JPanel {
 	
 	/* Strings */
 	public String HEADER_BUTTON_TOOL_TIP_TEXT 	= "Pres to scan ";
-	public String PANEL_TOOL_TIP_TEXT 			= "This is where you start the scan.";
 	public String NEXT_BUTTON_TOOL_TIP_TEXT 	= "Just start the scan";
 	
 	public String STEP_TEXT_GRAY	 			= "<html> <font color = rgb(120,120,120)>Scan</font></html>";
@@ -51,14 +59,6 @@ public class ScanSettingsSubPanel extends JPanel {
     private JPanel streamingContinaer = new JPanel();
 	
 	/* Imports the different images for the different button stages. */	
-	/* Import the images for the header button */
-	public ImageIcon HEADER_ENABLED_IMAGE_ICON 	 			= new ImageIcon("image/PanelGreenScan.png");
-	public ImageIcon HEADER_ENABLED_ROLLOVER_IMAGE_ICON 	= new ImageIcon("image/PanelGreenScanRollover.png");
-	public ImageIcon HEADER_DISABLED_GRAY_IMAGE_ICON 		= new ImageIcon("image/PanelGrayScan.png");
-	public ImageIcon HEADER_ENABLED_PREST_IMAGE_ICON 		= new ImageIcon("image/PanelGreenScanPrest.png");
-	public ImageIcon HEADER_DISABLED_BLUE_IMAGE_ICON 		= new ImageIcon("image/PanelBlueScan.png");
-	public ImageIcon HEADER_DISABLED_DARK_GREEN_IMAGE_ICON 	= new ImageIcon("image/PanelDarkGreenScan.png"); 
-	
 	public ImageIcon START_SCAN_ENABLED_IMAGE_ICON 	 		= new ImageIcon("image/ButtonStartScan.png");
 	public ImageIcon START_SCAN_ENABLED_PREST_IMAGE_ICON	= new ImageIcon("image/ButtonStartScanPrest.png");
 	public ImageIcon START_SCAN_DISABLED_IMAGE_ICON 		= new ImageIcon("image/ButtonScanStarted.png");
@@ -71,7 +71,6 @@ public class ScanSettingsSubPanel extends JPanel {
 	public ImageIcon STOP_SCAN_ENABLED_PREST_IMAGE_ICON		= new ImageIcon("image/ButtonStopScanPrest.png");
 	public ImageIcon STOP_SCAN_DISABLED_IMAGE_ICON 			= new ImageIcon("image/ButtonStopScanNotEnabled.png");
 	
-
 	public ImageIcon RESTART_ENABLED_IMAGE_ICON				= new ImageIcon("image/Restart.png");
 	public ImageIcon RESTART_PREST_ENABLED_IMAGE_ICON 		= new ImageIcon("image/RestartPrest.png");
 
@@ -82,7 +81,7 @@ public class ScanSettingsSubPanel extends JPanel {
 	public ImageIcon SAVE_PREST_ENABLED_IMAGE_ICON 			= new ImageIcon("image/SavePrest.png");
 	
 	/* Buttons */
-	public static JButton headerButton 	= new JButton();
+	public static HeaderButton headerButton = new HeaderButton(STAGE);
 	public static JButton startScanButton = new JButton();
 	public static JButton stopScanButton = new JButton();
 	public static JButton pauseScanButton = new JButton();
@@ -120,20 +119,7 @@ public class ScanSettingsSubPanel extends JPanel {
 	public ScanSettingsSubPanel() {
 		this.setLayout(new FlowLayout());
 		this.setMinimumSize(THIS_MINIMUM_DIMENSION);
-		
-		/* Sets creation values for the header button */
-		headerButton.setEnabled(HEADER_BUTTON_ENABLED = false);
-		headerButton.setPreferredSize(HEADER_BUTTON_DIMENSION);
-		headerButton.setToolTipText(PANEL_TOOL_TIP_TEXT);
-		headerButton.setOpaque(false);
-		headerButton.setContentAreaFilled(false);
-		headerButton.setBorderPainted(false);
-		headerButton.setIcon(HEADER_ENABLED_IMAGE_ICON);
-		headerButton.setDisabledIcon(HEADER_DISABLED_GRAY_IMAGE_ICON);
-		headerButton.setPressedIcon(HEADER_ENABLED_PREST_IMAGE_ICON);
-		headerButton.setRolloverIcon(HEADER_ENABLED_ROLLOVER_IMAGE_ICON);
-		headerButton.addActionListener(new HeaderButtonActionListener(this.STAGE));
-		
+				
 		/* Next JButton */
 		startScanButton.setOpaque(false);
 		startScanButton.setContentAreaFilled(false);
@@ -145,7 +131,6 @@ public class ScanSettingsSubPanel extends JPanel {
 		startScanButton.setDisabledIcon(START_SCAN_DISABLED_IMAGE_ICON);
 		startScanButton.setPressedIcon(START_SCAN_ENABLED_PREST_IMAGE_ICON);
 		startScanButton.setDisabledSelectedIcon(Program.NEXT_BUTTON_GRAY_PREST_IMAGE_ICON);
-		startScanButton.addActionListener(new NextActionListener());
 		
 		/* Back on step JButton */
 		pauseScanButton.setEnabled(false);
@@ -167,7 +152,6 @@ public class ScanSettingsSubPanel extends JPanel {
 		stopScanButton.setOpaque(false);
 		stopScanButton.setContentAreaFilled(false);
 		stopScanButton.setBorderPainted(false);
-		stopScanButton.addActionListener(new BackActionListener());
 		
 		/* Back on step JButton */
 		rescanButton.setEnabled(true);

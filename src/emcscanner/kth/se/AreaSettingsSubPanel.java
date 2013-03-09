@@ -4,15 +4,22 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
+/**
+ * 
+ * @author Jonas
+ *
+ */
 public class AreaSettingsSubPanel extends JPanel {
+	/**
+	 * Area Settings Sub Panel ID
+	 */
+	private static final long serialVersionUID = -1566067668166465634L;
 	
 	public static BufferedImage buffImg = null;
 	/* Creates a ColorPanel and adds it to this camera panel */
@@ -27,7 +34,7 @@ public class AreaSettingsSubPanel extends JPanel {
 	public static boolean HEADER_BUTTON_ENABLED = false;
 
 	/* Integers */
-	public int STAGE = 2; //This stage
+	public static int STAGE = 2; //This stage
 	
 	/* Panels- Containers for setting up GUI */
 	public JPanel stepContiner = new JPanel();
@@ -37,7 +44,7 @@ public class AreaSettingsSubPanel extends JPanel {
 	public JPanel areaSelectedContainer = new JPanel();
 	
 	/* Buttons */
-	public static JButton headerButton = new JButton();
+	public static HeaderButton headerButton = new HeaderButton(STAGE);
 	public static JButton nextButton = new JButton();
 	public static JButton backButton = new JButton();
 	
@@ -46,7 +53,6 @@ public class AreaSettingsSubPanel extends JPanel {
 	public String STEP_TEXT_LIGHT_BLUE  = "<html> <font color = rgb(100,150,255)>Step 2/4</font></html>";
 	public String STEP_TEXT_DARK_GREEN  = "<html> <font color = rgb(120,200,40)>Step 2/4</font></html>";
 	
-	public String PANEL_TOOL_TIP_TEXT = "This is where you select the area to scan.";
 	public String NEXT_BUTTON_TOOL_TIP_TEXT = "You need to select an area before you can continue";
 
 	public String AREA_NOT_SELECTED = "<html><font color = rgb(120,120,120)>Area not selected</font></html>";
@@ -54,22 +60,13 @@ public class AreaSettingsSubPanel extends JPanel {
 	
 	public String HEADER_BUTTON_TOOL_TIP_TEXT = "Press to reselect the area";
 	
-	public String AREA_SELECTED_LABEL = "<html><font color = rgb(120,200,40)>Selected area: Width </font>" + (int) (SettingsPanel.AREA_SELECTED_END_X - SettingsPanel.AREA_SELECTED_START_X) + " le & "
-			  + "<font color = rgb(120,200,40)> Hight </font>"+ (int) (SettingsPanel.AREA_SELECTED_END_Y - SettingsPanel.AREA_SELECTED_START_Y) + " le </html>";
+	public String AREA_SELECTED_LABEL = "<html><font color = rgb(120,200,40)>Selected area: Width </font>" + (int) (SettingsPanel.getAREA_SELECTED_END_X() - SettingsPanel.getAREA_SELECTED_START_X()) + " le & "
+			  + "<font color = rgb(120,200,40)> Hight </font>"+ (int) (SettingsPanel.getAREA_SELECTED_END_Y() - SettingsPanel.getAREA_SELECTED_START_Y()) + " le </html>";
 	
 	/* JLabel */
 	public JLabel stepLabel = new JLabel(STEP_TEXT_GRAY);
 	public JLabel areaNotSelectedLabel = new JLabel(AREA_NOT_SELECTED);
 	public JLabel areaLabel = new JLabel();
-
-	/* Imports the different images for the different button stages. */	
-	/* Import the images for the header button */
-	public ImageIcon HEADER_ENABLED_IMAGE_ICON 	 			= new ImageIcon("image/PanelGreenArea.png");
-	public ImageIcon HEADER_ENABLED_ROLLOVER_IMAGE_ICON 	= new ImageIcon("image/PanelGreenAreaRollover.png");
-	public ImageIcon HEADER_DISABLED_GRAY_IMAGE_ICON 		= new ImageIcon("image/PanelGrayArea.png");
-	public ImageIcon HEADER_ENABLED_PREST_IMAGE_ICON 		= new ImageIcon("image/PanelGreenAreaPrest.png");
-	public ImageIcon HEADER_DISABLED_BLUE_IMAGE_ICON 		= new ImageIcon("image/PanelBlueArea.png");
-	public ImageIcon HEADER_DISABLED_DARK_GREEN_IMAGE_ICON 	= new ImageIcon("image/PanelDarkGreenArea.png");
 
 	/* Dimensions */
 	public Dimension THIS_MINIMUM_DIMENSION = new Dimension(400, 100);
@@ -86,25 +83,11 @@ public class AreaSettingsSubPanel extends JPanel {
 	public Dimension HEADER_AND_PANEL_CONTINER_DIMENSION_DONE = new Dimension(322, 80);
 	public Dimension HEADER_AND_PANEL_CONTINER_DIMENSION_OFF = new Dimension(322, 40);
 	
-	public Dimension HEADER_BUTTON_DIMENSION = new Dimension(355, 40);
 	public Dimension STEP_LABEL_DIMENSION = new Dimension(50,40);
 	
 	public AreaSettingsSubPanel() {
 		this.setLayout(new FlowLayout());
 		this.setMinimumSize(THIS_MINIMUM_DIMENSION);
-
-		/* Sets creation values for the header button */
-		headerButton.setEnabled(HEADER_BUTTON_ENABLED = false);
-		headerButton.setPreferredSize(HEADER_BUTTON_DIMENSION);
-		headerButton.setToolTipText(PANEL_TOOL_TIP_TEXT);
-		headerButton.setOpaque(false);
-		headerButton.setContentAreaFilled(false);
-		headerButton.setBorderPainted(false);
-		headerButton.setIcon(HEADER_ENABLED_IMAGE_ICON);
-		headerButton.setDisabledIcon(HEADER_DISABLED_GRAY_IMAGE_ICON);
-		headerButton.setPressedIcon(HEADER_ENABLED_PREST_IMAGE_ICON);
-		headerButton.setRolloverIcon(HEADER_ENABLED_ROLLOVER_IMAGE_ICON);
-		headerButton.addActionListener(new HeaderButtonActionListener(this.STAGE));
 		
 		/* Creates a Label for the step numbers. */
 		stepLabel.setPreferredSize(STEP_LABEL_DIMENSION);
@@ -140,7 +123,6 @@ public class AreaSettingsSubPanel extends JPanel {
 		nextButton.setDisabledIcon(Program.NEXT_BUTTON_DISABLED_IMAGE_ICON);
 		nextButton.setPressedIcon(Program.NEXT_BUTTON_BLUE_PREST_IMAGE_ICON);
 		nextButton.setDisabledSelectedIcon(Program.NEXT_BUTTON_GRAY_PREST_IMAGE_ICON);
-		nextButton.addActionListener(new NextActionListener());
 
 		/* Back on step JButton */
 		backButton.setEnabled(true);
@@ -150,7 +132,7 @@ public class AreaSettingsSubPanel extends JPanel {
 		backButton.setOpaque(false);
 		backButton.setContentAreaFilled(false);
 		backButton.setBorderPainted(false);
-		backButton.addActionListener(new BackActionListener());
+		
 		
 		threadDisplayAreaSelectionVideo = new FrameGrabberThread(STAGE,"threadDisplayArea");
         threadDisplayAreaSelectionVideo.setDaemon(true);

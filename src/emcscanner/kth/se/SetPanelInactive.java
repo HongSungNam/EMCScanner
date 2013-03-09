@@ -8,9 +8,9 @@ public class SetPanelInactive {
 		FrequencySettingsSubPanel.DISPLAY_HELP_VIDEO = false;
 		
 		/* Sets the frequency that have been selected to SettingsPanels global variables */
-		SettingsPanel.frequencyStartUserSelectedFloat = SettingsPanel.frequencyPanel.startValue;
-		SettingsPanel.frequencyEndUserSelectedFloat = SettingsPanel.frequencyPanel.endValue;
-		SettingsPanel.frequencyDensityUserSelectedInt = SettingsPanel.frequencyPanel.densityValue;
+		SettingsPanel.setFrequencyStartUserSelectedFloat(SettingsPanel.frequencyPanel.startValue);
+		SettingsPanel.setFrequencyEndUserSelectedFloat(SettingsPanel.frequencyPanel.endValue);
+		SettingsPanel.setFrequencyDensityUserSelectedInt(SettingsPanel.frequencyPanel.densityValue);
 		
 		/* Sets header button to enabled and green with a new tool tip */
 		FrequencySettingsSubPanel.headerButton.setToolTipText(SettingsPanel.frequencyPanel.HEADER_BUTTON_TOOL_TIP_TEXT);
@@ -33,7 +33,7 @@ public class SetPanelInactive {
 		SettingsPanel.frequencyPanel.continer5.setVisible(false);
 		SettingsPanel.frequencyPanel.continer6.setVisible(false);
 		SettingsPanel.frequencyPanel.startFrequensyContainer.setVisible(false);
-		SettingsPanel.frequencyPanel.backButton.setVisible(false);
+		FrequencySettingsSubPanel.backButton.setVisible(false);
 		SettingsPanel.frequencyPanel.endFrequensyContainer.setVisible(false);
 		SettingsPanel.frequencyPanel.endCheckBox.setVisible(false);
 		FrequencySettingsSubPanel.colorFrequensyVideoPanel.setVisible(false);
@@ -48,9 +48,9 @@ public class SetPanelInactive {
 		
 		/* Label that shows the frequency that the user has selected */
 		SettingsPanel.frequencyPanel.frequencyLabel.setText("<html><font color = rgb(120,200,40)>Selected frequency: </font></html>");
-		SettingsPanel.frequencyPanel.frequencyLabelStart.setText("<html>Start = " + SettingsPanel.frequencyStartUserSelectedFloat + " MHz,</html>");
-		SettingsPanel.frequencyPanel.frequencyLabelEnd.setText("<html>End = " + SettingsPanel.frequencyEndUserSelectedFloat + " MHz,</html>");
-		SettingsPanel.frequencyPanel.frequencyLabelDensity.setText("<html>Density = "+ SettingsPanel.frequencyDensityUserSelectedInt + "</html>");
+		SettingsPanel.frequencyPanel.frequencyLabelStart.setText("<html>Start = " + SettingsPanel.getFrequencyStartUserSelectedFloat() + " MHz,</html>");
+		SettingsPanel.frequencyPanel.frequencyLabelEnd.setText("<html>End = " + SettingsPanel.getFrequencyEndUserSelectedFloat() + " MHz,</html>");
+		SettingsPanel.frequencyPanel.frequencyLabelDensity.setText("<html>Density = "+ SettingsPanel.getFrequencyDensityUserSelectedInt() + "</html>");
 		SettingsPanel.frequencyPanel.frequencyLabel.setVisible(true);
 	}
 	/**
@@ -58,7 +58,7 @@ public class SetPanelInactive {
 	 */
 	public static void areaPanelNotActive(){
 		/* Don't show Glass Panel and turn inactive */
-		MainFrame.GET_AREA_BOOLEAN = false;
+		MainFrame.setGET_AREA_BOOLEAN(false);
 
 		/* Area help video disabled */
 		AreaSettingsSubPanel.DISPLAY_HELP_VIDEO = false;
@@ -74,7 +74,7 @@ public class SetPanelInactive {
 		SettingsPanel.areaPanel.continer1.setVisible(false);
 		SettingsPanel.areaPanel.areaSelectedContainer.setVisible(false);
 		
-		if (SettingsPanel.AREA_SELECTED)
+		if (SettingsPanel.isAREA_SELECTED())
 		{
 			/* Sets step label green when button has been pressed */
 			SettingsPanel.areaPanel.stepLabel.setText(SettingsPanel.areaPanel.STEP_TEXT_DARK_GREEN);
@@ -106,7 +106,7 @@ public class SetPanelInactive {
 			SettingsPanel.areaPanel.areaPanel.setVisible(false);
 			
 			/* Sets Header button gray */
-			AreaSettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.areaPanel.HEADER_DISABLED_GRAY_IMAGE_ICON);
+			AreaSettingsSubPanel.headerButton.setDisabledIcon(AreaSettingsSubPanel.headerButton.AREA_HEADER_DISABLED_GRAY_IMAGE_ICON);
 			AreaSettingsSubPanel.headerButton.setEnabled(AreaSettingsSubPanel.HEADER_BUTTON_ENABLED = false);
 		}
 	}
@@ -137,7 +137,7 @@ public class SetPanelInactive {
 		SettingsPanel.densityPanel.noteLabel.setVisible(DensitySettingsSubPanel.NOT_VISIBLE);
 		SettingsPanel.densityPanel.getInputFeildsAButtons().setVisible(DensitySettingsSubPanel.NOT_VISIBLE);
 		
-		if (SettingsPanel.DENSITY_SELECTED)
+		if (SettingsPanel.isDENSITY_SELECTED())
 		{
 			/* Sets step label green when button has been pressed */
 			SettingsPanel.densityPanel.stepLabel.setText(SettingsPanel.densityPanel.STEP_TEXT_DARK_GREEN);
@@ -152,8 +152,9 @@ public class SetPanelInactive {
 			SettingsPanel.densityPanel.headerAndPanelContiner.setPreferredSize(SettingsPanel.densityPanel.HEADER_AND_PANEL_CONTINER_DIMENSION_DONE);
 			SettingsPanel.densityPanel.stepContiner.setPreferredSize(SettingsPanel.densityPanel.STEP_CONTINER_DIMENSION_DONE);
 			
-			SettingsPanel.densityPanel.densitySelectedLabel.setText("<html><font color = rgb(120,200,40)> Density selected:</font> Width: " + SettingsPanel.DENSITY_SELECTED_WIDTH + 
-										 ", Height: " + SettingsPanel.DENSITY_SELECTED_HEIGHT + "&nbsp</html>");
+			SettingsPanel.densityPanel.densitySelectedLabel.setText("<html><font color = rgb(120,200,40)> Density selected:</font> Width: " + 
+																	SettingsPanel.getDENSITY_SELECTED_WIDTH() + 
+																	", Height: " + SettingsPanel.getDENSITY_SELECTED_HEIGHT() + "&nbsp</html>");
 			SettingsPanel.densityPanel.densitySelectedLabel.setVisible(DensitySettingsSubPanel.VISIBLE);
 		}
 		else
@@ -165,7 +166,7 @@ public class SetPanelInactive {
 			SettingsPanel.densityPanel.densityPanel.setVisible(DensitySettingsSubPanel.NOT_VISIBLE);
 			
 			/* Sets Header button gray */
-			DensitySettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.densityPanel.HEADER_DISABLED_GRAY_IMAGE_ICON);
+			DensitySettingsSubPanel.headerButton.setDisabledIcon(DensitySettingsSubPanel.headerButton.DENSITY_HEADER_DISABLED_GRAY_IMAGE_ICON);
 			DensitySettingsSubPanel.headerButton.setEnabled(DensitySettingsSubPanel.HEADER_BUTTON_ENABLED = false);
 			
 			/* Changing size of panels when button has been pressed*/	
@@ -189,7 +190,7 @@ public class SetPanelInactive {
 		SettingsPanel.fileNamePanel.getInputFeildsAButtons().setVisible(false);
 		SettingsPanel.fileNamePanel.getInputContainer().setVisible(false);
 		
-		if (SettingsPanel.FILE_NAME_SELECTED)
+		if (SettingsPanel.isFILE_NAME_SELECTED())
 		{
 			/* Sets step label green when button has been pressed */
 			SettingsPanel.fileNamePanel.stepLabel.setText(SettingsPanel.fileNamePanel.STEP_TEXT_DARK_GREEN);
@@ -222,7 +223,7 @@ public class SetPanelInactive {
 			SettingsPanel.fileNamePanel.fileNamePanel.setVisible(false);
 			
 			/* Sets Header button gray */
-			FileNameSettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.fileNamePanel.HEADER_DISABLED_GRAY_IMAGE_ICON);
+			FileNameSettingsSubPanel.headerButton.setDisabledIcon(FileNameSettingsSubPanel.headerButton.FILE_NAME_HEADER_DISABLED_GRAY_IMAGE_ICON);
 			FileNameSettingsSubPanel.headerButton.setEnabled(FileNameSettingsSubPanel.HEADER_BUTTON_ENABLED = false);
 			
 			/* Changing size of panels when button has been pressed*/	
@@ -246,7 +247,7 @@ public class SetPanelInactive {
 		ScanSettingsSubPanel.rescanButton.setVisible(false);
 		ScanSettingsSubPanel.saveButton.setVisible(false);
 
-		if (SettingsPanel.SCAN_DONE)
+		if (SettingsPanel.isScanDone())
 		{
 			/* Sets step label green when button has been pressed */
 			SettingsPanel.scanPanel.stepLabel.setText(SettingsPanel.scanPanel.STEP_TEXT_DARK_GREEN);
@@ -268,7 +269,7 @@ public class SetPanelInactive {
 			SettingsPanel.scanPanel.scanPanel.setVisible(false);
 			
 			/* Sets Header button gray */
-			ScanSettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.scanPanel.HEADER_DISABLED_GRAY_IMAGE_ICON);
+			ScanSettingsSubPanel.headerButton.setDisabledIcon(ScanSettingsSubPanel.headerButton.SCAN_HEADER_DISABLED_GRAY_IMAGE_ICON);
 			ScanSettingsSubPanel.headerButton.setEnabled(ScanSettingsSubPanel.HEADER_BUTTON_ENABLED = false);
 
 			/* Changing size of panels when button has been pressed*/	

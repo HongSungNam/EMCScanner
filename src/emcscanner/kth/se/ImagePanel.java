@@ -2,7 +2,6 @@ package emcscanner.kth.se;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
@@ -16,14 +15,19 @@ import static com.googlecode.javacv.cpp.opencv_imgproc.*;
 
 
 public class ImagePanel extends JPanel{
+	/**
+	 * Image Panel ID
+	 */
+	private static final long serialVersionUID = -1479410513118668133L;
+	
 	public static BufferedImage buffImg = null;
 	public static IplImage showPhoto;
 	public ColorPanel colorPanel = new ColorPanel(buffImg);
 	
 	public IplImage photo;
 	public IplImage iplPhoto2;
-	public static boolean IMAGE_TAKEN = false;
-	public static boolean FIRST_TIME_REZISED = true;
+	private static boolean IMAGE_TAKEN = false;
+	private static boolean FIRST_TIME_REZISED = true;
 	
 	public int newWidthPhoto;
 	public int newHeightPhoto;
@@ -34,31 +38,28 @@ public class ImagePanel extends JPanel{
 	}
 	
 	public void setPhoto(){
-		
-		//this.photo = cvLoadImage("webcam photo/WEBCAM_PHOTO.png");
-		
 		this.photo = Program.cameraPanel.phototaken;
 		
-		SettingsPanel.photo = this.photo;
+		SettingsPanel.setPhoto(this.photo);
         cvFlip(this.photo, this.photo, 1);
         cvSmooth(this.photo, this.photo, CV_GAUSSIAN, 3);
         
 		/* Create new area selection values depending on the image size. */
-    	SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_START_X = ((SettingsPanel.AREA_SELECTED_START_X * this.photo.width())  / SettingsPanel.AREA_SELECTED_CAMERA_DIMENSION.width);
-    	SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_START_Y = ((SettingsPanel.AREA_SELECTED_START_Y * this.photo.height()) / SettingsPanel.AREA_SELECTED_CAMERA_DIMENSION.height);
-    	SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_END_X   = ((SettingsPanel.AREA_SELECTED_END_X   * this.photo.width() ) / SettingsPanel.AREA_SELECTED_CAMERA_DIMENSION.width );
-    	SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_END_Y   = ((SettingsPanel.AREA_SELECTED_END_Y   * this.photo.height()) / SettingsPanel.AREA_SELECTED_CAMERA_DIMENSION.height);
-    	SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_WIDTH   = (SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_END_X  - SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_START_X);
-    	SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_HEIGHT  = (SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_END_Y  - SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_START_Y);
+    	SettingsPanel.setAREA_SELECTED_IMAGE_DEPENDENT_START_X(((SettingsPanel.getAREA_SELECTED_START_X() * this.photo.width())  / SettingsPanel.AREA_SELECTED_CAMERA_DIMENSION.width));
+    	SettingsPanel.setAREA_SELECTED_IMAGE_DEPENDENT_START_Y(((SettingsPanel.getAREA_SELECTED_START_Y() * this.photo.height()) / SettingsPanel.AREA_SELECTED_CAMERA_DIMENSION.height));
+    	SettingsPanel.setAREA_SELECTED_IMAGE_DEPENDENT_END_X(((SettingsPanel.getAREA_SELECTED_END_X()     * this.photo.width() ) / SettingsPanel.AREA_SELECTED_CAMERA_DIMENSION.width ));
+    	SettingsPanel.setAREA_SELECTED_IMAGE_DEPENDENT_END_Y(((SettingsPanel.getAREA_SELECTED_END_Y()     * this.photo.height()) / SettingsPanel.AREA_SELECTED_CAMERA_DIMENSION.height));
+    	SettingsPanel.setAREA_SELECTED_IMAGE_DEPENDENT_WIDTH((SettingsPanel.getAREA_SELECTED_IMAGE_DEPENDENT_END_X()  - SettingsPanel.getAREA_SELECTED_IMAGE_DEPENDENT_START_X()));
+    	SettingsPanel.setAREA_SELECTED_IMAGE_DEPENDENT_HEIGHT((SettingsPanel.getAREA_SELECTED_IMAGE_DEPENDENT_END_Y() - SettingsPanel.getAREA_SELECTED_IMAGE_DEPENDENT_START_Y()));
     	
-		CvMat rectangleImage = cvCreateMat((int) SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_WIDTH,
-										   (int) SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_HEIGHT, 
+		CvMat rectangleImage = cvCreateMat((int) SettingsPanel.getAREA_SELECTED_IMAGE_DEPENDENT_WIDTH(),
+										   (int) SettingsPanel.getAREA_SELECTED_IMAGE_DEPENDENT_HEIGHT(), 
 										   CV_32SC2);
 		
-		CvRect rect = cvRect((int) SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_START_X,
-							 (int) SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_START_Y,
-							 (int) SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_WIDTH,
-							 (int) SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_HEIGHT);
+		CvRect rect = cvRect((int) SettingsPanel.getAREA_SELECTED_IMAGE_DEPENDENT_START_X(),
+							 (int) SettingsPanel.getAREA_SELECTED_IMAGE_DEPENDENT_START_Y(),
+							 (int) SettingsPanel.getAREA_SELECTED_IMAGE_DEPENDENT_WIDTH(),
+							 (int) SettingsPanel.getAREA_SELECTED_IMAGE_DEPENDENT_HEIGHT());
 		
 		
 		CvMat photo2 = cvGetSubRect(this.photo.asCvMat(), rectangleImage, rect); 
@@ -72,7 +73,6 @@ public class ImagePanel extends JPanel{
         int widthCroptImage = iplPhoto2.width();
         int heightCroptImage = iplPhoto2.height();
         
-
         /* CROPT_IMAGE SIZE */ 
         SettingsPanel.CROPT_PHOTO_DIMENSION = new Dimension(widthCroptImage, heightCroptImage);
         
@@ -97,7 +97,7 @@ public class ImagePanel extends JPanel{
         
 		colorPanel.theCamera = ipl.getBufferedImage();
 		
-		ImagePanel.IMAGE_TAKEN = true;
+		ImagePanel.setIMAGE_TAKEN(true);
 
         this.colorPanel.repaint();
         
@@ -129,5 +129,21 @@ public class ImagePanel extends JPanel{
 
 		colorPanel.theCamera = ipl.getBufferedImage();
         this.colorPanel.repaint();
+	}
+
+	public static boolean isIMAGE_TAKEN() {
+		return IMAGE_TAKEN;
+	}
+
+	public static void setIMAGE_TAKEN(boolean iMAGE_TAKEN) {
+		IMAGE_TAKEN = iMAGE_TAKEN;
+	}
+
+	public static boolean isFIRST_TIME_REZISED() {
+		return FIRST_TIME_REZISED;
+	}
+
+	public static void setFIRST_TIME_REZISED(boolean fIRST_TIME_REZISED) {
+		FIRST_TIME_REZISED = fIRST_TIME_REZISED;
 	}
 }

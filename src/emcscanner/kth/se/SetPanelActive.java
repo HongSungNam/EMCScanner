@@ -1,10 +1,14 @@
 package emcscanner.kth.se;
 
 import java.awt.BorderLayout;
-
+/**
+ * 
+ * @author Jonas
+ *
+ */
 public class SetPanelActive {
 	/**
-	 * Sets the Frequensy Panel to ACTIVE stage
+	 * Sets the Frequency Panel to ACTIVE stage
 	 */
 	public static void frequencyPanelActive() {
 		SettingsPanel.setStage(FrequencySettingsSubPanel.STAGE);
@@ -37,7 +41,7 @@ public class SetPanelActive {
 		SettingsPanel.frequencyPanel.continer5.setVisible(true);
 		SettingsPanel.frequencyPanel.continer6.setVisible(true);
 		SettingsPanel.frequencyPanel.startFrequensyContainer.setVisible(true);
-		SettingsPanel.frequencyPanel.backButton.setVisible(true);
+		FrequencySettingsSubPanel.backButton.setVisible(true);
 		SettingsPanel.frequencyPanel.endFrequensyContainer.setVisible(true);
 		SettingsPanel.frequencyPanel.endCheckBox.setVisible(true);
 		FrequencySettingsSubPanel.colorFrequensyVideoPanel.setVisible(true);
@@ -70,17 +74,18 @@ public class SetPanelActive {
 		Program.cameraPanel.setVisible(true);
 		Program.imagePanel.setVisible(false);
 
-		SettingsPanel.setStage(SettingsPanel.areaPanel.STAGE);
+		SettingsPanel.setStage(AreaSettingsSubPanel.STAGE);
 		
 		Program.frame.glass.repaint();
 		Program.frame.glass.setVisible(true);
 		
 		/* Glass Panel visible and active */
-		MainFrame.GET_AREA_BOOLEAN = true;
+		MainFrame.setGET_AREA_BOOLEAN(true);
 		
 		/* Turns off header button */
 		AreaSettingsSubPanel.headerButton.setEnabled(AreaSettingsSubPanel.HEADER_BUTTON_ENABLED = false);
-		AreaSettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.areaPanel.HEADER_DISABLED_BLUE_IMAGE_ICON);
+		/***************************************************************************************************************************/
+		AreaSettingsSubPanel.headerButton.setDisabledIcon(AreaSettingsSubPanel.headerButton.AREA_HEADER_DISABLED_BLUE_IMAGE_ICON);
 		
 		/* New tool tip */
 		AreaSettingsSubPanel.headerButton.setToolTipText(SettingsPanel.areaPanel.HEADER_BUTTON_TOOL_TIP_TEXT);
@@ -112,7 +117,7 @@ public class SetPanelActive {
 		if(Program.frame.glass.cursorReleased.x > 0 && Program.frame.glass.cursorReleased.y > 0)
 		{
 			AreaSettingsSubPanel.nextButton.setEnabled(true);
-			Program.frame.MOUSE_RELEASED_BOOLEAN = true;
+			Program.frame.setMOUSE_RELEASED_BOOLEAN(true);
 		}
 	}
 	/**
@@ -129,7 +134,7 @@ public class SetPanelActive {
 		Program.cameraPanel.setVisible(false);
 		Program.imagePanel.setVisible(true);
 		
-		SettingsPanel.setStage(SettingsPanel.densityPanel.STAGE);
+		SettingsPanel.setStage(DensitySettingsSubPanel.STAGE);
 		
 		Program.frame.glass.setVisible(DensitySettingsSubPanel.VISIBLE);
 		
@@ -137,8 +142,9 @@ public class SetPanelActive {
 		DensitySettingsSubPanel.DISPLAY_HELP_VIDEO = DensitySettingsSubPanel.VISIBLE;
 		
 		/* Sets active color Blue for header, labels and borders*/
+		/***************************************************************************************************************************/
 		DensitySettingsSubPanel.headerButton.setEnabled(DensitySettingsSubPanel.HEADER_BUTTON_ENABLED = false);
-		DensitySettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.densityPanel.HEADER_DISABLED_BLUE_IMAGE_ICON);
+		DensitySettingsSubPanel.headerButton.setDisabledIcon(DensitySettingsSubPanel.headerButton.DENSITY_HEADER_DISABLED_BLUE_IMAGE_ICON);
 		SettingsPanel.densityPanel.stepLabel.setText(SettingsPanel.densityPanel.STEP_TEXT_LIGHT_BLUE);
 		SettingsPanel.densityPanel.densityPanel.setBorder(Program.LIGHT_BLUE_BORDER);
 		
@@ -174,11 +180,11 @@ public class SetPanelActive {
 		
 		int value = (SettingsPanel.densityPanel.NUMBER_OF_LINES_WIDTH+1);
 		int value2 = (SettingsPanel.densityPanel.NUMBER_OF_LINES_HEIGHT+1);
-		if (value > ((SettingsPanel.AREA_SELECTED_END_X - SettingsPanel.AREA_SELECTED_START_X + 1) * Program.TIONDELS_MILLI_METER_PIXEL))
+		if (value > ((SettingsPanel.getAREA_SELECTED_END_X() - SettingsPanel.getAREA_SELECTED_START_X() + 1) * Program.TIONDELS_MILLI_METER_PIXEL))
 		{
 			SettingsPanel.densityPanel.widthLabel.setText("<html> <font color = rgb(255,0,0)> Width: </font></html>");
 			SettingsPanel.densityPanel.widthLabelValue.setText("<html><font color = rgb(255,0,0)>" + 
-															  (int)((SettingsPanel.AREA_SELECTED_END_X - SettingsPanel.AREA_SELECTED_START_X + 1) * 
+															  (int)((SettingsPanel.getAREA_SELECTED_END_X() - SettingsPanel.getAREA_SELECTED_START_X() + 1) * 
 																	  Program.TIONDELS_MILLI_METER_PIXEL) + " &gt&nbsp</font></html>");
 			SettingsPanel.densityPanel.widthLabel0.setText("<html> &nbsp&gt 0&nbsp</html>");
 			SettingsPanel.densityPanel.widthDensityInputTextField.setBorder(Program.RED_BORDER);
@@ -188,7 +194,7 @@ public class SetPanelActive {
 		{
 			SettingsPanel.densityPanel.widthLabel.setText("<html> <font color = rgb(255,0,0)> Width: </font></html>");
 			SettingsPanel.densityPanel.widthLabelValue.setText("<html>" + 
-																(int)((SettingsPanel.AREA_SELECTED_END_X - SettingsPanel.AREA_SELECTED_START_X + 1) * 
+																(int)((SettingsPanel.getAREA_SELECTED_END_X() - SettingsPanel.getAREA_SELECTED_START_X() + 1) * 
 																		Program.TIONDELS_MILLI_METER_PIXEL)  + 
 																		" &gt&nbsp</html>");
 			SettingsPanel.densityPanel.widthLabel0.setText("<html><font color = rgb(255,0,0)> &nbsp&gt 0&nbsp</font></html>");
@@ -199,16 +205,16 @@ public class SetPanelActive {
 		{
 			SettingsPanel.densityPanel.widthLabel.setText("<html><font color = rgb(100,150,255)> Width: </font></html>");
 			SettingsPanel.densityPanel.widthLabelValue.setText("<html>" + 
-																(int)((SettingsPanel.AREA_SELECTED_END_X - SettingsPanel.AREA_SELECTED_START_X + 1)* 
+																(int)((SettingsPanel.getAREA_SELECTED_END_X() - SettingsPanel.getAREA_SELECTED_START_X() + 1)* 
 																		Program.TIONDELS_MILLI_METER_PIXEL) + 
 																		" &gt&nbsp</html>");
 			SettingsPanel.densityPanel.widthLabel0.setText("<html> &nbsp&gt 0&nbsp </html>");
     	}
-		if (value2 > ((SettingsPanel.AREA_SELECTED_END_Y - SettingsPanel.AREA_SELECTED_START_Y + 1) * Program.TIONDELS_MILLI_METER_PIXEL))
+		if (value2 > ((SettingsPanel.getAREA_SELECTED_END_Y() - SettingsPanel.getAREA_SELECTED_START_Y() + 1) * Program.TIONDELS_MILLI_METER_PIXEL))
 		{
 			SettingsPanel.densityPanel.heightLabel.setText("<html> <font color = rgb(255,0,0)> Height: </html> </font>");
 			SettingsPanel.densityPanel.heightLabelValue.setText("<html> <font color = rgb(255,0,0)>" + 
-																(int)((SettingsPanel.AREA_SELECTED_END_Y - SettingsPanel.AREA_SELECTED_START_Y + 1) * 
+																(int)((SettingsPanel.getAREA_SELECTED_END_Y() - SettingsPanel.getAREA_SELECTED_START_Y() + 1) * 
 																		Program.TIONDELS_MILLI_METER_PIXEL) + 
 																		" &gt&nbsp</font></html>");
 			SettingsPanel.densityPanel.heightLabel0.setText("<html> &nbsp&gt 0&nbsp</html>");
@@ -219,7 +225,7 @@ public class SetPanelActive {
 		{
 			SettingsPanel.densityPanel.heightLabel.setText("<html> <font color = rgb(255,0,0)> Height: </html> </font>");
 			SettingsPanel.densityPanel.heightLabelValue.setText("<html>" + 
-																(int)((SettingsPanel.AREA_SELECTED_END_Y - SettingsPanel.AREA_SELECTED_START_Y + 1) * 
+																(int)((SettingsPanel.getAREA_SELECTED_END_Y() - SettingsPanel.getAREA_SELECTED_START_Y() + 1) * 
 																			Program.TIONDELS_MILLI_METER_PIXEL) + " &gt&nbsp</html>");
 			SettingsPanel.densityPanel.heightLabel0.setText("<html><font color = rgb(255,0,0)> &nbsp&gt 0&nbsp</font></html>");
 			SettingsPanel.densityPanel.heightDensityInputTextField.setBorder(Program.RED_BORDER);
@@ -229,7 +235,7 @@ public class SetPanelActive {
 		{
 			SettingsPanel.densityPanel.heightLabel.setText("<html> <font color = rgb(100,150,255)> Height: </font></html> ");
 			SettingsPanel.densityPanel.heightLabelValue.setText("<html>" + 
-																	(int)((SettingsPanel.AREA_SELECTED_END_Y - SettingsPanel.AREA_SELECTED_START_Y + 1) * 
+																	(int)((SettingsPanel.getAREA_SELECTED_END_Y() - SettingsPanel.getAREA_SELECTED_START_Y() + 1) * 
 																			Program.TIONDELS_MILLI_METER_PIXEL) + " &gt&nbsp</html>");
 			SettingsPanel.densityPanel.heightLabel0.setText("<html> &nbsp&gt 0&nbsp</html>");
 		}
@@ -248,14 +254,14 @@ public class SetPanelActive {
 		Program.cameraPanel.setVisible(false);
 		Program.imagePanel.setVisible(true);
 		
-		SettingsPanel.setStage(SettingsPanel.fileNamePanel.STAGE);
+		SettingsPanel.setStage(FileNameSettingsSubPanel.STAGE);
 		Program.frame.glass.repaint();
 		Program.frame.glass.setVisible(true);
 		
 		
 		/* Sets active color Blue for header, labels and borders*/
 		FileNameSettingsSubPanel.headerButton.setEnabled(FileNameSettingsSubPanel.HEADER_BUTTON_ENABLED = false);
-		FileNameSettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.fileNamePanel.HEADER_DISABLED_BLUE_IMAGE_ICON);
+		FileNameSettingsSubPanel.headerButton.setDisabledIcon(FileNameSettingsSubPanel.headerButton.FILE_NAME_HEADER_DISABLED_BLUE_IMAGE_ICON);
 		SettingsPanel.fileNamePanel.stepLabel.setText(SettingsPanel.fileNamePanel.STEP_TEXT_LIGHT_BLUE);
 		SettingsPanel.fileNamePanel.fileNamePanel.setBorder(Program.LIGHT_BLUE_BORDER);
 		
@@ -291,7 +297,7 @@ public class SetPanelActive {
 		Program.cameraPanel.setVisible(false);
 		Program.imagePanel.setVisible(true);
 		
-		SettingsPanel.setStage(SettingsPanel.scanPanel.STAGE);
+		SettingsPanel.setStage(ScanSettingsSubPanel.STAGE);
 		Program.frame.glass.repaint();
 		Program.frame.glass.setVisible(true);
 
@@ -317,7 +323,7 @@ public class SetPanelActive {
 			
 			/* Sets active color Blue for header, labels and borders*/
 			ScanSettingsSubPanel.headerButton.setEnabled(ScanSettingsSubPanel.HEADER_BUTTON_ENABLED = false);
-			ScanSettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.scanPanel.HEADER_ENABLED_IMAGE_ICON);
+			ScanSettingsSubPanel.headerButton.setDisabledIcon(ScanSettingsSubPanel.headerButton.SCAN_HEADER_ENABLED_IMAGE_ICON);
 
 			/* panel and step label color blue */
 			SettingsPanel.scanPanel.stepLabel.setText(SettingsPanel.scanPanel.STEP_TEXT_DARK_GREEN);
@@ -341,7 +347,7 @@ public class SetPanelActive {
 			
 			/* Sets active color Blue for header, labels and borders*/
 			ScanSettingsSubPanel.headerButton.setEnabled(ScanSettingsSubPanel.HEADER_BUTTON_ENABLED = false);
-			ScanSettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.scanPanel.HEADER_DISABLED_BLUE_IMAGE_ICON);
+			ScanSettingsSubPanel.headerButton.setDisabledIcon(ScanSettingsSubPanel.headerButton.SCAN_HEADER_DISABLED_BLUE_IMAGE_ICON);
 			
 			/* panel and step label color blue */
 			SettingsPanel.scanPanel.stepLabel.setText(SettingsPanel.scanPanel.STEP_TEXT_LIGHT_BLUE);

@@ -4,16 +4,17 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.image.RescaleOp;
 
-import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JMenuBar;
 
 /**
  * Our own glass pane so that it can paint.
  */
 public class MyGlassPane extends JComponent {
+	/**
+	 * ID
+	 */
+	private static final long serialVersionUID = 3526726902983156140L;
 	public MainFrame frame;
 	public Point cursorPressed;
 	public Point cursorReleased;
@@ -31,7 +32,7 @@ public class MyGlassPane extends JComponent {
 		{
 			if (SettingsPanel.getStage() ==  1 || SettingsPanel.getStage() == 2)
 			{
-				if (Program.frame.MOUSE_RELEASED_BOOLEAN)
+				if (Program.frame.isMOUSE_RELEASED_BOOLEAN())
 					g2.setColor(Program.LIGHT_GREEN_COLOR);
 				else
 					g2.setColor(Program.LIGHT_BLUE_COLOR);
@@ -42,7 +43,7 @@ public class MyGlassPane extends JComponent {
 		    			if((cursorPressed.y < cursorReleased.y))
 		    			{
 		    				g2.drawRect(cursorPressed.x, cursorPressed.y + MainFrame.menuBar.getHeight(), (cursorReleased.x-cursorPressed.x), (cursorReleased.y-cursorPressed.y));
-		    				if (Program.frame.MOUSE_RELEASED_BOOLEAN)
+		    				if (Program.frame.isMOUSE_RELEASED_BOOLEAN())
 		    				{
 		    					g2.setColor(new Color(150,255,80,80));
 		    				}
@@ -55,7 +56,7 @@ public class MyGlassPane extends JComponent {
 		    			else
 		    			{
 		    				g2.drawRect(cursorPressed.x, cursorReleased.y + MainFrame.menuBar.getHeight(), (cursorReleased.x-cursorPressed.x), (cursorPressed.y-cursorReleased.y));
-		    				if (Program.frame.MOUSE_RELEASED_BOOLEAN)
+		    				if (Program.frame.isMOUSE_RELEASED_BOOLEAN())
 		    				{
 		    					g2.setColor(new Color(150,255,80,80));
 		    				}
@@ -71,7 +72,7 @@ public class MyGlassPane extends JComponent {
 		    			if((cursorPressed.y < cursorReleased.y))
 		    			{
 		    				g2.drawRect(cursorReleased.x, cursorPressed.y + MainFrame.menuBar.getHeight(), (cursorPressed.x-cursorReleased.x), (cursorReleased.y-cursorPressed.y));
-		    				if (Program.frame.MOUSE_RELEASED_BOOLEAN)
+		    				if (Program.frame.isMOUSE_RELEASED_BOOLEAN())
 		    				{
 		    					g2.setColor(new Color(150,255,80,80));
 		    				}
@@ -84,7 +85,7 @@ public class MyGlassPane extends JComponent {
 		    			else
 		    			{
 		    				g2.drawRect(cursorReleased.x, cursorReleased.y + MainFrame.menuBar.getHeight(), (cursorPressed.x-cursorReleased.x), (cursorPressed.y-cursorReleased.y));
-		    				if (Program.frame.MOUSE_RELEASED_BOOLEAN)
+		    				if (Program.frame.isMOUSE_RELEASED_BOOLEAN())
 		    				{
 		    					g2.setColor(new Color(150,255,80,80));
 		    				}
@@ -109,8 +110,8 @@ public class MyGlassPane extends JComponent {
 						int n = SettingsPanel.densityPanel.NUMBER_OF_LINES_WIDTH + 1;
 
 						/* Adds number of steps and size to SettingsPanel for controlling the number of measurements */
-						SettingsPanel.numberOfStepsWidth = n;
-						SettingsPanel.stepSizeWidth =  (int) (((SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_END_X - SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_START_X + 1) * Program.TIONDELS_MILLI_METER_PIXEL) / (SettingsPanel.densityPanel.NUMBER_OF_LINES_WIDTH + 1));
+						SettingsPanel.setNumberOfStepsWidth(n);
+						SettingsPanel.setStepSizeWidth((int) (((SettingsPanel.getAREA_SELECTED_IMAGE_DEPENDENT_END_X() - SettingsPanel.getAREA_SELECTED_IMAGE_DEPENDENT_START_X() + 1) * Program.TIONDELS_MILLI_METER_PIXEL) / (SettingsPanel.densityPanel.NUMBER_OF_LINES_WIDTH + 1)));
 						
 						for (int i = 1; i < n; i++)
 						{
@@ -125,8 +126,8 @@ public class MyGlassPane extends JComponent {
 						int n = SettingsPanel.densityPanel.NUMBER_OF_LINES_HEIGHT + 1;
 
 						/* Adds number of steps and size to SettingsPanel for controlling the number of measurements */
-						SettingsPanel.numberOfStepsHeight = n;
-						SettingsPanel.stepSizeHeight = (int) (((SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_END_Y - SettingsPanel.AREA_SELECTED_IMAGE_DEPENDENT_START_Y + 1) * Program.TIONDELS_MILLI_METER_PIXEL) / (SettingsPanel.densityPanel.NUMBER_OF_LINES_WIDTH + 1));
+						SettingsPanel.setNumberOfStepsHeight(n);
+						SettingsPanel.setStepSizeHeight((int) (((SettingsPanel.getAREA_SELECTED_IMAGE_DEPENDENT_END_Y() - SettingsPanel.getAREA_SELECTED_IMAGE_DEPENDENT_START_Y() + 1) * Program.TIONDELS_MILLI_METER_PIXEL) / (SettingsPanel.densityPanel.NUMBER_OF_LINES_WIDTH + 1)));
 						
 						for (int i = 1; i < n; i++)
 						{
@@ -147,15 +148,16 @@ public class MyGlassPane extends JComponent {
 
 						/* Number of pixels to move every time */
 						int s = (int) (((SettingsPanel.densityPanel.NUMBER_OF_LINES_WIDTH + 1) * w )
-								 / ((((SettingsPanel.AREA_SELECTED_END_X - SettingsPanel.AREA_SELECTED_START_X + 1) * Program.TIONDELS_MILLI_METER_PIXEL))));
+								 / ((((SettingsPanel.getAREA_SELECTED_END_X() - SettingsPanel.getAREA_SELECTED_START_X() + 1) * Program.TIONDELS_MILLI_METER_PIXEL))));
 						
 						/* Adds number of steps and size to SettingsPanel for controlling the number of measurements */
-						SettingsPanel.numberOfStepsWidth = 0;
-						SettingsPanel.stepSizeWidth = SettingsPanel.densityPanel.NUMBER_OF_LINES_WIDTH + 1;
+						SettingsPanel.setNumberOfStepsWidth(0);
+						SettingsPanel.setStepSizeWidth(SettingsPanel.densityPanel.NUMBER_OF_LINES_WIDTH + 1);
 						
 						for (int x = s - 1; x < w; x += s)
 						{
-							SettingsPanel.numberOfStepsWidth++;
+							SettingsPanel.setNumberOfStepsWidth(SettingsPanel
+									.getNumberOfStepsWidth() + 1);
 							g2.drawLine(x / 10, y1, x / 10, y2);
 						}
 					}
@@ -169,15 +171,16 @@ public class MyGlassPane extends JComponent {
 						
 						/* Number of pixels to move every time */
 						int s = (int) (((SettingsPanel.densityPanel.NUMBER_OF_LINES_HEIGHT + 1) * h )
-								 / ((((SettingsPanel.AREA_SELECTED_END_Y - SettingsPanel.AREA_SELECTED_START_Y + 1) * Program.TIONDELS_MILLI_METER_PIXEL))));
+								 / ((((SettingsPanel.getAREA_SELECTED_END_Y() - SettingsPanel.getAREA_SELECTED_START_Y() + 1) * Program.TIONDELS_MILLI_METER_PIXEL))));
 
 						/* Adds number of steps and size to SettingsPanel for controlling the number of measurements */
-						SettingsPanel.numberOfStepsHeight = 0;
-						SettingsPanel.stepSizeHeight = SettingsPanel.densityPanel.NUMBER_OF_LINES_HEIGHT + 1;
+						SettingsPanel.setNumberOfStepsHeight(0);
+						SettingsPanel.setStepSizeHeight(SettingsPanel.densityPanel.NUMBER_OF_LINES_HEIGHT + 1);
 						
 						for (int y = s - 1; y < h; y += s)
 						{
-							SettingsPanel.numberOfStepsHeight++;
+							SettingsPanel.setNumberOfStepsHeight(SettingsPanel
+									.getNumberOfStepsHeight() + 1);
 							int $y = y / 10 + MainFrame.menuBar.getHeight();
 							g2.drawLine(x1, $y, x2, $y);
 						}
@@ -191,7 +194,7 @@ public class MyGlassPane extends JComponent {
 			}
 			else if (SettingsPanel.getStage() == 5)
 			{
-				g2.drawImage(SettingsPanel.scanPanel.scan.rezicedBuffImage, null, 0, MainFrame.menuBar.getHeight());
+				g2.drawImage(SettingsPanel.scanPanel.scan.getRezicedBuffImage(), null, 0, MainFrame.menuBar.getHeight());
 			}
 			g2.dispose();
 		}

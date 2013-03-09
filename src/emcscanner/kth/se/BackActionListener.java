@@ -2,8 +2,12 @@ package emcscanner.kth.se;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-public class BackActionListener implements ActionListener{
+/**
+ * 
+ * @author Jonas
+ *
+ */
+public class BackActionListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (SettingsPanel.getStage() == 1 && Program.frame.glass.glasPanelActive)
@@ -15,7 +19,7 @@ public class BackActionListener implements ActionListener{
 			Program.settingsPanel.setVisible(false);
 			
 			Program.frame.glass.glasPanelActive = false;
-			Program.startControlPanel.getNextButton().grabFocus();
+			StartControlPanel.getNextButton().grabFocus();
 		}
 		else if (SettingsPanel.getStage() == 2 && Program.frame.glass.glasPanelActive)
 		{
@@ -35,17 +39,18 @@ public class BackActionListener implements ActionListener{
 		else if (SettingsPanel.getStage() == 5 && Program.frame.glass.glasPanelActive)
 		{
 			//Program.cameraPanel.DISPLAY_WEB_CAMERA_INPUT = false;
-			if (SettingsPanel.scanPanel.scan.scanActive)
+			if (SettingsPanel.scanPanel.scan.isScanActive())
 			{
 				SettingsPanel.scanPanel.scan.setScanX(false);
 				SettingsPanel.scanPanel.scan.setScanY(false);
 				
 				//SettingsPanel.scanPanel.scan.setHeadersInactive(false);
-				
-				FrequencySettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.frequencyPanel.HEADER_DISABLED_BLUE_IMAGE_ICON);
-				AreaSettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.areaPanel.HEADER_DISABLED_BLUE_IMAGE_ICON);
-				DensitySettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.densityPanel.HEADER_DISABLED_BLUE_IMAGE_ICON);
-				FileNameSettingsSubPanel.headerButton.setDisabledIcon(SettingsPanel.fileNamePanel.HEADER_DISABLED_BLUE_IMAGE_ICON);
+
+				/***************************************************************************************************************************/
+				FrequencySettingsSubPanel.headerButton.setDisabledIcon(FrequencySettingsSubPanel.headerButton.FREQUENCY_HEADER_DISABLED_BLUE_IMAGE_ICON);
+				AreaSettingsSubPanel.headerButton.setDisabledIcon(AreaSettingsSubPanel.headerButton.AREA_HEADER_DISABLED_BLUE_IMAGE_ICON);
+				DensitySettingsSubPanel.headerButton.setDisabledIcon(DensitySettingsSubPanel.headerButton.DENSITY_HEADER_DISABLED_BLUE_IMAGE_ICON);
+				FileNameSettingsSubPanel.headerButton.setDisabledIcon(FileNameSettingsSubPanel.headerButton.FILE_NAME_HEADER_DISABLED_BLUE_IMAGE_ICON);
 
 				FrequencySettingsSubPanel.headerButton.setEnabled(true);
 				AreaSettingsSubPanel.headerButton.setEnabled(true);

@@ -10,7 +10,17 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+/**
+ * 
+ * @author Jonas
+ *
+ */
 public class EndSubSettingsPanel extends JPanel {
+	/**
+	 * End Sub Settings Panel ID
+	 */
+	private static final long serialVersionUID = 7983722947920631252L;
+	
 	/* Buttons */
 	public static JButton backButton = new JButton();
 	public static JButton quitButton = new JButton();
@@ -54,7 +64,7 @@ public class EndSubSettingsPanel extends JPanel {
 		quitButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Program.frame.quit();
+				MainFrame.quit();
 			}
 		});
 		stepContiner.setPreferredSize(STEP_CONTINER_DIMENSION);

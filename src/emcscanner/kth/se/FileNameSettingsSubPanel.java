@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Toolkit;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -13,9 +12,18 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-
+/**
+ * 
+ * @author Jonas
+ *
+ */
 public class FileNameSettingsSubPanel extends JPanel {
 
+	/**
+	 * File Name Settings Sub Panel ID
+	 */
+	private static final long serialVersionUID = 2183576868824285642L;
+	
 	/* Panels- Containers for setting up GUI */
 	public JPanel stepContiner 				= new JPanel();
 	public JPanel headerAndPanelContiner 	= new JPanel();
@@ -28,23 +36,13 @@ public class FileNameSettingsSubPanel extends JPanel {
 	
 	/* JTextField */
 	public JTextField fileNameInputTextField = new JTextField(10);
-	
-	/* Imports the different images for the different button stages. */	
-	/* Import the images for the header button */
-	public ImageIcon HEADER_ENABLED_IMAGE_ICON 	 				= new ImageIcon("image/PanelGreenFileName.png");
-	public ImageIcon HEADER_ENABLED_ROLLOVER_IMAGE_ICON 		= new ImageIcon("image/PanelGreenFileNameRollover.png");
-	public ImageIcon HEADER_DISABLED_GRAY_IMAGE_ICON 			= new ImageIcon("image/PanelGrayFileName.png");
-	public ImageIcon HEADER_ENABLED_PREST_IMAGE_ICON 			= new ImageIcon("image/PanelGreenFileNamePrest.png");
-	public ImageIcon HEADER_DISABLED_BLUE_IMAGE_ICON 			= new ImageIcon("image/PanelBlueFileName.png");
-	public ImageIcon HEADER_DISABLED_DARK_GREEN_IMAGE_ICON 		= new ImageIcon("image/PanelDarkGreenFileName.png"); 
-	
+		
 	/* Integers */
 	public int fileNameLengthLimit = 10;
-	public int STAGE = 4;
+	public static int STAGE = 4;
 	
 	/* Strings */
 	public String HEADER_BUTTON_TOOL_TIP_TEXT 					= "Press to reselect the file name ";
-	public String PANEL_TOOL_TIP_TEXT 							= "This is where you select the file name you want to save the result as.";
 	public String NEXT_BUTTON_TOOL_TIP_TEXT 					= "You need to select an a valid file name before you can continue";
 	
 	public String STEP_TEXT_GRAY	 							= "<html> <font color = rgb(120,120,120)>Step 4/4</font></html>";
@@ -52,13 +50,13 @@ public class FileNameSettingsSubPanel extends JPanel {
 	public String STEP_TEXT_DARK_GREEN  						= "<html> <font color = rgb(120,200,40)>Step 4/4</font></html>";
 
 	public String NOTE_TEXT										= "<html><p align=center><font color = rgb(255,0,0)> Note: " +
-			"													   </font>Write a name for the result file that will contain the scan result.<br>"
-																+ "<font color = rgb(255,0,0)>OBS!&nbsp</font>The file name shall not contain eny of thes caracters ?, \\, /, *, &lt, &gt, :, \", |, _, -</align><html>";
+																  "</font>Write a name for the result file that will contain the scan result.<br>" + 
+																  "<font color = rgb(255,0,0)>OBS!&nbsp</font>The file name shall not contain eny of thes caracters ?, \\, /, *, &lt, &gt, :, \", |, _, -</align><html>";
 	/* Boolean */
 	public static boolean HEADER_BUTTON_ENABLED 				= false;
 	
 	/* Buttons */
-	public static JButton headerButton 							= new JButton();
+	public static HeaderButton headerButton 					= new HeaderButton(STAGE);
 	public static JButton nextButton 							= new JButton();
 	public static JButton backButton 							= new JButton();
 
@@ -94,20 +92,7 @@ public class FileNameSettingsSubPanel extends JPanel {
 		
 		/* note label */
 		noteLabel.setPreferredSize(NOTE_LABEL_DIMENSION);
-		
-		/* Sets creation values for the header button */
-		headerButton.setEnabled(HEADER_BUTTON_ENABLED = false);
-		headerButton.setPreferredSize(HEADER_BUTTON_DIMENSION);
-		headerButton.setToolTipText(PANEL_TOOL_TIP_TEXT);
-		headerButton.setOpaque(false);
-		headerButton.setContentAreaFilled(false);
-		headerButton.setBorderPainted(false);
-		headerButton.setIcon(HEADER_ENABLED_IMAGE_ICON);
-		headerButton.setDisabledIcon(HEADER_DISABLED_GRAY_IMAGE_ICON);
-		headerButton.setPressedIcon(HEADER_ENABLED_PREST_IMAGE_ICON);
-		headerButton.setRolloverIcon(HEADER_ENABLED_ROLLOVER_IMAGE_ICON);
-		headerButton.addActionListener(new HeaderButtonActionListener(this.STAGE));
-		
+				
 		/* Creates a Label for the step numbers. */
 		stepLabel.setPreferredSize(STEP_LABEL_DIMENSION);
 		stepLabel.setLayout(new BorderLayout());
@@ -139,7 +124,6 @@ public class FileNameSettingsSubPanel extends JPanel {
 		nextButton.setDisabledIcon(Program.NEXT_BUTTON_DISABLED_IMAGE_ICON);
 		nextButton.setPressedIcon(Program.NEXT_BUTTON_BLUE_PREST_IMAGE_ICON);
 		nextButton.setDisabledSelectedIcon(Program.NEXT_BUTTON_GRAY_PREST_IMAGE_ICON);
-		nextButton.addActionListener(new NextActionListener());
 		
 		/* Back on step JButton */
 		backButton.setEnabled(true);
@@ -149,7 +133,6 @@ public class FileNameSettingsSubPanel extends JPanel {
 		backButton.setOpaque(false);
 		backButton.setContentAreaFilled(false);
 		backButton.setBorderPainted(false);
-		backButton.addActionListener(new BackActionListener());
 		
 		/* INPUT field for width */
         fileNameInputTextField.setPreferredSize(INPUT_TEXT_FEILD_DIMENSION);
@@ -174,14 +157,14 @@ public class FileNameSettingsSubPanel extends JPanel {
 		    	String name = fileNameInputTextField.getText();
 		    	if (name.isEmpty())
 		    	{
-		    		SettingsPanel.FILE_NAME_SELECTED = false;
+		    		SettingsPanel.setFILE_NAME_SELECTED(false);
 		    		nextButton.setEnabled(false);
 		    	}
 		    	else
 		    	{
 		    		nextButton.setEnabled(true);
 
-		    		SettingsPanel.FILE_NAME = name;
+		    		SettingsPanel.setFILE_NAME(name);
 		    	}
 		    }
 		});

@@ -11,16 +11,11 @@ public class NextActionListener implements ActionListener{
 		if (SettingsPanel.getStage() == 1 && Program.frame.glass.glasPanelActive){
 			if (FrequencySettingsSubPanel.nextButton.isEnabled())
 			{
-				//Program.cameraPanel.DISPLAY_WEB_CAMERA_INPUT = true;
 				SettingsPanel.setFREQUENCY_SELECTED(true);
-				
-				SettingsPanel.frequencyStartUserSelectedFloat = SettingsPanel.frequencyPanel.startValue;
-				SettingsPanel.frequencyEndUserSelectedFloat = SettingsPanel.frequencyPanel.endValue;
-				SettingsPanel.frequencyDensityUserSelectedInt = SettingsPanel.frequencyPanel.densityValue;
-				
-				/* Adding the next step */
+				SettingsPanel.setFrequencyStartUserSelectedFloat(SettingsPanel.frequencyPanel.startValue);
+				SettingsPanel.setFrequencyEndUserSelectedFloat(SettingsPanel.frequencyPanel.endValue);
+				SettingsPanel.setFrequencyDensityUserSelectedInt(SettingsPanel.frequencyPanel.densityValue);
 				StageActive.stageActive(2);
-				
 				AreaSettingsSubPanel.backButton.grabFocus();
 			}
 		}
@@ -28,28 +23,22 @@ public class NextActionListener implements ActionListener{
 		{
 			if (AreaSettingsSubPanel.nextButton.isEnabled())
 			{
-				//Program.cameraPanel.DISPLAY_WEB_CAMERA_INPUT = false;
-				SettingsPanel.AREA_SELECTED = true;
-				
+				SettingsPanel.setAREA_SELECTED(true);
         		SettingsPanel.areaPanel.areaLabel.setText("<html><font color = rgb(120,200,40)>Area Selected:</font>" +
-						" Width: " + (int) (SettingsPanel.AREA_SELECTED_END_X - SettingsPanel.AREA_SELECTED_START_X + 1) + 
-						" x Hight: " +(int) (SettingsPanel.AREA_SELECTED_END_Y - SettingsPanel.AREA_SELECTED_START_Y + 1) + "&nbsp</html>");
+						" Width: " + (int) (SettingsPanel.getAREA_SELECTED_END_X() - SettingsPanel.getAREA_SELECTED_START_X() + 1) + 
+						" x Hight: " +(int) (SettingsPanel.getAREA_SELECTED_END_Y() - SettingsPanel.getAREA_SELECTED_START_Y() + 1) + 
+						"&nbsp</html>");
 
-				SettingsPanel.AREA_SELECTED_CAMERA_DIMENSION = Program.cameraPanel.CAMERA_VIEW_BOUNDERYS_DIMENSION;
-
+				SettingsPanel.setAREA_SELECTED_CAMERA_DIMENSION(Program.cameraPanel.CAMERA_VIEW_BOUNDERYS_DIMENSION);
 				StageActive.stageActive(3);
-						
 				CameraPanel.SAVE_IMAGE = true;
 				try {
 					Thread.sleep(100);
 				} catch (InterruptedException e1) {
 					e1.printStackTrace();
 				}
-				
 				Program.imagePanel.setPhoto();
-				
 				SettingsPanel.densityPanel.widthDensityInputTextField.grabFocus();
-
 				SettingsPanel.scanPanel.scan.scanActiveChange();
 			}
 		}
@@ -57,13 +46,10 @@ public class NextActionListener implements ActionListener{
 		{
 			if (DensitySettingsSubPanel.nextButton.isEnabled())
 			{
-				//Program.cameraPanel.DISPLAY_WEB_CAMERA_INPUT = false;
-				SettingsPanel.DENSITY_SELECTED_WIDTH = SettingsPanel.densityPanel.NUMBER_OF_LINES_WIDTH + 1;
-				SettingsPanel.DENSITY_SELECTED_HEIGHT = SettingsPanel.densityPanel.NUMBER_OF_LINES_HEIGHT + 1;
-				SettingsPanel.DENSITY_SELECTED = true;
-
+				SettingsPanel.setDENSITY_SELECTED_WIDTH(SettingsPanel.densityPanel.NUMBER_OF_LINES_WIDTH + 1);
+				SettingsPanel.setDENSITY_SELECTED_HEIGHT(SettingsPanel.densityPanel.NUMBER_OF_LINES_HEIGHT + 1);
+				SettingsPanel.setDENSITY_SELECTED(true);
 				StageActive.stageActive(4);
-				
 				SettingsPanel.fileNamePanel.fileNameInputTextField.grabFocus();
 			}
 		}
@@ -71,11 +57,8 @@ public class NextActionListener implements ActionListener{
 		{
 			if (FileNameSettingsSubPanel.nextButton.isEnabled())
 			{
-				//Program.cameraPanel.DISPLAY_WEB_CAMERA_INPUT = false;
-				SettingsPanel.FILE_NAME_SELECTED = true;
-				
+				SettingsPanel.setFILE_NAME_SELECTED(true);
 				StageActive.stageActive(5);
-				
 				SettingsPanel.scanPanel.scan.resizeAPaint();
 			}
 		}
@@ -84,34 +67,28 @@ public class NextActionListener implements ActionListener{
 			if (ScanSettingsSubPanel.startScanButton.isEnabled())
 			{
 				SettingsPanel.scanPanel.scan.numberOfScans();
-				SettingsPanel.scanPanel.scan.scanNeverStarted = false;
-				if (!SettingsPanel.scanPanel.scan.isScanStoped() && !SettingsPanel.scanPanel.scan.pauseScanX)
+				SettingsPanel.scanPanel.scan.setScanNeverStarted(false);
+				ScanButtonActive.buttonsScanActiveStarted();
+				//SettingsPanel.scanPanel.createColorPalet();
+				if (!SettingsPanel.scanPanel.scan.isScanStoped() && !SettingsPanel.scanPanel.scan.isPauseScanX())
 				{
-					//createColorPalet();
-					SettingsPanel.scanPanel.scan.headersInactive();
-					SettingsPanel.scanPanel.scan.setBuffImageAlpha();
-					SettingsPanel.scanPanel.scan.buttonsScanActiveStarted();
+					Headers.headersInactive();
+					SetImageAlpha.setBuffImageAlpha();
 					EndSubSettingsPanel.backButton.setEnabled(false);
 					SettingsPanel.scanPanel.scan.delayedStartScan();
-					
-					SettingsPanel.scanPanel.scan.scanActive = true;
+					SettingsPanel.scanPanel.scan.setScanActive(true);
 				}
-				else if (!SettingsPanel.scanPanel.scan.isScanStoped() && SettingsPanel.scanPanel.scan.pauseScanX)
-				{
-					SettingsPanel.scanPanel.scan.pauseScanX = false;
-					SettingsPanel.scanPanel.scan.buttonsScanActiveStarted();
-				}
+				else if (!SettingsPanel.scanPanel.scan.isScanStoped() && SettingsPanel.scanPanel.scan.isPauseScanX())
+					SettingsPanel.scanPanel.scan.setPauseScanX(false);
 				else if(SettingsPanel.scanPanel.scan.isScanStoped())
 				{
-					SettingsPanel.scanPanel.scan.pauseScanX = false;
-					SettingsPanel.scanPanel.scan.changeWay = false;
+					SettingsPanel.scanPanel.scan.setPauseScanX(false);
+					SettingsPanel.scanPanel.scan.setChangeWay(false);
 					SettingsPanel.scanPanel.scan.restartScanValues();
-					//SettingsPanel.scanPanel.createColorPalet();
-					SettingsPanel.scanPanel.scan.headersInactive();
+					Headers.headersInactive();
 					SettingsPanel.scanPanel.scan.delayedStartScan();
-					SettingsPanel.scanPanel.scan.buttonsScanActiveStarted();
 					EndSubSettingsPanel.backButton.setEnabled(false);
-					SettingsPanel.scanPanel.scan.scanActive = true;
+					SettingsPanel.scanPanel.scan.setScanActive(true);
 				}
 			}
 		}
@@ -120,7 +97,7 @@ public class NextActionListener implements ActionListener{
 			MainFrame.mainPanel.add(Program.settingsPanel, BorderLayout.EAST);
 			MainFrame.mainPanel.add(Program.cameraPanel, BorderLayout.CENTER);
 			Program.frame.glass.glasPanelActive = true;
-			if (!SettingsPanel.scanPanel.scan.headersInactive)
+			if (!SettingsPanel.scanPanel.scan.isHeadersInactive())
 			{
 				if (SettingsPanel.getStage() == 1)
 				{
@@ -148,5 +125,11 @@ public class NextActionListener implements ActionListener{
 			else
 				SetPanelActive.scanPanelActive();
 		}
+	}
+	public int getStage() {
+		return stage;
+	}
+	public void setStage(int stage) {
+		this.stage = stage;
 	}
 }

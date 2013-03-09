@@ -13,23 +13,20 @@ import javax.swing.border.Border;
 public class Program {	
 	public static CameraPanel cameraPanel;
 	public static SettingsPanel settingsPanel;
-	public static DimentionPanel dimentionPanel;
 	public static ConclutionPanel conclutionPanel;
-	public static ImageScannedPanel imageScannedPanel;
 	public static StartControlPanel startControlPanel;
 	public static ManualPanel manualPanel;
 	public static ImagePanel imagePanel;
 	public static MainFrame frame;
 	
+	public static MainListener mainListener;
+	
+	public static Motor motor;
+	public static WaveLengthToColorConverter waveLengthToColorConverter;
+	public static SetImageAlpha setImageAlpha; 
 	public static SetPanelStage setPanelStage;
 
 	public static int TIONDELS_MILLI_METER_PIXEL = 1;
-	
-	/* Image Icon next button */
-	public static ImageIcon NEXT_BUTTON_ENABLED_IMAGE_ICON 		= new ImageIcon("image/ButtonBlueNext.png");
-	public static ImageIcon NEXT_BUTTON_DISABLED_IMAGE_ICON 	= new ImageIcon("image/ButtonGrayNext.png");
-	public static ImageIcon NEXT_BUTTON_BLUE_PREST_IMAGE_ICON 	= new ImageIcon("image/ButtonBlueNextPrest.png");
-	public static ImageIcon NEXT_BUTTON_GRAY_PREST_IMAGE_ICON 	= new ImageIcon("image/ButtonGrayNextPrest.png");
 	
 	/* Import the images for the BACK button */
 	public static ImageIcon BACK_BUTTON_ENABLED_IMAGE_ICON 		= new ImageIcon("image/ButtonBlueBack.png");
@@ -71,13 +68,13 @@ public class Program {
 
     	cameraPanel = new CameraPanel();
     	settingsPanel = new SettingsPanel();
-    	dimentionPanel = new DimentionPanel();
     	conclutionPanel = new ConclutionPanel();
-    	imageScannedPanel = new ImageScannedPanel();
     	startControlPanel = new StartControlPanel();
     	manualPanel = new ManualPanel();
     	imagePanel = new ImagePanel();
     	frame = new MainFrame();
+    	
+    	mainListener = new MainListener();
     	
     	MainPanel.setStages(startControlPanel, manualPanel);
     	GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(frame);
