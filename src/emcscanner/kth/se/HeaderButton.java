@@ -1,18 +1,13 @@
 package emcscanner.kth.se;
 
-import java.awt.Dimension;
-
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 
-public class HeaderButton extends JButton {
+public class HeaderButton extends LargeButton {
 	/**
 	 * HEADERS ID
 	 */
 	private static final long serialVersionUID = -5281658824456614703L;
 
-	public Dimension HEADER_BUTTON_DIMENSION = new Dimension(355, 40);
-	
 	public static String PANEL_INFORMATION 		= "This is where you can shoose the desired frequency.";
 	public String AREA_PANEL_TOOL_TIP_TEXT 		= "This is where you select the area to scan.";
 	public String DENSITY_PANEL_TOOL_TIP_TEXT 	= "This is where you select the density to scan";
@@ -55,11 +50,6 @@ public class HeaderButton extends JButton {
 	public ImageIcon SCAN_HEADER_DISABLED_DARK_GREEN_IMAGE_ICON 	= new ImageIcon("image/PanelDarkGreenScan.png"); 
 	
 	public HeaderButton(int stage){
-		this.setPreferredSize(HEADER_BUTTON_DIMENSION);
-		
-		this.setOpaque(false);
-		this.setContentAreaFilled(false);
-		this.setBorderPainted(false);
 		if (stage == 1)
 		{
 			/* Sets creation values for the header button */
@@ -98,7 +88,7 @@ public class HeaderButton extends JButton {
 			this.setPressedIcon(FILE_NAME_HEADER_ENABLED_PREST_IMAGE_ICON);
 			this.setRolloverIcon(FILE_NAME_HEADER_ENABLED_ROLLOVER_IMAGE_ICON);
 		}
-		else if (stage == 4)
+		else if (stage == 5)
 		{
 			this.setEnabled(ScanSettingsSubPanel.HEADER_BUTTON_ENABLED = false);
 			this.setToolTipText(SCAN_PANEL_TOOL_TIP_TEXT);

@@ -125,16 +125,15 @@ public class ScanSettingsSubPanel extends JPanel {
 		startScanButton.setContentAreaFilled(false);
 		startScanButton.setBorderPainted(false);
 		startScanButton.setToolTipText(NEXT_BUTTON_TOOL_TIP_TEXT);
-		startScanButton.setPreferredSize(Program.MEDIUM_BUTTON_DIMENSION);
+		startScanButton.setPreferredSize(Buttons.MEDIUM_BUTTON_DIMENSION);
 		startScanButton.setEnabled(true);		
 		startScanButton.setIcon(START_SCAN_ENABLED_IMAGE_ICON);
 		startScanButton.setDisabledIcon(START_SCAN_DISABLED_IMAGE_ICON);
 		startScanButton.setPressedIcon(START_SCAN_ENABLED_PREST_IMAGE_ICON);
-		startScanButton.setDisabledSelectedIcon(Program.NEXT_BUTTON_GRAY_PREST_IMAGE_ICON);
 		
 		/* Back on step JButton */
 		pauseScanButton.setEnabled(false);
-		pauseScanButton.setPreferredSize(Program.MEDIUM_BUTTON_DIMENSION);
+		pauseScanButton.setPreferredSize(Buttons.MEDIUM_BUTTON_DIMENSION);
 		pauseScanButton.setIcon(PAUSED_SCAN_ENABLED_IMAGE_ICON);
 		pauseScanButton.setDisabledIcon(PAUSED_SCAN_DISABLED_IMAGE_ICON);
 		pauseScanButton.setPressedIcon(PAUSED_SCAN_ENABLED_PREST_IMAGE_ICON);
@@ -145,7 +144,7 @@ public class ScanSettingsSubPanel extends JPanel {
 		
 		/* Back on step JButton */
 		stopScanButton.setEnabled(false);
-		stopScanButton.setPreferredSize(Program.MEDIUM_BUTTON_DIMENSION);
+		stopScanButton.setPreferredSize(Buttons.MEDIUM_BUTTON_DIMENSION);
 		stopScanButton.setIcon(STOP_SCAN_ENABLED_IMAGE_ICON);
 		stopScanButton.setDisabledIcon(STOP_SCAN_DISABLED_IMAGE_ICON);
 		stopScanButton.setPressedIcon(STOP_SCAN_ENABLED_PREST_IMAGE_ICON);
@@ -155,7 +154,7 @@ public class ScanSettingsSubPanel extends JPanel {
 		
 		/* Back on step JButton */
 		rescanButton.setEnabled(true);
-		rescanButton.setPreferredSize(Program.MEDIUM_BUTTON_DIMENSION);
+		rescanButton.setPreferredSize(Buttons.MEDIUM_BUTTON_DIMENSION);
 		rescanButton.setIcon(RESCAN_ENABLED_IMAGE_ICON);
 		rescanButton.setPressedIcon(RESCAN_PREST_ENABLED_IMAGE_ICON);
 		rescanButton.setOpaque(false);
@@ -165,7 +164,7 @@ public class ScanSettingsSubPanel extends JPanel {
 		
 		/* Back on step JButton */
 		saveButton.setEnabled(true);
-		saveButton.setPreferredSize(Program.MEDIUM_BUTTON_DIMENSION);
+		saveButton.setPreferredSize(Buttons.MEDIUM_BUTTON_DIMENSION);
 		saveButton.setIcon(SAVE_ENABLED_IMAGE_ICON);
 		saveButton.setPressedIcon(SAVE_PREST_ENABLED_IMAGE_ICON);
 		saveButton.setOpaque(false);

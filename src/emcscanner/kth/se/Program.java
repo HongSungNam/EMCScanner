@@ -3,7 +3,6 @@ package emcscanner.kth.se;
 import java.awt.*;
 
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.border.Border;
 
 /**
@@ -27,11 +26,7 @@ public class Program {
 	public static SetPanelStage setPanelStage;
 
 	public static int TIONDELS_MILLI_METER_PIXEL = 1;
-	
-	/* Import the images for the BACK button */
-	public static ImageIcon BACK_BUTTON_ENABLED_IMAGE_ICON 		= new ImageIcon("image/ButtonBlueBack.png");
-	public static ImageIcon BACK_BUTTON_BLUE_PREST_IMAGE_ICON 	= new ImageIcon("image/ButtonBlueBackPrest.png");
-	
+		
 	/* Used Colors */
 	public static Color LIGHT_BLUE_COLOR 	= new Color(100,150,255); 
 	public static Color LIGHT_BLUE_COLOR2 	= new Color(240,250,255); 
@@ -53,12 +48,7 @@ public class Program {
 	public static Border LIGHT_BLUE_BORDER 	= BorderFactory.createLineBorder(LIGHT_BLUE_COLOR);
 	public static Border LIGHT_GRAY_BORDER 	= BorderFactory.createLineBorder(LIGHT_GRAY_COLOR);
 	public static Border GREEN_BORDER 		= BorderFactory.createLineBorder(LIGHT_GREEN_COLOR);
-	public static Border RED_BORDER 		= BorderFactory.createLineBorder(RED_COLOR);
-	
-	/* Dimension */
-	public static Dimension BUTTON_DIMENSION 		= new Dimension(85, 50);
-	public static Dimension MEDIUM_BUTTON_DIMENSION = new Dimension(100, 50);
-	public static Dimension BUTTON_SMAL_DIMENSION 	= new Dimension(20, 20);
+	public static Border RED_BORDER 		= BorderFactory.createLineBorder(RED_COLOR);	
 	
 	/**
 	 * This is the main method

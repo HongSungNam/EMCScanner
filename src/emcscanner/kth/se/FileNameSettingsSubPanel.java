@@ -5,8 +5,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -43,7 +41,6 @@ public class FileNameSettingsSubPanel extends JPanel {
 	
 	/* Strings */
 	public String HEADER_BUTTON_TOOL_TIP_TEXT 					= "Press to reselect the file name ";
-	public String NEXT_BUTTON_TOOL_TIP_TEXT 					= "You need to select an a valid file name before you can continue";
 	
 	public String STEP_TEXT_GRAY	 							= "<html> <font color = rgb(120,120,120)>Step 4/4</font></html>";
 	public String STEP_TEXT_LIGHT_BLUE  						= "<html> <font color = rgb(100,150,255)>Step 4/4</font></html>";
@@ -57,8 +54,8 @@ public class FileNameSettingsSubPanel extends JPanel {
 	
 	/* Buttons */
 	public static HeaderButton headerButton 					= new HeaderButton(STAGE);
-	public static JButton nextButton 							= new JButton();
-	public static JButton backButton 							= new JButton();
+	public static NextButton nextButton 						= new NextButton(STAGE);
+	public static BackButton backButton 						= new BackButton(STAGE);
 
 	/* Labels */
 	public JLabel stepLabel 									= new JLabel(STEP_TEXT_GRAY); 
@@ -112,27 +109,6 @@ public class FileNameSettingsSubPanel extends JPanel {
 		/* Panel for the frequency input */
 		fileNamePanel.setLayout(new BorderLayout());
 		fileNamePanel.setPreferredSize(FILE_NAME_DENSITY_PANEL_DIMENSION_OFF);
-		
-		/* Next JButton */
-		nextButton.setOpaque(false);
-		nextButton.setContentAreaFilled(false);
-		nextButton.setBorderPainted(false);
-		nextButton.setToolTipText(NEXT_BUTTON_TOOL_TIP_TEXT);
-		nextButton.setPreferredSize(Program.BUTTON_DIMENSION);
-		nextButton.setEnabled(false);
-		nextButton.setIcon(Program.NEXT_BUTTON_ENABLED_IMAGE_ICON);
-		nextButton.setDisabledIcon(Program.NEXT_BUTTON_DISABLED_IMAGE_ICON);
-		nextButton.setPressedIcon(Program.NEXT_BUTTON_BLUE_PREST_IMAGE_ICON);
-		nextButton.setDisabledSelectedIcon(Program.NEXT_BUTTON_GRAY_PREST_IMAGE_ICON);
-		
-		/* Back on step JButton */
-		backButton.setEnabled(true);
-		backButton.setPreferredSize(Program.BUTTON_DIMENSION);
-		backButton.setIcon(Program.BACK_BUTTON_ENABLED_IMAGE_ICON);
-		backButton.setPressedIcon(Program.BACK_BUTTON_BLUE_PREST_IMAGE_ICON);
-		backButton.setOpaque(false);
-		backButton.setContentAreaFilled(false);
-		backButton.setBorderPainted(false);
 		
 		/* INPUT field for width */
         fileNameInputTextField.setPreferredSize(INPUT_TEXT_FEILD_DIMENSION);

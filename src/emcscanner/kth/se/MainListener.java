@@ -27,5 +27,7 @@ public class MainListener {
 		FileNameSettingsSubPanel.headerButton.addActionListener(new HeaderButtonActionListener(FileNameSettingsSubPanel.STAGE));
 		DensitySettingsSubPanel.headerButton.addActionListener(new HeaderButtonActionListener(DensitySettingsSubPanel.STAGE));
 		AreaSettingsSubPanel.headerButton.addActionListener(new HeaderButtonActionListener(AreaSettingsSubPanel.STAGE));
+		
+		EndSubSettingsPanel.backButton.addActionListener(new MainBackActionListener());
 	}
 }

@@ -45,7 +45,7 @@ public class StartControlPanel extends JPanel {
 		getNextButton().setOpaque(buttonLook);
 		getNextButton().setContentAreaFilled(buttonLook);
 		getNextButton().setBorderPainted(buttonLook);
-		getNextButton().setPreferredSize(Program.BUTTON_DIMENSION);
+		getNextButton().setPreferredSize(Buttons.BUTTON_DIMENSION);
 		getNextButton().setToolTipText(buttonToolTipText);
 		getNextButton().setEnabled(true);
 		getNextButton().setFocusable(true);

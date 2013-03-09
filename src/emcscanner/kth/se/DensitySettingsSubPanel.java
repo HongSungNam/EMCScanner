@@ -4,8 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
 import javax.swing.ImageIcon;
@@ -54,14 +52,14 @@ public class DensitySettingsSubPanel extends JPanel {
 	
 	/* Buttons */
 	public static HeaderButton headerButton = new HeaderButton(STAGE);
-	public static JButton nextButton 	= new JButton();
-	public static JButton backButton 	= new JButton();
+	public static NextButton nextButton 	= new NextButton(STAGE);
+	public static BackButton backButton 	= new BackButton(STAGE);
+	
 	public JButton densityMillimeter	= new JButton();
 	public JButton densityNumberOfSteps	= new JButton();
 	
 	/* Strings */
 	public String HEADER_BUTTON_TOOL_TIP_TEXT 	= "Press to reselect the density";
-	public String NEXT_BUTTON_TOOL_TIP_TEXT 	= "You need to select an area before you can continue";
 	
 	public String STEP_TEXT_GRAY	 			= "<html> <font color = rgb(120,120,120)>Step 3/4</font></html>";
 	public String STEP_TEXT_LIGHT_BLUE  		= "<html> <font color = rgb(100,150,255)>Step 3/4</font></html>";
@@ -174,32 +172,11 @@ public class DensitySettingsSubPanel extends JPanel {
 		densityPanel.setLayout(new BorderLayout());
 		densityPanel.setPreferredSize(DENSITY_PANEL_DIMENSION_OFF);
 		
-		/* Next JButton */
-		nextButton.setOpaque(false);
-		nextButton.setContentAreaFilled(false);
-		nextButton.setBorderPainted(false);
-		nextButton.setToolTipText(NEXT_BUTTON_TOOL_TIP_TEXT);
-		nextButton.setPreferredSize(Program.BUTTON_DIMENSION);
-		nextButton.setEnabled(false);
-		nextButton.setIcon(Program.NEXT_BUTTON_ENABLED_IMAGE_ICON);
-		nextButton.setDisabledIcon(Program.NEXT_BUTTON_DISABLED_IMAGE_ICON);
-		nextButton.setPressedIcon(Program.NEXT_BUTTON_BLUE_PREST_IMAGE_ICON);
-		nextButton.setDisabledSelectedIcon(Program.NEXT_BUTTON_GRAY_PREST_IMAGE_ICON);
-		
-		/* Back on step JButton */
-		backButton.setEnabled(true);
-		backButton.setPreferredSize(Program.BUTTON_DIMENSION);
-		backButton.setIcon(Program.BACK_BUTTON_ENABLED_IMAGE_ICON);
-		backButton.setPressedIcon(Program.BACK_BUTTON_BLUE_PREST_IMAGE_ICON);
-		backButton.setOpaque(false);
-		backButton.setContentAreaFilled(false);
-		backButton.setBorderPainted(false);
-
 		densityMillimeter.setEnabled(true);
 		densityMillimeter.setOpaque(false);
 		densityMillimeter.setContentAreaFilled(false);
 		densityMillimeter.setBorderPainted(false);
-		densityMillimeter.setPreferredSize(Program.BUTTON_SMAL_DIMENSION);
+		densityMillimeter.setPreferredSize(Buttons.BUTTON_SMAL_DIMENSION);
 		densityMillimeter.setIcon(DENSITY_MM_BUTTON_ENABLED_IMAGE_ICON);
 		densityMillimeter.setDisabledIcon(DENSITY_MM_BUTTON_DISABLED_IMAGE_ICON);
 		densityMillimeter.setPressedIcon(DENSITY_MM_BUTTON_BLUE_PREST_IMAGE_ICON);
@@ -210,7 +187,7 @@ public class DensitySettingsSubPanel extends JPanel {
 		densityNumberOfSteps.setOpaque(false);
 		densityNumberOfSteps.setContentAreaFilled(false);
 		densityNumberOfSteps.setBorderPainted(false);
-		densityNumberOfSteps.setPreferredSize(Program.BUTTON_SMAL_DIMENSION);
+		densityNumberOfSteps.setPreferredSize(Buttons.BUTTON_SMAL_DIMENSION);
 		densityNumberOfSteps.setIcon(DENSITY_STEP_BUTTON_ENABLED_IMAGE_ICON);
 		densityNumberOfSteps.setDisabledIcon(DENSITY_STEP_BUTTON_DISABLED_IMAGE_ICON);
 		densityNumberOfSteps.setPressedIcon(DENSITY_STEP_BUTTON_BLUE_PREST_IMAGE_ICON);

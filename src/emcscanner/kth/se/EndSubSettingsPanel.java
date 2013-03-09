@@ -21,8 +21,10 @@ public class EndSubSettingsPanel extends JPanel {
 	 */
 	private static final long serialVersionUID = 7983722947920631252L;
 	
+	public static int STAGE = 6;
+	
 	/* Buttons */
-	public static JButton backButton = new JButton();
+	public static BackButton backButton = new BackButton(STAGE);
 	public static JButton quitButton = new JButton();
 
 	/* Dimensions */
@@ -43,19 +45,9 @@ public class EndSubSettingsPanel extends JPanel {
 		this.setLayout(new FlowLayout());
 		this.setMinimumSize(THIS_MINIMUM_DIMENSION);
 
-		/* Button made for going back to previous views */
-		backButton.setEnabled(true);
-		backButton.setPreferredSize(Program.BUTTON_DIMENSION);
-		backButton.setIcon(Program.BACK_BUTTON_ENABLED_IMAGE_ICON);
-		backButton.setPressedIcon(Program.BACK_BUTTON_BLUE_PREST_IMAGE_ICON);
-		backButton.setOpaque(false);
-		backButton.setContentAreaFilled(false);
-		backButton.setBorderPainted(false);
-		backButton.addActionListener(new MainBackActionListener());
-
 		/* Back on step JButton */
 		quitButton.setEnabled(true);
-		quitButton.setPreferredSize(Program.MEDIUM_BUTTON_DIMENSION);
+		quitButton.setPreferredSize(Buttons.MEDIUM_BUTTON_DIMENSION);
 		quitButton.setIcon(QUIT_ENABLED_IMAGE_ICON);
 		quitButton.setPressedIcon(QUIT_PREST_ENABLED_IMAGE_ICON);
 		quitButton.setOpaque(false);

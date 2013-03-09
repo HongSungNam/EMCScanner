@@ -35,7 +35,6 @@ public class SetPanelInactive {
 		SettingsPanel.frequencyPanel.startFrequensyContainer.setVisible(false);
 		FrequencySettingsSubPanel.backButton.setVisible(false);
 		SettingsPanel.frequencyPanel.endFrequensyContainer.setVisible(false);
-		SettingsPanel.frequencyPanel.endCheckBox.setVisible(false);
 		FrequencySettingsSubPanel.colorFrequensyVideoPanel.setVisible(false);
 		
 		/* Sets step Label green when button has been pressed*/

@@ -43,7 +43,6 @@ public class SetPanelActive {
 		SettingsPanel.frequencyPanel.startFrequensyContainer.setVisible(true);
 		FrequencySettingsSubPanel.backButton.setVisible(true);
 		SettingsPanel.frequencyPanel.endFrequensyContainer.setVisible(true);
-		SettingsPanel.frequencyPanel.endCheckBox.setVisible(true);
 		FrequencySettingsSubPanel.colorFrequensyVideoPanel.setVisible(true);
 		
 		/* New Active dimensions */

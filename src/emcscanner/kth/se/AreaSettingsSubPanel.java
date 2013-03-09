@@ -6,8 +6,6 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.image.BufferedImage;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 /**
@@ -45,15 +43,13 @@ public class AreaSettingsSubPanel extends JPanel {
 	
 	/* Buttons */
 	public static HeaderButton headerButton = new HeaderButton(STAGE);
-	public static JButton nextButton = new JButton();
-	public static JButton backButton = new JButton();
+	public static NextButton nextButton = new NextButton(STAGE);
+	public static BackButton backButton = new BackButton(STAGE);
 	
 	/* String */
 	public String STEP_TEXT_GRAY	 	= "<html> <font color = rgb(120,120,120)>Step 2/4</font></html>";
 	public String STEP_TEXT_LIGHT_BLUE  = "<html> <font color = rgb(100,150,255)>Step 2/4</font></html>";
 	public String STEP_TEXT_DARK_GREEN  = "<html> <font color = rgb(120,200,40)>Step 2/4</font></html>";
-	
-	public String NEXT_BUTTON_TOOL_TIP_TEXT = "You need to select an area before you can continue";
 
 	public String AREA_NOT_SELECTED = "<html><font color = rgb(120,120,120)>Area not selected</font></html>";
 	public String AREA_SELECTED = "<html><font color = rgb(100,150,255)>Area selected </html></font>";
@@ -111,28 +107,6 @@ public class AreaSettingsSubPanel extends JPanel {
 		
 		/* Turns off area Label showing the selected area */
 		areaLabel.setVisible(false);
-		
-		/* Next JButton */
-		nextButton.setOpaque(false);
-		nextButton.setContentAreaFilled(false);
-		nextButton.setBorderPainted(false);
-		nextButton.setToolTipText(NEXT_BUTTON_TOOL_TIP_TEXT);
-		nextButton.setPreferredSize(Program.BUTTON_DIMENSION);
-		nextButton.setEnabled(false);
-		nextButton.setIcon(Program.NEXT_BUTTON_ENABLED_IMAGE_ICON);
-		nextButton.setDisabledIcon(Program.NEXT_BUTTON_DISABLED_IMAGE_ICON);
-		nextButton.setPressedIcon(Program.NEXT_BUTTON_BLUE_PREST_IMAGE_ICON);
-		nextButton.setDisabledSelectedIcon(Program.NEXT_BUTTON_GRAY_PREST_IMAGE_ICON);
-
-		/* Back on step JButton */
-		backButton.setEnabled(true);
-		backButton.setPreferredSize(Program.BUTTON_DIMENSION);
-		backButton.setIcon(Program.BACK_BUTTON_ENABLED_IMAGE_ICON);
-		backButton.setPressedIcon(Program.BACK_BUTTON_BLUE_PREST_IMAGE_ICON);
-		backButton.setOpaque(false);
-		backButton.setContentAreaFilled(false);
-		backButton.setBorderPainted(false);
-		
 		
 		threadDisplayAreaSelectionVideo = new FrameGrabberThread(STAGE,"threadDisplayArea");
         threadDisplayAreaSelectionVideo.setDaemon(true);
