@@ -10,7 +10,7 @@ public class SetPanelInactive {
 		/* Sets the frequency that have been selected to SettingsPanels global variables */
 		SettingsPanel.setFrequencyStartUserSelectedFloat(SettingsPanel.frequencyPanel.startValue);
 		SettingsPanel.setFrequencyEndUserSelectedFloat(SettingsPanel.frequencyPanel.endValue);
-		SettingsPanel.setFrequencyDensityUserSelectedInt(SettingsPanel.frequencyPanel.densityValue);
+		SettingsPanel.setFrequencyDensityUserSelectedInt(SettingsPanel.frequencyPanel.densityStartValue);
 		
 		/* Sets header button to enabled and green with a new tool tip */
 		FrequencySettingsSubPanel.headerButton.setToolTipText(SettingsPanel.frequencyPanel.getHeaderButtonToolTipText());
@@ -63,7 +63,7 @@ public class SetPanelInactive {
 		AreaSettingsSubPanel.DISPLAY_HELP_VIDEO = false;
 		
 		/* New tool tip */
-		AreaSettingsSubPanel.headerButton.setToolTipText(SettingsPanel.areaPanel.HEADER_BUTTON_TOOL_TIP_TEXT);
+		AreaSettingsSubPanel.headerButton.setToolTipText(AreaSettingsSubPanel.headerButton.HEADER_BUTTON_TOOL_TIP_TEXT);
 		
 		/* Sets video and buttons not visible */
 		AreaSettingsSubPanel.nextButton.setVisible(false);
@@ -84,11 +84,11 @@ public class SetPanelInactive {
 			
 			/* Changing size of panels when button has been pressed*/	
 			SettingsPanel.areaPanel.areaPanel.setPreferredSize(SettingsPanel.areaPanel.AREA_PANEL_DIMENSION_DONE);
-			SettingsPanel.areaPanel.headerAndPanelContiner.setPreferredSize(SettingsPanel.areaPanel.HEADER_AND_PANEL_CONTINER_DIMENSION_DONE);
+			SettingsPanel.areaPanel.headerAndPanelContiner.setPreferredSize(SettingsPanel.areaPanel.HEADER_AND_PANEL_DIMENSION_DONE);
 			SettingsPanel.areaPanel.stepContiner.setPreferredSize(SettingsPanel.areaPanel.STEP_CONTINER_DIMENSION_DONE);
 			
 			/* Sets selected area and label visible */
-			SettingsPanel.areaPanel.areaLabel.setVisible(true);
+			SettingsPanel.areaPanel.areaResultLabel.setVisible(true);
 		}
 		else
 		{
@@ -97,11 +97,11 @@ public class SetPanelInactive {
 			
 			/* Changing size of panels when button has been pressed*/	
 			SettingsPanel.areaPanel.areaPanel.setPreferredSize(SettingsPanel.areaPanel.AREA_PANEL_DIMENSION_OFF);
-			SettingsPanel.areaPanel.headerAndPanelContiner.setPreferredSize(SettingsPanel.areaPanel.HEADER_AND_PANEL_CONTINER_DIMENSION_OFF);
+			SettingsPanel.areaPanel.headerAndPanelContiner.setPreferredSize(SettingsPanel.areaPanel.HEADER_AND_PANEL_DIMENSION_OFF);
 			SettingsPanel.areaPanel.stepContiner.setPreferredSize(SettingsPanel.areaPanel.STEP_CONTINER_DIMENSION_OFF);
 			
 			/* Sets selected area and label invisible */
-			SettingsPanel.areaPanel.areaLabel.setVisible(false);
+			SettingsPanel.areaPanel.areaResultLabel.setVisible(false);
 			SettingsPanel.areaPanel.areaPanel.setVisible(false);
 			
 			/* Sets Header button gray */
@@ -115,7 +115,7 @@ public class SetPanelInactive {
 	public static void densityPanelNotActive(){
 		DensitySettingsSubPanel.DISPLAY_HELP_VIDEO = false;
 		/* Sets header button to enabled and green with a new tool tip */
-		DensitySettingsSubPanel.headerButton.setToolTipText(SettingsPanel.densityPanel.HEADER_BUTTON_TOOL_TIP_TEXT);
+		DensitySettingsSubPanel.headerButton.setToolTipText(DensitySettingsSubPanel.headerButton.HEADER_BUTTON_TOOL_TIP_TEXT);
 		
 		/* For showing videos */
 		DensitySettingsSubPanel.DISPLAY_HELP_VIDEO = DensitySettingsSubPanel.NOT_VISIBLE;
@@ -147,9 +147,9 @@ public class SetPanelInactive {
 			DensitySettingsSubPanel.headerButton.setEnabled(DensitySettingsSubPanel.HEADER_BUTTON_ENABLED = true);
 			
 			/* Changing size of panels when button has been pressed*/	
-			SettingsPanel.densityPanel.densityPanel.setPreferredSize(SettingsPanel.densityPanel.DENSITY_PANEL_DIMENSION_DONE);
-			SettingsPanel.densityPanel.headerAndPanelContiner.setPreferredSize(SettingsPanel.densityPanel.HEADER_AND_PANEL_CONTINER_DIMENSION_DONE);
-			SettingsPanel.densityPanel.stepContiner.setPreferredSize(SettingsPanel.densityPanel.STEP_CONTINER_DIMENSION_DONE);
+			SettingsPanel.densityPanel.densityPanel.setPreferredSize(SettingsPanel.densityPanel.getDENSITY_PANEL_DIMENSION_DONE());
+			SettingsPanel.densityPanel.headerAndPanelContiner.setPreferredSize(SettingsPanel.densityPanel.getHEADER_AND_PANEL_CONTINER_DIMENSION_DONE());
+			SettingsPanel.densityPanel.stepContiner.setPreferredSize(SettingsPanel.densityPanel.getSTEP_CONTINER_DIMENSION_DONE());
 			
 			SettingsPanel.densityPanel.densitySelectedLabel.setText("<html><font color = rgb(120,200,40)> Density selected:</font> Width: " + 
 																	SettingsPanel.getDENSITY_SELECTED_WIDTH() + 
@@ -169,9 +169,9 @@ public class SetPanelInactive {
 			DensitySettingsSubPanel.headerButton.setEnabled(DensitySettingsSubPanel.HEADER_BUTTON_ENABLED = false);
 			
 			/* Changing size of panels when button has been pressed*/	
-			SettingsPanel.densityPanel.densityPanel.setPreferredSize(SettingsPanel.densityPanel.HEADER_AND_PANEL_AND_DENSITY_PANEL_DIMENSION_OFF);
-			SettingsPanel.densityPanel.headerAndPanelContiner.setPreferredSize(SettingsPanel.densityPanel.HEADER_AND_PANEL_AND_DENSITY_PANEL_DIMENSION_OFF);
-			SettingsPanel.densityPanel.stepContiner.setPreferredSize(SettingsPanel.densityPanel.STEP_CONTINER_DIMENSION_OFF);
+			SettingsPanel.densityPanel.densityPanel.setPreferredSize(SettingsPanel.densityPanel.getHEADER_AND_PANEL_AND_DENSITY_PANEL_DIMENSION_OFF());
+			SettingsPanel.densityPanel.headerAndPanelContiner.setPreferredSize(SettingsPanel.densityPanel.getHEADER_AND_PANEL_AND_DENSITY_PANEL_DIMENSION_OFF());
+			SettingsPanel.densityPanel.stepContiner.setPreferredSize(SettingsPanel.densityPanel.getSTEP_CONTINER_DIMENSION_OFF());
 		}
 	}
 	/**
@@ -179,7 +179,7 @@ public class SetPanelInactive {
 	 */
 	public static void fileNamePanelNotActive(){		
 		/* Sets header button to enabled and green with a new tool tip */
-		FileNameSettingsSubPanel.headerButton.setToolTipText(SettingsPanel.fileNamePanel.HEADER_BUTTON_TOOL_TIP_TEXT);
+		FileNameSettingsSubPanel.headerButton.setToolTipText(FileNameSettingsSubPanel.headerButton.HEADER_BUTTON_TOOL_TIP_TEXT);
 			
 		/* Sets video and buttons not visible */
 		FileNameSettingsSubPanel.nextButton.setVisible(false);

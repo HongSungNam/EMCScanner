@@ -1,20 +1,43 @@
 package emcscanner.kth.se;
 
 import java.awt.Dimension;
+
 import java.awt.image.BufferedImage;
 
 import com.googlecode.javacv.OpenCVFrameGrabber;
 import com.googlecode.javacv.cpp.opencv_core.IplImage;
-
+/**
+ * 
+ * @author Jonas
+ *
+ */
 public class FrameGrabberThread extends Thread {
+	/**
+	 * True: Displays help video
+	 * False: Do not displays help video
+	 */
 	private boolean DISPLAY_VIDEO;
+	/**
+	 * True: Displays help video
+	 * False: Do not displays help video
+	 */
 	private boolean DISPLAY_HELP_VIDEO;
 	private int stage;
 	
-	/* Frame grabbers for video */
+	/**
+	 * Frame grabbers for video
+	 */
 	public OpenCVFrameGrabber grabber;
+	/**
+	 * Frame grabbers for video
+	 */
 	public OpenCVFrameGrabber grabber2;
 	
+	/**
+	 * Frame grabber thread
+	 * @param stage
+	 * @param string
+	 */
 	public FrameGrabberThread(int stage, String string){
 		this.stage = stage;
 		if (this.stage == 1)
@@ -45,6 +68,9 @@ public class FrameGrabberThread extends Thread {
 			grabber2.setFrameRate(25);
 		}
 	}
+	/**
+	 * Runs the thread.
+	 */
 	public void run() {
         while (DISPLAY_VIDEO) {
     		IplImage grabbedImage = null;

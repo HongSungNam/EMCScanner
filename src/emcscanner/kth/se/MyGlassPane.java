@@ -111,7 +111,9 @@ public class MyGlassPane extends JComponent {
 
 						/* Adds number of steps and size to SettingsPanel for controlling the number of measurements */
 						SettingsPanel.setNumberOfStepsWidth(n);
-						SettingsPanel.setStepSizeWidth((int) (((SettingsPanel.getAREA_SELECTED_IMAGE_DEPENDENT_END_X() - SettingsPanel.getAREA_SELECTED_IMAGE_DEPENDENT_START_X() + 1) * Program.TIONDELS_MILLI_METER_PIXEL) / (SettingsPanel.densityPanel.NUMBER_OF_LINES_WIDTH + 1)));
+						SettingsPanel.setStepSizeWidth((int) (((SettingsPanel.getAREA_SELECTED_IMAGE_DEPENDENT_END_X() - 
+															SettingsPanel.getAREA_SELECTED_IMAGE_DEPENDENT_START_X() + 1) / 
+															(SettingsPanel.densityPanel.NUMBER_OF_LINES_WIDTH + 1))));
 						
 						for (int i = 1; i < n; i++)
 						{
@@ -127,7 +129,9 @@ public class MyGlassPane extends JComponent {
 
 						/* Adds number of steps and size to SettingsPanel for controlling the number of measurements */
 						SettingsPanel.setNumberOfStepsHeight(n);
-						SettingsPanel.setStepSizeHeight((int) (((SettingsPanel.getAREA_SELECTED_IMAGE_DEPENDENT_END_Y() - SettingsPanel.getAREA_SELECTED_IMAGE_DEPENDENT_START_Y() + 1) * Program.TIONDELS_MILLI_METER_PIXEL) / (SettingsPanel.densityPanel.NUMBER_OF_LINES_WIDTH + 1)));
+						SettingsPanel.setStepSizeHeight((int)(((SettingsPanel.getAREA_SELECTED_IMAGE_DEPENDENT_END_Y() - 
+																	SettingsPanel.getAREA_SELECTED_IMAGE_DEPENDENT_START_Y() + 1) / 
+																(SettingsPanel.densityPanel.NUMBER_OF_LINES_WIDTH + 1))));
 						
 						for (int i = 1; i < n; i++)
 						{
@@ -144,11 +148,12 @@ public class MyGlassPane extends JComponent {
 						int y2 = SettingsPanel.PHOTO_VIEW_DIMENSION.height + y1;
 
 						/* Length of the photo symbolizing reality */
-						int w = SettingsPanel.PHOTO_VIEW_DIMENSION.width * Program.TIONDELS_MILLI_METER_PIXEL;
+						int w = SettingsPanel.PHOTO_VIEW_DIMENSION.width;
 
 						/* Number of pixels to move every time */
-						int s = (int) (((SettingsPanel.densityPanel.NUMBER_OF_LINES_WIDTH + 1) * w )
-								 / ((((SettingsPanel.getAREA_SELECTED_END_X() - SettingsPanel.getAREA_SELECTED_START_X() + 1) * Program.TIONDELS_MILLI_METER_PIXEL))));
+						int s = (int) (((SettingsPanel.densityPanel.NUMBER_OF_LINES_WIDTH + 1) * w ) / 
+									  (((SettingsPanel.getAREA_SELECTED_END_X() - 
+										 SettingsPanel.getAREA_SELECTED_START_X() + 1))));
 						
 						/* Adds number of steps and size to SettingsPanel for controlling the number of measurements */
 						SettingsPanel.setNumberOfStepsWidth(0);
@@ -167,11 +172,11 @@ public class MyGlassPane extends JComponent {
 						int x2 = SettingsPanel.PHOTO_VIEW_DIMENSION.width + x1;
 
 						/* Length of the photo symbolizing reality */
-						int h = SettingsPanel.PHOTO_VIEW_DIMENSION.height * Program.TIONDELS_MILLI_METER_PIXEL;
+						int h = SettingsPanel.PHOTO_VIEW_DIMENSION.height;
 						
 						/* Number of pixels to move every time */
 						int s = (int) (((SettingsPanel.densityPanel.NUMBER_OF_LINES_HEIGHT + 1) * h )
-								 / ((((SettingsPanel.getAREA_SELECTED_END_Y() - SettingsPanel.getAREA_SELECTED_START_Y() + 1) * Program.TIONDELS_MILLI_METER_PIXEL))));
+								 / (((SettingsPanel.getAREA_SELECTED_END_Y() - SettingsPanel.getAREA_SELECTED_START_Y() + 1))));
 
 						/* Adds number of steps and size to SettingsPanel for controlling the number of measurements */
 						SettingsPanel.setNumberOfStepsHeight(0);

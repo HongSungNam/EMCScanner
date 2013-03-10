@@ -30,7 +30,7 @@ public class ScanButtons extends Buttons{
 	public String START_BUTTON_TOOL_TIP_TEXT 	= "Just start the scan";
 	
 	public ScanButtons(String type){
-		super(3);
+		super(Buttons.LARG_BUTTON);
 		
 		if (type.equals("START")){
 			this.setToolTipText(START_BUTTON_TOOL_TIP_TEXT);

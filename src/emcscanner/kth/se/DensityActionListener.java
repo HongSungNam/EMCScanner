@@ -2,9 +2,21 @@ package emcscanner.kth.se;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+/***
+ * 
+ * @author Jonas
+ *
+ */
 public class DensityActionListener implements ActionListener {
+	/**
+	 * 1: Millimeter <br>
+	 * 2: Step
+	 */
 	int action;
+	/**
+	 * Decides if it is millimeter or step.
+	 * @param i
+	 */
 	public DensityActionListener(int i){
 		this.action = i;
 	}

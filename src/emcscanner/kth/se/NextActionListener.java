@@ -14,7 +14,7 @@ public class NextActionListener implements ActionListener{
 				SettingsPanel.setFREQUENCY_SELECTED(true);
 				SettingsPanel.setFrequencyStartUserSelectedFloat(SettingsPanel.frequencyPanel.startValue);
 				SettingsPanel.setFrequencyEndUserSelectedFloat(SettingsPanel.frequencyPanel.endValue);
-				SettingsPanel.setFrequencyDensityUserSelectedInt(SettingsPanel.frequencyPanel.densityValue);
+				SettingsPanel.setFrequencyDensityUserSelectedInt(SettingsPanel.frequencyPanel.densityStartValue);
 				StageActive.stageActive(2);
 				AreaSettingsSubPanel.backButton.grabFocus();
 			}
@@ -24,7 +24,7 @@ public class NextActionListener implements ActionListener{
 			if (AreaSettingsSubPanel.nextButton.isEnabled())
 			{
 				SettingsPanel.setAREA_SELECTED(true);
-        		SettingsPanel.areaPanel.areaLabel.setText("<html><font color = rgb(120,200,40)>Area Selected:</font>" +
+        		SettingsPanel.areaPanel.areaResultLabel.setText("<html><font color = rgb(120,200,40)>Area Selected:</font>" +
 						" Width: " + (int) (SettingsPanel.getAREA_SELECTED_END_X() - SettingsPanel.getAREA_SELECTED_START_X() + 1) + 
 						" x Hight: " +(int) (SettingsPanel.getAREA_SELECTED_END_Y() - SettingsPanel.getAREA_SELECTED_START_Y() + 1) + 
 						"&nbsp</html>");

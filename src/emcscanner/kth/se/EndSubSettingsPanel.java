@@ -3,17 +3,14 @@ package emcscanner.kth.se;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JPanel;
 
 /**
  * 
  * @author Jonas
  *
+ * Extends JPanel
  */
 public class EndSubSettingsPanel extends JPanel {
 	/**
@@ -21,44 +18,56 @@ public class EndSubSettingsPanel extends JPanel {
 	 */
 	private static final long serialVersionUID = 7983722947920631252L;
 	
+	/**
+	 * End sub panel stage = 6
+	 */
 	public static int STAGE = 6;
 	
 	/* Buttons */
+	/** 
+	 * Back Button is not be used for going to the to the previous stage when enabled. <br>
+	 * Nothing happen when when you click on it when it is not enabled
+	 */
 	public static BackButton backButton = new BackButton(STAGE);
-	public static JButton quitButton = new JButton();
+	/** 
+	 * Quit Button is used to quit the program. <br>
+	 * Nothing happen when when you click on it when it is not enabled
+	 */
+	public static QuitButton quitButton = new QuitButton();
 
 	/* Dimensions */
-	public Dimension THIS_MINIMUM_DIMENSION = new Dimension(400, 100);
-	public Dimension STEP_LABEL_DIMENSION = new Dimension(50,40);
+	/** 
+	 * Step Label container: <br>
+	 * 50 Width, 40 Height 
+	 */
 	public Dimension STEP_CONTINER_DIMENSION = new Dimension(50, 40);
+	/** 
+	 * When end panel is active(always active) : <br>
+	 * 322 Width, 40 Height 
+	 */
 	public Dimension END_PANEL_DIMENSION = new Dimension(322, 40);
 
-	/* Imports the different images for the different button stages. */	
-	public ImageIcon QUIT_ENABLED_IMAGE_ICON				= new ImageIcon("image/Quit.png");
-	public ImageIcon QUIT_PREST_ENABLED_IMAGE_ICON 			= new ImageIcon("image/QuitPrest.png");
-
 	/* Panels- Containers for setting up GUI */
+	/**
+	 * Container containing: <br>
+	 * Null
+	 */
 	public JPanel stepContiner = new JPanel(new BorderLayout());
+	/**
+	 * Container containing: <br>
+	 * backButton					WEST<br>
+	 * quitButton					EAST
+	 */
 	public JPanel headerAndPanelContiner = new JPanel(new BorderLayout());
 	
+	/**
+	 * End Sub Settings Panel <br>
+	 * Extends JPanel
+	 */
 	public EndSubSettingsPanel() {
 		this.setLayout(new FlowLayout());
-		this.setMinimumSize(THIS_MINIMUM_DIMENSION);
+		this.setMinimumSize(SettingsPanel.SUB_PANEL_MINIMUM_DIMENSION);
 
-		/* Back on step JButton */
-		quitButton.setEnabled(true);
-		quitButton.setPreferredSize(Buttons.MEDIUM_BUTTON_DIMENSION);
-		quitButton.setIcon(QUIT_ENABLED_IMAGE_ICON);
-		quitButton.setPressedIcon(QUIT_PREST_ENABLED_IMAGE_ICON);
-		quitButton.setOpaque(false);
-		quitButton.setContentAreaFilled(false);
-		quitButton.setBorderPainted(false);
-		quitButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				MainFrame.quit();
-			}
-		});
 		stepContiner.setPreferredSize(STEP_CONTINER_DIMENSION);
 		
 		/* A panel for the Header and the sup settings panels. */

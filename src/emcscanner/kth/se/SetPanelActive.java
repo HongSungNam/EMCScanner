@@ -87,7 +87,7 @@ public class SetPanelActive {
 		AreaSettingsSubPanel.headerButton.setDisabledIcon(AreaSettingsSubPanel.headerButton.AREA_HEADER_DISABLED_BLUE_IMAGE_ICON);
 		
 		/* New tool tip */
-		AreaSettingsSubPanel.headerButton.setToolTipText(SettingsPanel.areaPanel.HEADER_BUTTON_TOOL_TIP_TEXT);
+		AreaSettingsSubPanel.headerButton.setToolTipText(AreaSettingsSubPanel.headerButton.HEADER_BUTTON_TOOL_TIP_TEXT);
 		
 		/* Turns ON next back label video */
 		AreaSettingsSubPanel.nextButton.setVisible(true);
@@ -98,14 +98,14 @@ public class SetPanelActive {
 		SettingsPanel.areaPanel.areaSelectedContainer.setVisible(true);
 		
 		SettingsPanel.areaPanel.areaPanel.setVisible(true);
-		SettingsPanel.areaPanel.areaPanel.add(SettingsPanel.areaPanel.areaLabel, BorderLayout.EAST);
+		SettingsPanel.areaPanel.areaPanel.add(SettingsPanel.areaPanel.areaResultLabel, BorderLayout.EAST);
 		
 		/* Turns OFF area Label */
-		SettingsPanel.areaPanel.areaLabel.setVisible(false);
+		SettingsPanel.areaPanel.areaResultLabel.setVisible(false);
 		
 		/* Changing size of panels when button has been pressed*/	
 		SettingsPanel.areaPanel.areaPanel.setPreferredSize(SettingsPanel.areaPanel.AREA_PANEL_DIMENSION_ACTIVE);
-		SettingsPanel.areaPanel.headerAndPanelContiner.setPreferredSize(SettingsPanel.areaPanel.HEADER_AND_PANEL_CONTINER_DIMENSION_ACTIVE);
+		SettingsPanel.areaPanel.headerAndPanelContiner.setPreferredSize(SettingsPanel.areaPanel.HEADER_AND_PANEL_DIMENSION_ACTIVE);
 		SettingsPanel.areaPanel.stepContiner.setPreferredSize(SettingsPanel.areaPanel.STEP_CONTINER_DIMENSION_ACTIVE);
 		
 		/* Sets appropriate blue active colors */
@@ -164,12 +164,12 @@ public class SetPanelActive {
 		SettingsPanel.densityPanel.getInputFeildsAButtons().setVisible(DensitySettingsSubPanel.VISIBLE);
 		
 		/* Changing size of panels when button has been pressed*/	
-		SettingsPanel.densityPanel.densityPanel.setPreferredSize(SettingsPanel.densityPanel.DENSITY_PANEL_DIMENSION_ACTIVE);
+		SettingsPanel.densityPanel.densityPanel.setPreferredSize(SettingsPanel.densityPanel.getDENSITY_PANEL_DIMENSION_ACTIVE());
 
 		/* Changing size of panels when button has been pressed*/	
-		SettingsPanel.densityPanel.densityPanel.setPreferredSize(SettingsPanel.densityPanel.DENSITY_PANEL_DIMENSION_ACTIVE);
-		SettingsPanel.densityPanel.headerAndPanelContiner.setPreferredSize(SettingsPanel.densityPanel.HEADER_AND_PANEL_CONTINER_DIMENSION_ACTIVE);
-		SettingsPanel.densityPanel.stepContiner.setPreferredSize(SettingsPanel.densityPanel.STEP_CONTINER_DIMENSION_ACTIVE);
+		SettingsPanel.densityPanel.densityPanel.setPreferredSize(SettingsPanel.densityPanel.getDENSITY_PANEL_DIMENSION_ACTIVE());
+		SettingsPanel.densityPanel.headerAndPanelContiner.setPreferredSize(SettingsPanel.densityPanel.getHEADER_AND_PANEL_CONTINER_DIMENSION_ACTIVE());
+		SettingsPanel.densityPanel.stepContiner.setPreferredSize(SettingsPanel.densityPanel.getSTEP_CONTINER_DIMENSION_ACTIVE());
 		
 		/* Turns on Panel */
 		SettingsPanel.densityPanel.densityPanel.setVisible(true);
@@ -183,8 +183,7 @@ public class SetPanelActive {
 		{
 			SettingsPanel.densityPanel.widthLabel.setText("<html> <font color = rgb(255,0,0)> Width: </font></html>");
 			SettingsPanel.densityPanel.widthLabelValue.setText("<html><font color = rgb(255,0,0)>" + 
-															  (int)((SettingsPanel.getAREA_SELECTED_END_X() - SettingsPanel.getAREA_SELECTED_START_X() + 1) * 
-																	  Program.TIONDELS_MILLI_METER_PIXEL) + " &gt&nbsp</font></html>");
+															  (int)((SettingsPanel.getAREA_SELECTED_END_X() - SettingsPanel.getAREA_SELECTED_START_X() + 1)) + " &gt&nbsp</font></html>");
 			SettingsPanel.densityPanel.widthLabel0.setText("<html> &nbsp&gt 0&nbsp</html>");
 			SettingsPanel.densityPanel.widthDensityInputTextField.setBorder(Program.RED_BORDER);
 			DensitySettingsSubPanel.WIDTH_ENTERD_CORRECTLY = false;
@@ -193,8 +192,7 @@ public class SetPanelActive {
 		{
 			SettingsPanel.densityPanel.widthLabel.setText("<html> <font color = rgb(255,0,0)> Width: </font></html>");
 			SettingsPanel.densityPanel.widthLabelValue.setText("<html>" + 
-																(int)((SettingsPanel.getAREA_SELECTED_END_X() - SettingsPanel.getAREA_SELECTED_START_X() + 1) * 
-																		Program.TIONDELS_MILLI_METER_PIXEL)  + 
+																(int)((SettingsPanel.getAREA_SELECTED_END_X() - SettingsPanel.getAREA_SELECTED_START_X() + 1))  + 
 																		" &gt&nbsp</html>");
 			SettingsPanel.densityPanel.widthLabel0.setText("<html><font color = rgb(255,0,0)> &nbsp&gt 0&nbsp</font></html>");
 			SettingsPanel.densityPanel.widthDensityInputTextField.setBorder(Program.RED_BORDER);
@@ -204,8 +202,7 @@ public class SetPanelActive {
 		{
 			SettingsPanel.densityPanel.widthLabel.setText("<html><font color = rgb(100,150,255)> Width: </font></html>");
 			SettingsPanel.densityPanel.widthLabelValue.setText("<html>" + 
-																(int)((SettingsPanel.getAREA_SELECTED_END_X() - SettingsPanel.getAREA_SELECTED_START_X() + 1)* 
-																		Program.TIONDELS_MILLI_METER_PIXEL) + 
+																(int)((SettingsPanel.getAREA_SELECTED_END_X() - SettingsPanel.getAREA_SELECTED_START_X() + 1)) + 
 																		" &gt&nbsp</html>");
 			SettingsPanel.densityPanel.widthLabel0.setText("<html> &nbsp&gt 0&nbsp </html>");
     	}
@@ -213,8 +210,7 @@ public class SetPanelActive {
 		{
 			SettingsPanel.densityPanel.heightLabel.setText("<html> <font color = rgb(255,0,0)> Height: </html> </font>");
 			SettingsPanel.densityPanel.heightLabelValue.setText("<html> <font color = rgb(255,0,0)>" + 
-																(int)((SettingsPanel.getAREA_SELECTED_END_Y() - SettingsPanel.getAREA_SELECTED_START_Y() + 1) * 
-																		Program.TIONDELS_MILLI_METER_PIXEL) + 
+																(int)((SettingsPanel.getAREA_SELECTED_END_Y() - SettingsPanel.getAREA_SELECTED_START_Y() + 1)) + 
 																		" &gt&nbsp</font></html>");
 			SettingsPanel.densityPanel.heightLabel0.setText("<html> &nbsp&gt 0&nbsp</html>");
 			SettingsPanel.densityPanel.heightDensityInputTextField.setBorder(Program.RED_BORDER);
@@ -224,8 +220,7 @@ public class SetPanelActive {
 		{
 			SettingsPanel.densityPanel.heightLabel.setText("<html> <font color = rgb(255,0,0)> Height: </html> </font>");
 			SettingsPanel.densityPanel.heightLabelValue.setText("<html>" + 
-																(int)((SettingsPanel.getAREA_SELECTED_END_Y() - SettingsPanel.getAREA_SELECTED_START_Y() + 1) * 
-																			Program.TIONDELS_MILLI_METER_PIXEL) + " &gt&nbsp</html>");
+																(int)((SettingsPanel.getAREA_SELECTED_END_Y() - SettingsPanel.getAREA_SELECTED_START_Y() + 1)) + " &gt&nbsp</html>");
 			SettingsPanel.densityPanel.heightLabel0.setText("<html><font color = rgb(255,0,0)> &nbsp&gt 0&nbsp</font></html>");
 			SettingsPanel.densityPanel.heightDensityInputTextField.setBorder(Program.RED_BORDER);
 			DensitySettingsSubPanel.HEIGHT_ENTERD_CORRECTLY = false;
@@ -234,8 +229,7 @@ public class SetPanelActive {
 		{
 			SettingsPanel.densityPanel.heightLabel.setText("<html> <font color = rgb(100,150,255)> Height: </font></html> ");
 			SettingsPanel.densityPanel.heightLabelValue.setText("<html>" + 
-																	(int)((SettingsPanel.getAREA_SELECTED_END_Y() - SettingsPanel.getAREA_SELECTED_START_Y() + 1) * 
-																			Program.TIONDELS_MILLI_METER_PIXEL) + " &gt&nbsp</html>");
+																	(int)((SettingsPanel.getAREA_SELECTED_END_Y() - SettingsPanel.getAREA_SELECTED_START_Y() + 1)) + " &gt&nbsp</html>");
 			SettingsPanel.densityPanel.heightLabel0.setText("<html> &nbsp&gt 0&nbsp</html>");
 		}
 		Program.frame.glass.repaint();

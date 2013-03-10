@@ -3,16 +3,23 @@ package emcscanner.kth.se;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
+/**
+ * 
+ * @author Jonas
+ *
+ */
 public class CameraPanelMouseListener extends MouseAdapter {
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
+		// Nothing
 	}
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
+		// Nothing
 	}
 	@Override
 	public void mouseExited(MouseEvent arg0) {
+		// Nothing
 	}
 	@Override 
 	public void mousePressed(MouseEvent arg0) {

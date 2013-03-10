@@ -26,18 +26,56 @@ import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfWriter;
-
+/**
+ * 
+ * @author Jonas
+ *
+ *	PDF Creator
+ */
 public class CreatePdf {
+	/**
+	 * File location where to save the PDF.
+	 * 
+	 * Location: user data/PDF/ITextTest
+	 */
 	private static String FILE = "user data/PDF/ITextTest";
+	
+	/**
+	 * Header Font
+	 * 
+	 * FontFamily: TIMES_ROMAN
+	 * Size: 24
+	 * Font: Bold
+	 */
 	private static Font HEADER_FONT = new Font(Font.FontFamily.TIMES_ROMAN, 24, Font.BOLD);
+	/**
+	 * Headline 2.
+	 * 
+	 * FontFamily: TIMES_ROMAN
+	 * Size: 18
+	 * Font: Bold
+	 */
 	private static Font CAT_FONT = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
-	//private static Font redFont = new Font(Font.FontFamily.TIMES_ROMAN, 12,Font.NORMAL, BaseColor.RED);
-	//private static Font subFont = new Font(Font.FontFamily.TIMES_ROMAN, 16,Font.BOLD);
+	/**
+	 * Regular text
+	 * 
+	 * FontFamily: TIMES_ROMAN
+	 * Size: 12
+	 * Font: Bold
+	 */
 	private static Font SMALL_BOLD_FONT = new Font(Font.FontFamily.TIMES_ROMAN, 12,Font.BOLD);
+	
+	/**
+	 * photo
+	 * 
+	 * FontFamily: TIMES_ROMAN
+	 * Size: 12
+	 * Font: Bold
+	 */
 	private static IplImage photo;
 
 	/**
-	 * 
+	 * Create a result PDF
 	 */
 	public CreatePdf() {
 		int i = 0;
@@ -94,6 +132,7 @@ public class CreatePdf {
 	}
 	
 	/**
+	 * Title Page
 	 * 
 	 * @param document
 	 * @throws DocumentException
@@ -128,7 +167,12 @@ public class CreatePdf {
 		document.newPage();
 	}
 	
-	
+	/**
+	 * PDF Content
+	 * 
+	 * @param document
+	 * @throws DocumentException
+	 */
 	private static void addContent(Document document) throws DocumentException {
 		Anchor anchor = new Anchor("Input Values", CAT_FONT);
 	    anchor.setName("Input Values");
@@ -188,6 +232,7 @@ public class CreatePdf {
 	    document.add(catPart);
 	}
 	/**
+	 * Adds an empty line in the document
 	 * 
 	 * @param paragraph
 	 * @param number
@@ -197,8 +242,11 @@ public class CreatePdf {
 	    	paragraph.add(new Paragraph(" "));
 		}
 	}
-	/*
+	/**
 	 * Resizes the Photo when needed to 
+	 * 
+	 * @param i
+	 * @return
 	 */
 	public static Image coloredPhoto(int i){	
 		

@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
  *
  */
 public class BackActionListener implements ActionListener {
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (SettingsPanel.getStage() == 1 && Program.frame.glass.glasPanelActive)

@@ -21,17 +21,26 @@ public class FrequencySettingsSubPanel extends JPanel {
 	 */
 	private static final long serialVersionUID = 5772427918605539001L;
 
-	/* Threads */
+	/** 
+	 * Threads for displaying the frequency help video. 
+	 */
 	public static Thread DisplayFrequensyVideoThread;
-	
+
+	/** 
+	 * The buffered received from the camera. 
+	 */
 	public static BufferedImage buffImg = null;
-	/* Creates a ColorPanel and adds it to this camera panel */
+	/** 
+	 * The color panel is a panel where we show the video for the frequency help video
+	 */
 	public static ColorPanel colorFrequensyVideoPanel = new ColorPanel(buffImg);
 	
 	/* Constants for the FrequencyPanel */
-	public int densityValue = 0;
+	
+	public int densityStartValue = 0;
 	public int densityEndValue = 1;
-	public static int STAGE = 1; //This stage
+	
+	public static int STAGE = 1;
 	
 	/* Boolean */
 	/* Display video*/

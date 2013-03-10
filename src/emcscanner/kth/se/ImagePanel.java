@@ -13,7 +13,11 @@ import static com.googlecode.javacv.cpp.opencv_highgui.*;
 import static com.googlecode.javacv.cpp.opencv_core.*;
 import static com.googlecode.javacv.cpp.opencv_imgproc.*;
 
-
+/**
+ * 
+ * @author Jonas
+ *
+ */
 public class ImagePanel extends JPanel{
 	/**
 	 * Image Panel ID
@@ -26,17 +30,21 @@ public class ImagePanel extends JPanel{
 	
 	public IplImage photo;
 	public IplImage iplPhoto2;
-	private static boolean IMAGE_TAKEN = false;
-	private static boolean FIRST_TIME_REZISED = true;
+	private static boolean imsgrTaken = false;
+	private static boolean firstTimeRezised = true;
 	
 	public int newWidthPhoto;
 	public int newHeightPhoto;
-	
+	/**
+	 * 
+	 */
 	public ImagePanel(){
 		this.setLayout(new BorderLayout());
 		this.setPreferredSize(Program.cameraPanel.getCameraPanelDimension());
 	}
-	
+	/**
+	 * 
+	 */
 	public void setPhoto(){
 		this.photo = Program.cameraPanel.phototaken;
 		
@@ -97,13 +105,13 @@ public class ImagePanel extends JPanel{
         
 		colorPanel.theCamera = ipl.getBufferedImage();
 		
-		ImagePanel.setIMAGE_TAKEN(true);
+		ImagePanel.setImageTaken(true);
 
         this.colorPanel.repaint();
         
 		this.add(colorPanel);
 	}
-	/*
+	/**
 	 * Resizes the Photo when needed to 
 	 */
 	public void resizePhoto(){
@@ -130,20 +138,32 @@ public class ImagePanel extends JPanel{
 		colorPanel.theCamera = ipl.getBufferedImage();
         this.colorPanel.repaint();
 	}
-
-	public static boolean isIMAGE_TAKEN() {
-		return IMAGE_TAKEN;
+	/**
+	 * 
+	 * @return
+	 */
+	public static boolean isImageTaken() {
+		return imsgrTaken;
 	}
-
-	public static void setIMAGE_TAKEN(boolean iMAGE_TAKEN) {
-		IMAGE_TAKEN = iMAGE_TAKEN;
+	/**
+	 * 
+	 * @param i
+	 */
+	public static void setImageTaken(boolean i) {
+		imsgrTaken = i;
 	}
-
-	public static boolean isFIRST_TIME_REZISED() {
-		return FIRST_TIME_REZISED;
+	/**
+	 * 
+	 * @return
+	 */
+	public static boolean isFirstTimeRezised() {
+		return firstTimeRezised;
 	}
-
-	public static void setFIRST_TIME_REZISED(boolean fIRST_TIME_REZISED) {
-		FIRST_TIME_REZISED = fIRST_TIME_REZISED;
+	/**
+	 * 
+	 * @param i
+	 */
+	public static void setFirstTimeRezised(boolean i) {
+		firstTimeRezised = i;
 	}
 }

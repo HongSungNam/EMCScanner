@@ -7,7 +7,11 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import com.googlecode.javacv.cpp.opencv_core.IplImage;
-
+/**
+ * 
+ * @author Jonas
+ *
+ */
 public class ColorPallet {
 
 	/**

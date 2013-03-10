@@ -2,8 +2,16 @@ package emcscanner.kth.se;
 
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-
+/**
+ * 
+ * @author Jonas
+ *
+ */
 public class DensitInputDocumentListener implements DocumentListener {
+	/**
+	 * 1: Width Density <br>
+	 * 2: Height Density
+	 */
 	int type;
 	public DensitInputDocumentListener(int type){
 		this.type = type;
@@ -26,19 +34,20 @@ public class DensitInputDocumentListener implements DocumentListener {
 		else
 			checkInt2();
     }
-    public void checkInt()
-    {
+    /**
+     * Input for the density in vertical.
+     */
+    public void checkInt() {
     	try
     	{
     		int value = Integer.valueOf(SettingsPanel.densityPanel.widthDensityInputTextField.getText());
     		
-			if (value > 0 && value <= ((SettingsPanel.getAREA_SELECTED_END_X() - SettingsPanel.getAREA_SELECTED_START_X() + 1) * Program.TIONDELS_MILLI_METER_PIXEL))
+			if (value > 0 && value <= (SettingsPanel.getAREA_SELECTED_END_X() - SettingsPanel.getAREA_SELECTED_START_X() + 1))
     		{
 				SettingsPanel.densityPanel.NUMBER_OF_LINES_WIDTH = value - 1;
 				SettingsPanel.densityPanel.widthLabel.setText("<html><font color = rgb(100,150,255)> Width: </font></html>");
 				SettingsPanel.densityPanel.widthLabelValue.setText("<html>" + 
-																   (int)((SettingsPanel.getAREA_SELECTED_END_X() - SettingsPanel.getAREA_SELECTED_START_X() + 1) * 
-																		   		Program.TIONDELS_MILLI_METER_PIXEL) + 
+																   (int)(SettingsPanel.getAREA_SELECTED_END_X() - SettingsPanel.getAREA_SELECTED_START_X() + 1) + 
 																   " &gt&nbsp</html>");
 				SettingsPanel.densityPanel.widthLabel0.setText("<html> &nbsp&gt 0&nbsp</html>");
 				
@@ -52,12 +61,11 @@ public class DensitInputDocumentListener implements DocumentListener {
     		}
     		else
     		{						
-    			if (value > ((SettingsPanel.getAREA_SELECTED_END_X() - SettingsPanel.getAREA_SELECTED_START_X() + 1) * Program.TIONDELS_MILLI_METER_PIXEL))
+    			if (value > (SettingsPanel.getAREA_SELECTED_END_X() - SettingsPanel.getAREA_SELECTED_START_X() + 1))
     			{
     				SettingsPanel.densityPanel.widthLabel.setText("<html> <font color = rgb(255,0,0)> Width: </font></html>");
     				SettingsPanel.densityPanel.widthLabelValue.setText("<html><font color = rgb(255,0,0)>" + 
-    																  (int)((SettingsPanel.getAREA_SELECTED_END_X() - SettingsPanel.getAREA_SELECTED_START_X() + 1) * 
-    																  			Program.TIONDELS_MILLI_METER_PIXEL) + 
+    																  (int)(SettingsPanel.getAREA_SELECTED_END_X() - SettingsPanel.getAREA_SELECTED_START_X() + 1) + 
     																  " &gt&nbsp</font></html>");
     				SettingsPanel.densityPanel.widthLabel0.setText("<html> &nbsp&gt 0&nbsp</html>");
     			}
@@ -65,8 +73,7 @@ public class DensitInputDocumentListener implements DocumentListener {
 				{
 					SettingsPanel.densityPanel.widthLabel.setText("<html> <font color = rgb(255,0,0)> Width: </font></html>");
 					SettingsPanel.densityPanel.widthLabelValue.setText("<html>" + 
-										   (int)((SettingsPanel.getAREA_SELECTED_END_X() - SettingsPanel.getAREA_SELECTED_START_X() + 1) * 
-												   Program.TIONDELS_MILLI_METER_PIXEL)  + 
+										   (int)(SettingsPanel.getAREA_SELECTED_END_X() - SettingsPanel.getAREA_SELECTED_START_X() + 1)  + 
 										   " &gt&nbsp</html>");
 					SettingsPanel.densityPanel.widthLabel0.setText("<html><font color = rgb(255,0,0)> &nbsp&gt 0&nbsp</font></html>");
 				}
@@ -81,8 +88,7 @@ public class DensitInputDocumentListener implements DocumentListener {
 		catch (NumberFormatException e) {
 			SettingsPanel.densityPanel.widthLabel.setText("<html> <font color = rgb(255,0,0)> Width: </font></html>");
 			SettingsPanel.densityPanel.widthLabelValue.setText("<html>" + 
-								   (int)((SettingsPanel.getAREA_SELECTED_END_X() - SettingsPanel.getAREA_SELECTED_START_X() + 1) * 
-										   Program.TIONDELS_MILLI_METER_PIXEL) + 
+								   (int)(SettingsPanel.getAREA_SELECTED_END_X() - SettingsPanel.getAREA_SELECTED_START_X() + 1) + 
 									" &gt&nbsp</html>");
 			SettingsPanel.densityPanel.widthLabel0.setText("<html> &nbsp&gt 0&nbsp</html>");
 			
@@ -95,19 +101,20 @@ public class DensitInputDocumentListener implements DocumentListener {
 			Program.frame.glass.repaint();
     	}
     }
-    public void checkInt2()
-    {
+    /**
+     * Input for the density in horizontal.
+     */
+    public void checkInt2() {
     	try
     	{
     		int value = Integer.valueOf(SettingsPanel.densityPanel.heightDensityInputTextField.getText());
-    		if (value > 0 && value <= ((SettingsPanel.getAREA_SELECTED_END_Y() - SettingsPanel.getAREA_SELECTED_START_Y() + 1) * Program.TIONDELS_MILLI_METER_PIXEL))
+    		if (value > 0 && value <= ((SettingsPanel.getAREA_SELECTED_END_Y() - SettingsPanel.getAREA_SELECTED_START_Y() + 1)))
     		{
     			SettingsPanel.densityPanel.NUMBER_OF_LINES_HEIGHT = value - 1;
 				
     			SettingsPanel.densityPanel.heightLabel.setText("<html> <font color = rgb(100,150,255)> Height: </html> </font>");
     			SettingsPanel.densityPanel.heightLabelValue.setText("<html>" + 
-										(int)((SettingsPanel.getAREA_SELECTED_END_Y() - SettingsPanel.getAREA_SELECTED_START_Y() + 1) * 
-												Program.TIONDELS_MILLI_METER_PIXEL) + 
+										(int)(SettingsPanel.getAREA_SELECTED_END_Y() - SettingsPanel.getAREA_SELECTED_START_Y() + 1) + 
 										" &gt&nbsp</html>");
     			SettingsPanel.densityPanel.heightLabel0.setText("<html> &nbsp&gt 0&nbsp</html>");
 
@@ -122,12 +129,11 @@ public class DensitInputDocumentListener implements DocumentListener {
     		}
     		else
     		{
-    			if (value > ((SettingsPanel.getAREA_SELECTED_END_Y() - SettingsPanel.getAREA_SELECTED_START_Y() + 1) * Program.TIONDELS_MILLI_METER_PIXEL))
+    			if (value > (SettingsPanel.getAREA_SELECTED_END_Y() - SettingsPanel.getAREA_SELECTED_START_Y() + 1))
     			{
     				SettingsPanel.densityPanel.heightLabel.setText("<html> <font color = rgb(255,0,0)> Height: </html> </font>");
     				SettingsPanel.densityPanel.heightLabelValue.setText("<html> <font color = rgb(255,0,0)>" + 
-    																   (int)((SettingsPanel.getAREA_SELECTED_END_Y() - SettingsPanel.getAREA_SELECTED_START_Y() + 1) * 
-    																		   Program.TIONDELS_MILLI_METER_PIXEL) + 
+    																   (int)(SettingsPanel.getAREA_SELECTED_END_Y() - SettingsPanel.getAREA_SELECTED_START_Y() + 1) + 
     																	" &gt&nbsp</font></html>");
     				SettingsPanel.densityPanel.heightLabel0.setText("<html> &nbsp&gt 0&nbsp</html>");
     			}
@@ -135,8 +141,7 @@ public class DensitInputDocumentListener implements DocumentListener {
     			{
     				SettingsPanel.densityPanel.heightLabel.setText("<html> <font color = rgb(255,0,0)> Height: </html> </font>");
     				SettingsPanel.densityPanel.heightLabelValue.setText("<html>" + 
-    																	(int)((SettingsPanel.getAREA_SELECTED_END_Y() - SettingsPanel.getAREA_SELECTED_START_Y() + 1) * 
-    																			Program.TIONDELS_MILLI_METER_PIXEL) + 
+    																	(int)(SettingsPanel.getAREA_SELECTED_END_Y() - SettingsPanel.getAREA_SELECTED_START_Y() + 1) + 
     																	" &gt&nbsp</html>");
     				SettingsPanel.densityPanel.heightLabel0.setText("<html><font color = rgb(255,0,0)> &nbsp&gt 0&nbsp</font></html>");
     			}
@@ -152,8 +157,7 @@ public class DensitInputDocumentListener implements DocumentListener {
 		catch (NumberFormatException e) {
 			SettingsPanel.densityPanel.heightLabel.setText("<html> <font color = rgb(255,0,0)> Height: </html> </font>");
 			SettingsPanel.densityPanel.heightLabelValue.setText("<html>" + 
-															   (int)((SettingsPanel.getAREA_SELECTED_END_Y() - SettingsPanel.getAREA_SELECTED_START_Y() + 1) * 
-																	   Program.TIONDELS_MILLI_METER_PIXEL) + 
+															   (int)(SettingsPanel.getAREA_SELECTED_END_Y() - SettingsPanel.getAREA_SELECTED_START_Y() + 1) + 
 																" &gt&nbsp</html>");
 			SettingsPanel.densityPanel.heightLabel0.setText("<html> &nbsp&gt 0&nbsp</html>");
 			

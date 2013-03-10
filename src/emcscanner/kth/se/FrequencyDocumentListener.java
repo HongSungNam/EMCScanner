@@ -4,7 +4,17 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 public class FrequencyDocumentListener implements DocumentListener {
+	/**
+	 * Listener stages:
+	 * 1: checkStartFloat
+	 * 2: checkEndFloat
+	 * 3: checkFloatDensity
+	 */
 	private int listener;
+	/**
+	 * Sets listener type. 
+	 * @param i
+	 */
 	public FrequencyDocumentListener(int i){
 		this.listener = i;
 	}
@@ -52,6 +62,7 @@ public class FrequencyDocumentListener implements DocumentListener {
     			SettingsPanel.frequencyPanel.endFloatInputTextField.setEnabled(true);
     			SettingsPanel.frequencyPanel.endFloatInputTextField.setBackground(Program.LIGHT_BLUE_COLOR2);
     			SettingsPanel.frequencyPanel.endFloatInputTextField.setBorder(Program.LIGHT_BLUE_BORDER);
+    			
     			SettingsPanel.frequencyPanel.getEndMoreThenLabel().setText("<html><font color = rgb(0,0,0)>" + 
     																  SettingsPanel.frequencyPanel.startValue + 
     																  " ≤</font></html>");
@@ -261,7 +272,7 @@ public class FrequencyDocumentListener implements DocumentListener {
 				
     			SettingsPanel.frequencyPanel.densityEndValue = (int)((SettingsPanel.frequencyPanel.endValue-SettingsPanel.frequencyPanel.startValue) * 10 + 1.5);
 	    		
-				if (SettingsPanel.frequencyPanel.endValue < SettingsPanel.frequencyPanel.densityValue)
+				if (SettingsPanel.frequencyPanel.endValue < SettingsPanel.frequencyPanel.densityStartValue)
 					SettingsPanel.frequencyPanel.densityIntInputTextField.setText(""+(int)1);
     			
 	    		/* Density selection  enabled */
@@ -312,7 +323,7 @@ public class FrequencyDocumentListener implements DocumentListener {
 				SettingsPanel.frequencyPanel.endFloatInputTextField.setBackground(Program.LIGHT_RED_COLOR);
 				FrequencySettingsSubPanel.END_FREQUENCY_SELECTED = false;
     			
-				if (SettingsPanel.frequencyPanel.endValue < SettingsPanel.frequencyPanel.densityValue)
+				if (SettingsPanel.frequencyPanel.endValue < SettingsPanel.frequencyPanel.densityStartValue)
 					SettingsPanel.frequencyPanel.densityIntInputTextField.setText(""+(int)1);
 				
 				/* Sets next button disabled values have been entered */
@@ -420,7 +431,7 @@ public class FrequencyDocumentListener implements DocumentListener {
     	{
     		SettingsPanel.frequencyPanel.densityIntInputTextField.setBackground(Program.LIGHT_BLUE_COLOR2);
     		int value = Integer.valueOf(SettingsPanel.frequencyPanel.densityIntInputTextField.getText());
-    		SettingsPanel.frequencyPanel.densityValue = value;
+    		SettingsPanel.frequencyPanel.densityStartValue = value;
     		if ((1 <= value) && (value <= SettingsPanel.frequencyPanel.densityEndValue))
 	    	{
     			FrequencySettingsSubPanel.DENSITY_FREQUENSY_SELECTED = true;

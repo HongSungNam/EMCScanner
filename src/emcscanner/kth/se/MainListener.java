@@ -47,5 +47,9 @@ public class MainListener {
         ScanSettingsSubPanel.pauseScanButton.addActionListener(new PauseScanActionListener());
         ScanSettingsSubPanel.rescanButton.addActionListener(new RescanActionListener());
         ScanSettingsSubPanel.saveButton.addActionListener(new SaveActionListener());
+        
+
+		EndSubSettingsPanel.quitButton.addActionListener(new QuitActionListener());
+        
 	}
 }

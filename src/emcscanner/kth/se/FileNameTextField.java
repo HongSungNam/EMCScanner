@@ -14,10 +14,20 @@ public class FileNameTextField extends JTextField {
 	 */
 	private static final long serialVersionUID = -3545219919589093429L;
 	
+	/**
+	 * Used for input field dimension size.
+	 * Width: 20
+	 * Height: 20
+	 */
 	public Dimension INPUT_TEXT_FEILD_DIMENSION = new Dimension(20, 20);
+	/**
+	 * The maximum length of the user selected file name <br>
+	 * 10
+	 */
 	public static int fileNameLengthLimit = 10;
 	/**
-	 * 
+	 * User input for PDF file name 
+	 * extends JTextFeild
 	 */
 	public FileNameTextField(){
 		super(fileNameLengthLimit);

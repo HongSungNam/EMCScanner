@@ -14,6 +14,16 @@ public class HeaderButton extends Buttons {
 	public String FILE_NAME_PANEL_TOOL_TIP_TEXT = "This is where you select the file name you want to save the result as.";
 	public String SCAN_PANEL_TOOL_TIP_TEXT 		= "This is where you start the scan.";
 	
+
+	/** String <br>
+	 * 
+	 * Used by0 header as a tool tip text. <br>
+	 * Color: Black <br>
+	 * Text: Press to reselect the area
+	 */
+	public String HEADER_BUTTON_TOOL_TIP_TEXT = "Press to reselect the area";
+	
+	
 	public ImageIcon FREQUENCY_HEADER_ENABLED_IMAGE_ICON 	 		= new ImageIcon("image/PanelGreenFrequency.png");
 	public ImageIcon FREQUENCY_HEADER_ENABLED_ROLLOVER_IMAGE_ICON 	= new ImageIcon("image/PanelGreenFrequencyRollover.png");
 	public ImageIcon FREQUENCY_HEADER_DISABLED_BLUE_IMAGE_ICON 		= new ImageIcon("image/PanelBlueFrequency.png");
@@ -50,7 +60,7 @@ public class HeaderButton extends Buttons {
 	public ImageIcon SCAN_HEADER_DISABLED_DARK_GREEN_IMAGE_ICON 	= new ImageIcon("image/PanelDarkGreenScan.png"); 
 	
 	public HeaderButton(int stage){
-		super(4);
+		super(Buttons.HEADER_BUTTON);
 		
 		if (stage == 1)
 		{

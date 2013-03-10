@@ -25,7 +25,7 @@ public class NextButton extends Buttons {
 	public static ImageIcon NEXT_BUTTON_GRAY_PREST_IMAGE_ICON = new ImageIcon("image/ButtonGrayNextPrest.png");
 
 	public NextButton(int stage){
-		super(2);
+		super(Buttons.MEDIUM_BUTTON);
 		this.setIcon(NEXT_BUTTON_ENABLED_IMAGE_ICON);
 		this.setDisabledIcon(NEXT_BUTTON_DISABLED_IMAGE_ICON);
 		this.setPressedIcon(NEXT_BUTTON_BLUE_PREST_IMAGE_ICON);

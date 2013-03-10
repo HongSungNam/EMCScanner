@@ -15,6 +15,9 @@ public class ColorPanel extends JPanel{
 	 * ColorPanel ID
 	 */
 	private static final long serialVersionUID = 6948165950015731934L;
+	/**
+	 * Image to be whiten to the panel.
+	 */
 	public BufferedImage theCamera;
 	/**
 	 * 
@@ -24,7 +27,7 @@ public class ColorPanel extends JPanel{
 		theCamera = image;
 	}
 	/**
-	 * 
+	 * Draws image to the color panel. 
 	 */
 	public void paint(Graphics g){
 		super.paint(g);

@@ -26,22 +26,60 @@ public class CameraPanel extends JPanel{
 	 */
 	private static final long serialVersionUID = 992833980333183668L;
 
+	/**
+	 * Shows the input feed from the camera
+	 */
 	public static ColorPanel colorCameraPanel;
-	
+	/**
+	 * Input buffered image from the camera.
+	 */
 	public static BufferedImage buffImg = null;
+	/**
+	 * Camera input thread.
+	 */
 	public static Thread threadDisplayCamera;
 	
+	/**
+	 * Grabber for grabbing the frames from the web camera. <br>
+	 * There are different frame grabbers but from what i have noticed this is the best one for this camera.
+	 */
 	public FrameGrabber grabber;
+	/**
+	 * New camera image dimensions when camera has been fitted to color frame.
+	 */
 	public Dimension CAMERA_VIEW_BOUNDERYS_DIMENSION;
 	
+	/**
+	 * Photo taken from the camera.
+	 */
 	public IplImage phototaken;
 	
+	/**
+	 * True: Shows the web camera input 
+	 * False dosen't show the web camera input.
+	 */
 	public static boolean DISPLAY_WEB_CAMERA_INPUT = true;
+	/**
+	 * True: Stops camera from grabbing any more images.
+	 * False: Runs the camera.
+	 */
 	public static boolean stopCamera = false;
+	/**
+	 * True: Saves an image to phototaken(IplImage).
+	 */
 	public static boolean SAVE_IMAGE = false;
 	
+	/**
+	 * Camera Panel Dimension
+	 * Value type: Integer
+	 * Width: 2*Toolkit.getDefaultToolkit().getScreenSize().getWidth()/3
+	 * Height: Not specified
+	 */
 	private Dimension cameraPanelDimension = new Dimension((int) (2*Toolkit.getDefaultToolkit().getScreenSize().getWidth()/3), 0);
 	
+	/**
+	 * Runns the camera when started 
+	 */
 	public CameraPanel() {
 		this.setLayout(new BorderLayout());
 		this.setPreferredSize(getCameraPanelDimension());
@@ -150,6 +188,7 @@ public class CameraPanel extends JPanel{
         
 	}
 	/**
+	 * Resizes image
 	 * 
 	 * @param originalImage
 	 * @param type
@@ -166,6 +205,7 @@ public class CameraPanel extends JPanel{
 		return resizedImage;
 	}
 	/**
+	 * Scales to new dimension.
 	 * 
 	 * @param imgSize
 	 * @param boundary
@@ -181,6 +221,9 @@ public class CameraPanel extends JPanel{
 		
 		return new Dimension(x <= 0 ? 1 : x, y <= 0 ? 1 : y);
 	}
+	/**
+	 * Stops the camera.
+	 */
 	public void stopCameraFunktion(){
 
 		try {
@@ -189,6 +232,9 @@ public class CameraPanel extends JPanel{
 			e.printStackTrace();
 		}
 	}
+	/**
+	 * 
+	 */
 	public void cordinates(){
 		if(Program.frame.glass.cursorPressed.x < Program.frame.glass.cursorReleased.x)
 		{
@@ -242,9 +288,17 @@ public class CameraPanel extends JPanel{
 			}
 		}
 	}
+	/**
+	 * 
+	 * @return
+	 */
 	public Dimension getCameraPanelDimension() {
 		return cameraPanelDimension;
 	}
+	/**
+	 * 
+	 * @param cameraPanelDimension
+	 */
 	public void setCameraPanelDimension(Dimension cameraPanelDimension) {
 		this.cameraPanelDimension = cameraPanelDimension;
 	}
