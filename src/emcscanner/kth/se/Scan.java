@@ -16,7 +16,11 @@ import java.util.TimerTask;
 import javax.imageio.ImageIO;
 
 import com.googlecode.javacv.cpp.opencv_core.IplImage;
-
+/**
+ * 
+ * @author Jonas
+ *
+ */
 public class Scan {
 	/* Array with frequency to be scanned */
 	float[] frequency = null; 
@@ -66,7 +70,9 @@ public class Scan {
 	/* File Creation */
 	private FileOutputStream[] fileFrequencyOutputArray;
     private PrintStream[] fileFrequencyPrint;
-    
+    /**
+     * 
+     */
     public Scan() {
     	/* Scanning position x and y */
     	setX(0);
@@ -218,7 +224,6 @@ public class Scan {
 						e.printStackTrace();
 					}
 			}
-			
 			startX = true;
 			
 			if (isMoveUY())
@@ -240,8 +245,6 @@ public class Scan {
 			else if (!isMoveUY() && dy > maxDY - 1)
 				setScanY(false);
 				
-			
-			
 			for (int i = 0; i < frequency.length; i++)
 				getFileFrequencyPrint()[i].println("");
 
@@ -371,142 +374,326 @@ public class Scan {
 		setY(0);
 		SetImageAlpha.setBuffImageAlpha();
 	}
+	/**
+	 * 
+	 * @return
+	 */
 	public boolean isScanX() {
 		return scanX;
 	}
+	/**
+	 * 
+	 * @param scanX
+	 */
 	public void setScanX(boolean scanX) {
 		this.scanX = scanX;
 	}
+	/**
+	 * 
+	 * @return
+	 */
 	public boolean isScanY() {
 		return scanY;
 	}
+	/**
+	 * 
+	 * @param scanY
+	 */
 	public void setScanY(boolean scanY) {
 		this.scanY = scanY;
 	}
+	/**
+	 * 
+	 * @return
+	 */
 	public boolean isScanStoped() {
 		return scanStoped;
 	}
+	/**
+	 * 
+	 * @param scanStoped
+	 */
 	public void setScanStoped(boolean scanStoped) {
 		this.scanStoped = scanStoped;
 	}
+	/**
+	 * 
+	 * @return
+	 */
 	public boolean isHeadersInactive() {
 		return headersInactive;
 	}
+	/**
+	 * 
+	 * @param headersInactive
+	 */
 	public void setHeadersInactive(boolean headersInactive) {
 		this.headersInactive = headersInactive;
 	}
+	/**
+	 * 
+	 * @return
+	 */
 	public int getX() {
 		return x;
 	}
+	/**
+	 * 
+	 * @param x
+	 */
 	public void setX(int x) {
 		this.x = x;
 	}
+	/**
+	 * 
+	 * @return
+	 */
 	public int getY() {
 		return y;
 	}
+	/**
+	 * 
+	 * @param y
+	 */
 	public void setY(int y) {
 		this.y = y;
 	}
+	/**
+	 * 
+	 * @return
+	 */
 	public boolean isPauseScanX() {
 		return pauseScanX;
 	}
+	/**
+	 * 
+	 * @param pauseScanX
+	 */
 	public void setPauseScanX(boolean pauseScanX) {
 		this.pauseScanX = pauseScanX;
 	}
+	/**
+	 * 
+	 * @return
+	 */
 	public boolean isChangeWay() {
 		return changeWay;
 	}
+	/**
+	 * 
+	 * @param changeWay
+	 */
 	public void setChangeWay(boolean changeWay) {
 		this.changeWay = changeWay;
 	}
+	/**
+	 * 
+	 * @return
+	 */
 	public boolean isScanActive() {
 		return scanActive;
 	}
+	/**
+	 * 
+	 * @param scanActive
+	 */
 	public void setScanActive(boolean scanActive) {
 		this.scanActive = scanActive;
 	}
+	/**
+	 * 
+	 * @return
+	 */
 	public boolean isScanNeverStarted() {
 		return scanNeverStarted;
 	}
+	/**
+	 * 
+	 * @param scanNeverStarted
+	 */
 	public void setScanNeverStarted(boolean scanNeverStarted) {
 		this.scanNeverStarted = scanNeverStarted;
 	}
+	/**
+	 * 
+	 * @return
+	 */
 	public BufferedImage getRezicedBuffImage() {
 		return rezicedBuffImage;
 	}
+	/**
+	 * 
+	 * @param rezicedBuffImage
+	 */
 	public void setRezicedBuffImage(BufferedImage rezicedBuffImage) {
 		this.rezicedBuffImage = rezicedBuffImage;
 	}
+	/**
+	 * 
+	 * @return
+	 */
 	public BufferedImage[] getBuffImage() {
 		return buffImage;
 	}
+	/**
+	 * 
+	 * @param buffImage
+	 */
 	public void setBuffImage(BufferedImage[] buffImage) {
 		this.buffImage = buffImage;
 	}
+	/**
+	 * 
+	 * @return
+	 */
 	public boolean isMoveStartPosToMesurmentPosBoolean() {
 		return moveStartPosToMesurmentPosBoolean;
 	}
+	/**
+	 * 
+	 * @param moveStartPosToMesurmentPosBoolean
+	 */
 	public void setMoveStartPosToMesurmentPosBoolean(
 			boolean moveStartPosToMesurmentPosBoolean) {
 		this.moveStartPosToMesurmentPosBoolean = moveStartPosToMesurmentPosBoolean;
 	}
+	/**
+	 * 
+	 * @return
+	 */
 	public int getyMoved() {
 		return yMoved;
 	}
+	/**
+	 * 
+	 * @param yMoved
+	 */
 	public void setyMoved(int yMoved) {
 		this.yMoved = yMoved;
 	}
+	/**
+	 * 
+	 * @return
+	 */
 	public int getxMoved() {
 		return xMoved;
 	}
+	/**
+	 * 
+	 * @param xMoved
+	 */
 	public void setxMoved(int xMoved) {
 		this.xMoved = xMoved;
 	}
+	/**
+	 * 
+	 * @return
+	 */
 	public static int getMesurmentPosX() {
 		return MesurmentPosX;
 	}
+	/**
+	 * 
+	 * @param mesurmentPosX
+	 */
 	public void setMesurmentPosX(int mesurmentPosX) {
 		MesurmentPosX = mesurmentPosX;
 	}
+	/**
+	 * 
+	 * @return
+	 */
 	public static int getMesurmentPosY() {
 		return MesurmentPosY;
 	}
+	/**
+	 * 
+	 * @param mesurmentPosY
+	 */
 	public void setMesurmentPosY(int mesurmentPosY) {
 		MesurmentPosY = mesurmentPosY;
 	}
+	/**
+	 * 
+	 * @return
+	 */
 	public boolean isMoveFX() {
 		return moveFX;
 	}
+	/**
+	 * 
+	 * @param moveFX
+	 */
 	public void setMoveFX(boolean moveFX) {
 		this.moveFX = moveFX;
 	}
+	/**
+	 * 
+	 * @return
+	 */
 	public boolean isMoveUY() {
 		return moveUY;
 	}
+	/**
+	 * 
+	 * @param moveUY
+	 */
 	public void setMoveUY(boolean moveUY) {
 		this.moveUY = moveUY;
 	}
+	/**
+	 * 
+	 * @param b
+	 */
 	public void setScanDone(boolean b) {
 		scanDone = b;
 	}
+	/**
+	 * 
+	 * @return
+	 */
 	public boolean getScanDone() {
 		return scanDone;
 	}
+	/**
+	 * 
+	 * @return
+	 */
 	public int getSizeY() {
 		return sizeY;
 	}
+	/**
+	 * 
+	 * @param sizeY
+	 */
 	public void setSizeY(int sizeY) {
 		this.sizeY = sizeY;
 	}
+	/**
+	 * 
+	 * @return
+	 */
 	public int getSizeX() {
 		return sizeX;
 	}
+	/**
+	 * 
+	 * @param sizeX
+	 */
 	public void setSizeX(int sizeX) {
 		this.sizeX = sizeX;
 	}
+	/**
+	 * 
+	 * @return
+	 */
 	public PrintStream[] getFileFrequencyPrint() {
 		return fileFrequencyPrint;
 	}
+	/**
+	 * 
+	 * @param fileFrequencyPrint
+	 */
 	public void setFileFrequencyPrint(PrintStream[] fileFrequencyPrint) {
 		this.fileFrequencyPrint = fileFrequencyPrint;
 	}

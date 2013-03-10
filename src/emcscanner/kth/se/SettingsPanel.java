@@ -83,6 +83,8 @@ public class SettingsPanel extends JPanel{
 	public static EndSubSettingsPanel endPanel;
 
 	private Dimension settingsPanelDimension = new Dimension((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth()/3), 0);
+
+	public static Dimension SUB_PANEL_MINIMUM_DIMENSION = new Dimension(400, 100);
 	
 	/**
 	 * SettingsPanel

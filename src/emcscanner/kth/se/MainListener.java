@@ -29,5 +29,23 @@ public class MainListener {
 		AreaSettingsSubPanel.headerButton.addActionListener(new HeaderButtonActionListener(AreaSettingsSubPanel.STAGE));
 		
 		EndSubSettingsPanel.backButton.addActionListener(new MainBackActionListener());
+		
+		SettingsPanel.frequencyPanel.startFloatInputTextField.getDocument().addDocumentListener(new FrequencyDocumentListener(1));
+		SettingsPanel.frequencyPanel.endFloatInputTextField.getDocument().addDocumentListener(new FrequencyDocumentListener(2));
+		SettingsPanel.frequencyPanel.densityIntInputTextField.getDocument().addDocumentListener(new FrequencyDocumentListener(3));
+		
+		DensitySettingsSubPanel.densityMillimeter.addActionListener(new DensityActionListener(1));
+		DensitySettingsSubPanel.densityNumberOfSteps.addActionListener(new DensityActionListener(2));
+		
+		SettingsPanel.densityPanel.widthDensityInputTextField.getDocument().addDocumentListener(new DensitInputDocumentListener(1));
+		SettingsPanel.densityPanel.heightDensityInputTextField.getDocument().addDocumentListener(new DensitInputDocumentListener(2));
+		
+		SettingsPanel.fileNamePanel.fileNameInputTextField.getDocument().addDocumentListener(new FileNameDocumentListener());
+        char[] r = {'?', '\\', '/', '*', '<',':', '>','"','|','_', '-'};
+        SettingsPanel.fileNamePanel.fileNameInputTextField.addKeyListener(new InvalidCharListener(r));
+        
+        ScanSettingsSubPanel.pauseScanButton.addActionListener(new PauseScanActionListener());
+        ScanSettingsSubPanel.rescanButton.addActionListener(new RescanActionListener());
+        ScanSettingsSubPanel.saveButton.addActionListener(new SaveActionListener());
 	}
 }

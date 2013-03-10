@@ -6,13 +6,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.image.BufferedImage;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 /**
  * 
@@ -37,7 +32,6 @@ public class DensitySettingsSubPanel extends JPanel {
 	public int NUMBER_MAX_OF_LINES_HEIGHT;
 	public int NUMBER_OF_LINES_HEIGHT;
 	public int NUMBER_OF_LINES_WIDTH;
-	public int densityInputLimit = 5;
 	public static int STAGE = 3;
 	
 	/* Boolean */	
@@ -55,8 +49,8 @@ public class DensitySettingsSubPanel extends JPanel {
 	public static NextButton nextButton 	= new NextButton(STAGE);
 	public static BackButton backButton 	= new BackButton(STAGE);
 	
-	public JButton densityMillimeter	= new JButton();
-	public JButton densityNumberOfSteps	= new JButton();
+	public static DensityButton densityMillimeter	= new DensityButton(1);
+	public static DensityButton densityNumberOfSteps	= new DensityButton(1);
 	
 	/* Strings */
 	public String HEADER_BUTTON_TOOL_TIP_TEXT 	= "Press to reselect the density";
@@ -94,21 +88,9 @@ public class DensitySettingsSubPanel extends JPanel {
 	
 	public JLabel noteLabel  			= new JLabel();
 	
-	/* Imports the different images for the different button stages. */	
-	public static ImageIcon DENSITY_MM_BUTTON_ENABLED_IMAGE_ICON = new ImageIcon("image/ButtonStepMMBlue.png");
-	public static ImageIcon DENSITY_MM_BUTTON_DISABLED_IMAGE_ICON = new ImageIcon("image/ButtonStepMMGray.png");
-	public static ImageIcon DENSITY_MM_BUTTON_BLUE_PREST_IMAGE_ICON = new ImageIcon("image/ButtonStepMMBluePrest.png");
-
-	public static ImageIcon DENSITY_STEP_BUTTON_ENABLED_IMAGE_ICON 	= new ImageIcon("image/ButtonNumberStepBlue.png");
-	public static ImageIcon DENSITY_STEP_BUTTON_DISABLED_IMAGE_ICON = new ImageIcon("image/ButtonNumberStepGray.png");
-	public static ImageIcon DENSITY_STEP_BUTTON_BLUE_PREST_IMAGE_ICON = new ImageIcon("image/ButtonNumberStepBluePrest.png");
-	
 	/* Dimensions */
-	public Dimension THIS_MINIMUM_DIMENSION 					= new Dimension(400, 100);
 	public Dimension HEADER_BUTTON_DIMENSION 					= new Dimension(355, 40);
-	public Dimension STEP_LABEL_DIMENSION 						= new Dimension(50,40);
-
-	public Dimension INPUT_TEXT_FEILD_DIMENSION 				= new Dimension(20,20);
+	public Dimension STEP_LABEL_DIMENSION 						= new Dimension(50, 40);
 	
 	public Dimension STEP_CONTINER_DIMENSION_ACTIVE 			= new Dimension(50, 360);
 	public Dimension STEP_CONTINER_DIMENSION_DONE 				= new Dimension(50, 80);
@@ -116,38 +98,40 @@ public class DensitySettingsSubPanel extends JPanel {
 	
 	public Dimension DENSITY_PANEL_DIMENSION_ACTIVE 			= new Dimension(322, 320);
 	public Dimension DENSITY_PANEL_DIMENSION_DONE 				= new Dimension(322, 40);
-	public Dimension DENSITY_PANEL_DIMENSION_OFF 				= new Dimension(322, 40);
+	public Dimension HEADER_AND_PANEL_AND_DENSITY_PANEL_DIMENSION_OFF = new Dimension(322, 40);
 	
 	public Dimension HEADER_AND_PANEL_CONTINER_DIMENSION_ACTIVE = new Dimension(322, 360);
 	public Dimension HEADER_AND_PANEL_CONTINER_DIMENSION_DONE 	= new Dimension(322, 80);
-	public Dimension HEADER_AND_PANEL_CONTINER_DIMENSION_OFF 	= new Dimension(322, 40);
 
 	public Dimension NOTE_LABEL_DIMENSION 						= new Dimension(200, 40);
 	public Dimension INPUT_FEILDS_CONTAINER_DIMENSION 			= new Dimension(160, 85);
 	public Dimension DENSITY_INPUT_TEXT_FIELD_DIMENSION 		= new Dimension(30, 20);
 	
+	
+	public Dimension DENSITY_BUTTON_DIMENSION 					= new Dimension(40, 40);
+	
 	/* Panels- Containers for setting up GUI */
-	public JPanel stepContiner 				= new JPanel();
-	public JPanel headerAndPanelContiner 	= new JPanel();
-	public JPanel densityPanel				= new JPanel();
-	public JPanel continer1 				= new JPanel(new BorderLayout());
+	public JPanel stepContiner 				  = new JPanel(new BorderLayout());
+	public JPanel headerAndPanelContiner 	  = new JPanel(new BorderLayout());
+	public JPanel densityPanel				  = new JPanel(new BorderLayout());
+	public JPanel continer1 				  = new JPanel(new BorderLayout());
 
-	private JPanel imputFeildsContainer  	= new JPanel(new BorderLayout());
-	private JPanel imputFeildsContainer2  	= new JPanel(new BorderLayout());
-	private JPanel imputFeildsContainer3  	= new JPanel(new BorderLayout());
-	private JPanel imputFeildsContainer4  	= new JPanel(new BorderLayout());
+	private JPanel imputFeildsContainer  	  = new JPanel(new BorderLayout());
+	private JPanel imputFeildsContainer2  	  = new JPanel(new BorderLayout());
+	private JPanel imputFeildsContainer3  	  = new JPanel(new BorderLayout());
+	private JPanel imputFeildsContainer4  	  = new JPanel(new BorderLayout());
 	private JPanel imputFeildsContainerValue1 = new JPanel(new BorderLayout());
 	private JPanel imputFeildsContainerValue2 = new JPanel(new BorderLayout());
-	private JPanel inputFeildsAButtons 		= new JPanel(new BorderLayout());
-	private JPanel densityButtonContainer 	= new JPanel(new BorderLayout());
+	private JPanel inputFeildsAButtons 		  = new JPanel(new BorderLayout());
+	private JPanel densityButtonContainer 	  = new JPanel(new BorderLayout());
 	
 	/* JTextField */
-	public JTextField heightDensityInputTextField = new JTextField(5);
-	public JTextField widthDensityInputTextField  = new JTextField(5);
+	public DensityTextField heightDensityInputTextField = new DensityTextField();
+	public DensityTextField widthDensityInputTextField  = new DensityTextField();
 	
 	public DensitySettingsSubPanel() {
 		this.setLayout(new FlowLayout());
-		this.setMinimumSize(THIS_MINIMUM_DIMENSION);
+		this.setMinimumSize(SettingsPanel.SUB_PANEL_MINIMUM_DIMENSION);
 		
 		/* Creates a Label for the step numbers. */
 		stepLabel.setPreferredSize(STEP_LABEL_DIMENSION);
@@ -158,77 +142,20 @@ public class DensitySettingsSubPanel extends JPanel {
         
 		/* Container to make it possible for the step label to be to 
 		   the south and north of the header and the settings panels */
-		stepContiner.setLayout(new BorderLayout());
 		stepContiner.add(stepLabel, BorderLayout.NORTH );
 		stepContiner.setPreferredSize(STEP_CONTINER_DIMENSION_OFF);
 		this.add(stepContiner, BorderLayout.WEST);
 		
 		/* A panel for the Header and the sup settings panels. */
-		headerAndPanelContiner.setLayout(new BorderLayout());
 		headerAndPanelContiner.add(headerButton, BorderLayout.NORTH );
-		headerAndPanelContiner.setPreferredSize(HEADER_AND_PANEL_CONTINER_DIMENSION_OFF);
+		headerAndPanelContiner.setPreferredSize(HEADER_AND_PANEL_AND_DENSITY_PANEL_DIMENSION_OFF);
 		
 		/* Panel for the frequency input */
-		densityPanel.setLayout(new BorderLayout());
-		densityPanel.setPreferredSize(DENSITY_PANEL_DIMENSION_OFF);
-		
-		densityMillimeter.setEnabled(true);
-		densityMillimeter.setOpaque(false);
-		densityMillimeter.setContentAreaFilled(false);
-		densityMillimeter.setBorderPainted(false);
-		densityMillimeter.setPreferredSize(Buttons.BUTTON_SMAL_DIMENSION);
-		densityMillimeter.setIcon(DENSITY_MM_BUTTON_ENABLED_IMAGE_ICON);
-		densityMillimeter.setDisabledIcon(DENSITY_MM_BUTTON_DISABLED_IMAGE_ICON);
-		densityMillimeter.setPressedIcon(DENSITY_MM_BUTTON_BLUE_PREST_IMAGE_ICON);
-		/* Density makes it possible to select the density depending on the interested length in millimeter */
-		densityMillimeter.addActionListener(new DensityActionListener(1));
-
-		densityNumberOfSteps.setEnabled(false);
-		densityNumberOfSteps.setOpaque(false);
-		densityNumberOfSteps.setContentAreaFilled(false);
-		densityNumberOfSteps.setBorderPainted(false);
-		densityNumberOfSteps.setPreferredSize(Buttons.BUTTON_SMAL_DIMENSION);
-		densityNumberOfSteps.setIcon(DENSITY_STEP_BUTTON_ENABLED_IMAGE_ICON);
-		densityNumberOfSteps.setDisabledIcon(DENSITY_STEP_BUTTON_DISABLED_IMAGE_ICON);
-		densityNumberOfSteps.setPressedIcon(DENSITY_STEP_BUTTON_BLUE_PREST_IMAGE_ICON);
-		densityNumberOfSteps.addActionListener(new DensityActionListener(2));
+		densityPanel.setPreferredSize(HEADER_AND_PANEL_AND_DENSITY_PANEL_DIMENSION_OFF);
 		
 		threadDisplayDensityVideo = new FrameGrabberThread(STAGE, "densityVideo");
         threadDisplayDensityVideo.setDaemon(true);
         threadDisplayDensityVideo.start();
-        
-        /* INPUT field for width */
-        widthDensityInputTextField.setPreferredSize(INPUT_TEXT_FEILD_DIMENSION);
-        widthDensityInputTextField.setBackground(Program.LIGHT_BLUE_COLOR2);
-        widthDensityInputTextField.setDocument(new LengthRestrictedDocument(densityInputLimit));
-        widthDensityInputTextField.setBorder(Program.LIGHT_BLUE_BORDER);
-        widthDensityInputTextField.getDocument().addDocumentListener(new DocumentListener () {
-			public void insertUpdate(DocumentEvent aEvent) {
-				checkInt();
-		    }
-		    public void removeUpdate(DocumentEvent aEvente) {
-		    	checkInt();
-		    }
-		    public void changedUpdate(DocumentEvent aEvent) {
-		    	checkInt();
-		    }
-		});
-        /* INPUT field for height */
-        heightDensityInputTextField.setPreferredSize(INPUT_TEXT_FEILD_DIMENSION);
-        heightDensityInputTextField.setBackground(Program.LIGHT_BLUE_COLOR2);
-        heightDensityInputTextField.setDocument(new LengthRestrictedDocument(densityInputLimit));
-        heightDensityInputTextField.setBorder(Program.LIGHT_BLUE_BORDER);
-        heightDensityInputTextField.getDocument().addDocumentListener(new DocumentListener () {
-			public void insertUpdate(DocumentEvent aEvent) {
-				checkInt2();
-		    }
-		    public void removeUpdate(DocumentEvent aEvente) {
-		    	checkInt2();
-		    }
-		    public void changedUpdate(DocumentEvent aEvent) {
-		    	checkInt2();
-		    }
-		});
         
         /* Sets container backgrounds to white instead of gray for contrast */
         colorDensityVideoPanel.setBackground(Color.WHITE);
@@ -248,7 +175,7 @@ public class DensitySettingsSubPanel extends JPanel {
     	widthDensityInputTextField.setPreferredSize(DENSITY_INPUT_TEXT_FIELD_DIMENSION);
     	heightDensityInputTextField.setPreferredSize(DENSITY_INPUT_TEXT_FIELD_DIMENSION);
     	
-    	densityButtonContainer.setPreferredSize(new Dimension(40, 40));
+    	densityButtonContainer.setPreferredSize(DENSITY_BUTTON_DIMENSION);
         
     	densityButtonContainer.add(densityMillimeter, BorderLayout.NORTH);
     	densityButtonContainer.add(densityNumberOfSteps, BorderLayout.SOUTH);
@@ -292,122 +219,6 @@ public class DensitySettingsSubPanel extends JPanel {
 		
 		this.add(headerAndPanelContiner);
 	}
-	public void checkInt()
-    {
-    	try
-    	{
-    		int value = Integer.valueOf(widthDensityInputTextField.getText());
-    		
-			if (value > 0 && value <= ((SettingsPanel.getAREA_SELECTED_END_X() - SettingsPanel.getAREA_SELECTED_START_X() + 1) * Program.TIONDELS_MILLI_METER_PIXEL))
-    		{
-				NUMBER_OF_LINES_WIDTH = value - 1;
-				widthLabel.setText("<html><font color = rgb(100,150,255)> Width: </font></html>");
-				widthLabelValue.setText("<html>" + (int)((SettingsPanel.getAREA_SELECTED_END_X() - SettingsPanel.getAREA_SELECTED_START_X() + 1) * Program.TIONDELS_MILLI_METER_PIXEL) + " &gt&nbsp</html>");
-				widthLabel0.setText("<html> &nbsp&gt 0&nbsp</html>");
-				
-				widthDensityInputTextField.setBorder(Program.LIGHT_BLUE_BORDER);
-    			widthDensityInputTextField.setBackground(Program.LIGHT_BLUE_COLOR2);
-				WIDTH_ENTERD_CORRECTLY = true;
-				if (HEIGHT_ENTERD_CORRECTLY && WIDTH_ENTERD_CORRECTLY)
-					nextButton.setEnabled(true);
-				
-				Program.frame.glass.repaint();
-    		}
-    		else
-    		{						
-    			if (value > ((SettingsPanel.getAREA_SELECTED_END_X() - SettingsPanel.getAREA_SELECTED_START_X() + 1) * Program.TIONDELS_MILLI_METER_PIXEL))
-    			{
-					widthLabel.setText("<html> <font color = rgb(255,0,0)> Width: </font></html>");
-					widthLabelValue.setText("<html><font color = rgb(255,0,0)>" + (int)((SettingsPanel.getAREA_SELECTED_END_X() - SettingsPanel.getAREA_SELECTED_START_X() + 1) * Program.TIONDELS_MILLI_METER_PIXEL) + " &gt&nbsp</font></html>");
-    				widthLabel0.setText("<html> &nbsp&gt 0&nbsp</html>");
-    			}
-				else if (value <= 0)
-				{
-					widthLabel.setText("<html> <font color = rgb(255,0,0)> Width: </font></html>");
-					widthLabelValue.setText("<html>" + (int)((SettingsPanel.getAREA_SELECTED_END_X() - SettingsPanel.getAREA_SELECTED_START_X() + 1) * Program.TIONDELS_MILLI_METER_PIXEL)  + " &gt&nbsp</html>");
-					widthLabel0.setText("<html><font color = rgb(255,0,0)> &nbsp&gt 0&nbsp</font></html>");
-				}
-    			widthDensityInputTextField.setBorder(Program.RED_BORDER);
-    			widthDensityInputTextField.setBackground(Program.LIGHT_RED_COLOR);
-    			WIDTH_ENTERD_CORRECTLY = false;
-				nextButton.setEnabled(false);
-				NUMBER_OF_LINES_WIDTH = 0;
-				Program.frame.glass.repaint();
-    		}
-    	} 
-		catch (NumberFormatException e) {
-			widthLabel.setText("<html> <font color = rgb(255,0,0)> Width: </font></html>");
-			widthLabelValue.setText("<html>" + (int)((SettingsPanel.getAREA_SELECTED_END_X() - SettingsPanel.getAREA_SELECTED_START_X() + 1) * Program.TIONDELS_MILLI_METER_PIXEL) + " &gt&nbsp</html>");
-			widthLabel0.setText("<html> &nbsp&gt 0&nbsp</html>");
-			
-			widthDensityInputTextField.setBorder(Program.RED_BORDER);
-			widthDensityInputTextField.setBackground(Program.LIGHT_RED_COLOR);
-			WIDTH_ENTERD_CORRECTLY = false;
-			nextButton.setEnabled(false);
-
-			NUMBER_OF_LINES_WIDTH = 0;
-			Program.frame.glass.repaint();
-    	}
-    }
-	public void checkInt2()
-    {
-    	try
-    	{
-    		int value = Integer.valueOf(heightDensityInputTextField.getText());
-    		if (value > 0 && value <= ((SettingsPanel.getAREA_SELECTED_END_Y() - SettingsPanel.getAREA_SELECTED_START_Y() + 1) * Program.TIONDELS_MILLI_METER_PIXEL))
-    		{
-				NUMBER_OF_LINES_HEIGHT = value - 1;
-				
-				heightLabel.setText("<html> <font color = rgb(100,150,255)> Height: </html> </font>");
-				heightLabelValue.setText("<html>" + (int)((SettingsPanel.getAREA_SELECTED_END_Y() - SettingsPanel.getAREA_SELECTED_START_Y() + 1) * Program.TIONDELS_MILLI_METER_PIXEL) + " &gt&nbsp</html>");
-				heightLabel0.setText("<html> &nbsp&gt 0&nbsp</html>");
-
-		        heightDensityInputTextField.setBackground(Program.LIGHT_BLUE_COLOR2);
-    			heightDensityInputTextField.setBorder(Program.LIGHT_BLUE_BORDER);
-
-				HEIGHT_ENTERD_CORRECTLY = true;
-				if (HEIGHT_ENTERD_CORRECTLY && WIDTH_ENTERD_CORRECTLY)
-					nextButton.setEnabled(true);
-
-				Program.frame.glass.repaint();
-    		}
-    		else
-    		{
-    			if (value > ((SettingsPanel.getAREA_SELECTED_END_Y() - SettingsPanel.getAREA_SELECTED_START_Y() + 1) * Program.TIONDELS_MILLI_METER_PIXEL))
-    			{
-    				heightLabel.setText("<html> <font color = rgb(255,0,0)> Height: </html> </font>");
-    				heightLabelValue.setText("<html> <font color = rgb(255,0,0)>" + (int)((SettingsPanel.getAREA_SELECTED_END_Y() - SettingsPanel.getAREA_SELECTED_START_Y() + 1) * Program.TIONDELS_MILLI_METER_PIXEL) + " &gt&nbsp</font></html>");
-    				heightLabel0.setText("<html> &nbsp&gt 0&nbsp</html>");
-    			}
-    			else if (value <= 0)
-    			{
-    				heightLabel.setText("<html> <font color = rgb(255,0,0)> Height: </html> </font>");
-    				heightLabelValue.setText("<html>" + (int)((SettingsPanel.getAREA_SELECTED_END_Y() - SettingsPanel.getAREA_SELECTED_START_Y() + 1) * Program.TIONDELS_MILLI_METER_PIXEL) + " &gt&nbsp</html>");
-    				heightLabel0.setText("<html><font color = rgb(255,0,0)> &nbsp&gt 0&nbsp</font></html>");
-    			}
-				heightDensityInputTextField.setBorder(Program.RED_BORDER);
-		        heightDensityInputTextField.setBackground(Program.LIGHT_RED_COLOR);
-				HEIGHT_ENTERD_CORRECTLY = false;
-				nextButton.setEnabled(false);
-				NUMBER_OF_LINES_HEIGHT = 0;
-
-				Program.frame.glass.repaint();
-    		}
-    	} 
-		catch (NumberFormatException e) {
-			heightLabel.setText("<html> <font color = rgb(255,0,0)> Height: </html> </font>");
-			heightLabelValue.setText("<html>" + (int)((SettingsPanel.getAREA_SELECTED_END_Y() - SettingsPanel.getAREA_SELECTED_START_Y() + 1) * Program.TIONDELS_MILLI_METER_PIXEL) + " &gt&nbsp</html>");
-			heightLabel0.setText("<html> &nbsp&gt 0&nbsp</html>");
-			
-			heightDensityInputTextField.setBorder(Program.RED_BORDER);
-	        heightDensityInputTextField.setBackground(Program.LIGHT_RED_COLOR);
-			HEIGHT_ENTERD_CORRECTLY = false;
-			nextButton.setEnabled(false);
-			NUMBER_OF_LINES_HEIGHT = 0;
-
-			Program.frame.glass.repaint();
-    	}
-    }
 	public JPanel getInputFeildsAButtons() {
 		return inputFeildsAButtons;
 	}

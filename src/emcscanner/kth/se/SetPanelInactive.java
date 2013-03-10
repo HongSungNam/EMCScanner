@@ -13,7 +13,7 @@ public class SetPanelInactive {
 		SettingsPanel.setFrequencyDensityUserSelectedInt(SettingsPanel.frequencyPanel.densityValue);
 		
 		/* Sets header button to enabled and green with a new tool tip */
-		FrequencySettingsSubPanel.headerButton.setToolTipText(SettingsPanel.frequencyPanel.HEADER_BUTTON_TOOL_TIP_TEXT);
+		FrequencySettingsSubPanel.headerButton.setToolTipText(SettingsPanel.frequencyPanel.getHeaderButtonToolTipText());
 		FrequencySettingsSubPanel.headerButton.setEnabled(true);
 		
 		/* Green Borders */
@@ -21,8 +21,8 @@ public class SetPanelInactive {
 
 		/* Sets step button, text and text input not visible when when next button has been pressed */
 		SettingsPanel.frequencyPanel.startFloatInputTextField.setVisible(false);
-		SettingsPanel.frequencyPanel.startMoreThenLabel.setVisible(false);
-		SettingsPanel.frequencyPanel.startLessThenLabel.setVisible(false);
+		SettingsPanel.frequencyPanel.getStartMoreThenLabel().setVisible(false);
+		SettingsPanel.frequencyPanel.getStartLessThenLabel().setVisible(false);
 		FrequencySettingsSubPanel.nextButton.setVisible(false);
 		
 		/* Containers for setting up GUI */
@@ -38,7 +38,7 @@ public class SetPanelInactive {
 		FrequencySettingsSubPanel.colorFrequensyVideoPanel.setVisible(false);
 		
 		/* Sets step Label green when button has been pressed*/
-		SettingsPanel.frequencyPanel.stepLabel.setText(SettingsPanel.frequencyPanel.STEP_TEXT_DARK_GREEN);
+		SettingsPanel.frequencyPanel.getStepLabel().setText(SettingsPanel.frequencyPanel.getStepTextDarkGreen());
 		
 		/* Changing size of panels when button has been pressed*/	
 		SettingsPanel.frequencyPanel.frequencyPanel.setPreferredSize(SettingsPanel.frequencyPanel.FREQUENCY_PANEL_DIMENSION_OFF);
@@ -46,11 +46,11 @@ public class SetPanelInactive {
 		SettingsPanel.frequencyPanel.stepContiner.setPreferredSize(SettingsPanel.frequencyPanel.STEP_CONTINER_DIMENSION_OFF);
 		
 		/* Label that shows the frequency that the user has selected */
-		SettingsPanel.frequencyPanel.frequencyLabel.setText("<html><font color = rgb(120,200,40)>Selected frequency: </font></html>");
-		SettingsPanel.frequencyPanel.frequencyLabelStart.setText("<html>Start = " + SettingsPanel.getFrequencyStartUserSelectedFloat() + " MHz,</html>");
-		SettingsPanel.frequencyPanel.frequencyLabelEnd.setText("<html>End = " + SettingsPanel.getFrequencyEndUserSelectedFloat() + " MHz,</html>");
-		SettingsPanel.frequencyPanel.frequencyLabelDensity.setText("<html>Density = "+ SettingsPanel.getFrequencyDensityUserSelectedInt() + "</html>");
-		SettingsPanel.frequencyPanel.frequencyLabel.setVisible(true);
+		SettingsPanel.frequencyPanel.getFrequencyLabel().setText("<html><font color = rgb(120,200,40)>Selected frequency: </font></html>");
+		SettingsPanel.frequencyPanel.getFrequencyLabelStart().setText("<html>Start = " + SettingsPanel.getFrequencyStartUserSelectedFloat() + " MHz,</html>");
+		SettingsPanel.frequencyPanel.getFrequencyLabelEnd().setText("<html>End = " + SettingsPanel.getFrequencyEndUserSelectedFloat() + " MHz,</html>");
+		SettingsPanel.frequencyPanel.getFrequencyLabelDensity().setText("<html>Density = "+ SettingsPanel.getFrequencyDensityUserSelectedInt() + "</html>");
+		SettingsPanel.frequencyPanel.getFrequencyLabel().setVisible(true);
 	}
 	/**
 	 * Sets Area Panel stage to NOT ACTIVE 
@@ -169,8 +169,8 @@ public class SetPanelInactive {
 			DensitySettingsSubPanel.headerButton.setEnabled(DensitySettingsSubPanel.HEADER_BUTTON_ENABLED = false);
 			
 			/* Changing size of panels when button has been pressed*/	
-			SettingsPanel.densityPanel.densityPanel.setPreferredSize(SettingsPanel.densityPanel.DENSITY_PANEL_DIMENSION_OFF);
-			SettingsPanel.densityPanel.headerAndPanelContiner.setPreferredSize(SettingsPanel.densityPanel.HEADER_AND_PANEL_CONTINER_DIMENSION_OFF);
+			SettingsPanel.densityPanel.densityPanel.setPreferredSize(SettingsPanel.densityPanel.HEADER_AND_PANEL_AND_DENSITY_PANEL_DIMENSION_OFF);
+			SettingsPanel.densityPanel.headerAndPanelContiner.setPreferredSize(SettingsPanel.densityPanel.HEADER_AND_PANEL_AND_DENSITY_PANEL_DIMENSION_OFF);
 			SettingsPanel.densityPanel.stepContiner.setPreferredSize(SettingsPanel.densityPanel.STEP_CONTINER_DIMENSION_OFF);
 		}
 	}
@@ -272,9 +272,9 @@ public class SetPanelInactive {
 			ScanSettingsSubPanel.headerButton.setEnabled(ScanSettingsSubPanel.HEADER_BUTTON_ENABLED = false);
 
 			/* Changing size of panels when button has been pressed*/	
-			SettingsPanel.scanPanel.scanPanel.setPreferredSize(SettingsPanel.scanPanel.SCAN_PANEL_DIMENSION_OFF);
-			SettingsPanel.scanPanel.headerAndPanelContiner.setPreferredSize(SettingsPanel.scanPanel.HEADER_AND_PANEL_CONTINER_DIMENSION_OFF);
-			SettingsPanel.scanPanel.stepContiner.setPreferredSize(SettingsPanel.scanPanel.STEP_CONTINER_DIMENSION_OFF);
+			SettingsPanel.scanPanel.scanPanel.setPreferredSize(SettingsPanel.scanPanel.getSCAN_PANEL_DIMENSION_OFF());
+			SettingsPanel.scanPanel.headerAndPanelContiner.setPreferredSize(SettingsPanel.scanPanel.getHEADER_AND_PANEL_CONTINER_DIMENSION_OFF());
+			SettingsPanel.scanPanel.stepContiner.setPreferredSize(SettingsPanel.scanPanel.getSTEP_CONTINER_DIMENSION_OFF());
 		}
 	}
 }

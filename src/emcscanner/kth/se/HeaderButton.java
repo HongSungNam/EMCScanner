@@ -2,7 +2,7 @@ package emcscanner.kth.se;
 
 import javax.swing.ImageIcon;
 
-public class HeaderButton extends LargeButton {
+public class HeaderButton extends Buttons {
 	/**
 	 * HEADERS ID
 	 */
@@ -50,6 +50,8 @@ public class HeaderButton extends LargeButton {
 	public ImageIcon SCAN_HEADER_DISABLED_DARK_GREEN_IMAGE_ICON 	= new ImageIcon("image/PanelDarkGreenScan.png"); 
 	
 	public HeaderButton(int stage){
+		super(4);
+		
 		if (stage == 1)
 		{
 			/* Sets creation values for the header button */

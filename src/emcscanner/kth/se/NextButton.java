@@ -4,7 +4,7 @@ import java.awt.Dimension;
 
 import javax.swing.ImageIcon;
 
-public class NextButton extends MediumSizeButton {
+public class NextButton extends Buttons {
 
 	/**
 	 * Next Button ID
@@ -25,7 +25,7 @@ public class NextButton extends MediumSizeButton {
 	public static ImageIcon NEXT_BUTTON_GRAY_PREST_IMAGE_ICON = new ImageIcon("image/ButtonGrayNextPrest.png");
 
 	public NextButton(int stage){
-		
+		super(2);
 		this.setIcon(NEXT_BUTTON_ENABLED_IMAGE_ICON);
 		this.setDisabledIcon(NEXT_BUTTON_DISABLED_IMAGE_ICON);
 		this.setPressedIcon(NEXT_BUTTON_BLUE_PREST_IMAGE_ICON);

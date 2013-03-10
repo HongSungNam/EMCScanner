@@ -25,13 +25,13 @@ public class SetPanelActive {
 		Program.frame.glass.setVisible(false);
 		
 		/* Sets header back to blue */
-		FrequencySettingsSubPanel.headerButton.setToolTipText(FrequencySettingsSubPanel.PANEL_INFORMATION);
+		FrequencySettingsSubPanel.headerButton.setToolTipText(FrequencySettingsSubPanel.getPanelInformation());
 		FrequencySettingsSubPanel.headerButton.setEnabled(false);
 		
 		/* Turns on */ 
 		SettingsPanel.frequencyPanel.startFloatInputTextField.setVisible(true);
-		SettingsPanel.frequencyPanel.startMoreThenLabel.setVisible(true);
-		SettingsPanel.frequencyPanel.startLessThenLabel.setVisible(true);
+		SettingsPanel.frequencyPanel.getStartMoreThenLabel().setVisible(true);
+		SettingsPanel.frequencyPanel.getStartLessThenLabel().setVisible(true);
 		FrequencySettingsSubPanel.nextButton.setVisible(true);
 		/* Containers for setting up GUI */
 		SettingsPanel.frequencyPanel.continer1.setVisible(true);
@@ -51,11 +51,11 @@ public class SetPanelActive {
 		SettingsPanel.frequencyPanel.stepContiner.setPreferredSize(SettingsPanel.frequencyPanel.STEP_CONTINER_DIMENSION_ACTIVE);
 		
 		/* Sets Active colors light blue to border and text */
-		SettingsPanel.frequencyPanel.stepLabel.setText(SettingsPanel.frequencyPanel.STEP_TEXT_LIGHT_BLUE);
+		SettingsPanel.frequencyPanel.getStepLabel().setText(SettingsPanel.frequencyPanel.getStepLightBlueText());
 		SettingsPanel.frequencyPanel.frequencyPanel.setBorder(Program.LIGHT_BLUE_BORDER);
 		
 		/* Turns off */
-		SettingsPanel.frequencyPanel.frequencyLabel.setVisible(false);
+		SettingsPanel.frequencyPanel.getFrequencyLabel().setVisible(false);
 		SettingsPanel.setFREQUENCY_SELECTED(false);
 	}
 	/**
@@ -308,9 +308,9 @@ public class SetPanelActive {
 		ScanSettingsSubPanel.saveButton.setVisible(true);
 		
 		/* Changing size of panels when button has been pressed*/	
-		SettingsPanel.scanPanel.scanPanel.setPreferredSize(SettingsPanel.scanPanel.SCAN_PANEL_DIMENSION_ACTIVE);
-		SettingsPanel.scanPanel.headerAndPanelContiner.setPreferredSize(SettingsPanel.scanPanel.HEADER_AND_PANEL_CONTINER_DIMENSION_ACTIVE);
-		SettingsPanel.scanPanel.stepContiner.setPreferredSize(SettingsPanel.scanPanel.STEP_CONTINER_DIMENSION_ACTIVE);
+		SettingsPanel.scanPanel.scanPanel.setPreferredSize(SettingsPanel.scanPanel.getSCAN_PANEL_DIMENSION_ACTIVE());
+		SettingsPanel.scanPanel.headerAndPanelContiner.setPreferredSize(SettingsPanel.scanPanel.getHEADER_AND_PANEL_CONTINER_DIMENSION_ACTIVE());
+		SettingsPanel.scanPanel.stepContiner.setPreferredSize(SettingsPanel.scanPanel.getSTEP_CONTINER_DIMENSION_ACTIVE());
 		
 		/* Turns on Panel */
 		SettingsPanel.scanPanel.scanPanel.setVisible(true);

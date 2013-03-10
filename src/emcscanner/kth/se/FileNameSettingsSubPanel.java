@@ -7,9 +7,6 @@ import java.awt.FlowLayout;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 /**
  * 
  * @author Jonas
@@ -23,20 +20,19 @@ public class FileNameSettingsSubPanel extends JPanel {
 	private static final long serialVersionUID = 2183576868824285642L;
 	
 	/* Panels- Containers for setting up GUI */
-	public JPanel stepContiner 				= new JPanel();
-	public JPanel headerAndPanelContiner 	= new JPanel();
-	public JPanel fileNamePanel 			= new JPanel();
-	public JPanel continer1 				= new JPanel();
+	public JPanel stepContiner 				= new JPanel(new BorderLayout());
+	public JPanel headerAndPanelContiner 	= new JPanel(new BorderLayout());
+	public JPanel fileNamePanel 			= new JPanel(new BorderLayout());
+	public JPanel continer1 				= new JPanel(new BorderLayout());
 
 	private JPanel imputFeildsContainer  	= new JPanel(new BorderLayout());
 	private JPanel inputFeildsAButtons 		= new JPanel(new BorderLayout());
 	private JPanel inputContainer 			= new JPanel();
 	
 	/* JTextField */
-	public JTextField fileNameInputTextField = new JTextField(10);
+	public FileNameTextField fileNameInputTextField = new FileNameTextField();
 		
 	/* Integers */
-	public int fileNameLengthLimit = 10;
 	public static int STAGE = 4;
 	
 	/* Strings */
@@ -45,7 +41,7 @@ public class FileNameSettingsSubPanel extends JPanel {
 	public String STEP_TEXT_GRAY	 							= "<html> <font color = rgb(120,120,120)>Step 4/4</font></html>";
 	public String STEP_TEXT_LIGHT_BLUE  						= "<html> <font color = rgb(100,150,255)>Step 4/4</font></html>";
 	public String STEP_TEXT_DARK_GREEN  						= "<html> <font color = rgb(120,200,40)>Step 4/4</font></html>";
-
+	
 	public String NOTE_TEXT										= "<html><p align=center><font color = rgb(255,0,0)> Note: " +
 																  "</font>Write a name for the result file that will contain the scan result.<br>" + 
 																  "<font color = rgb(255,0,0)>OBS!&nbsp</font>The file name shall not contain eny of thes caracters ?, \\, /, *, &lt, &gt, :, \", |, _, -</align><html>";
@@ -63,11 +59,8 @@ public class FileNameSettingsSubPanel extends JPanel {
 	public JLabel noteLabel										= new JLabel(NOTE_TEXT);
 
 	/* Dimensions */
-	public Dimension THIS_MINIMUM_DIMENSION 					= new Dimension(400, 100);
 	public Dimension HEADER_BUTTON_DIMENSION 					= new Dimension(355, 40);
 	public Dimension STEP_LABEL_DIMENSION 						= new Dimension(50,40);
-
-	public Dimension INPUT_TEXT_FEILD_DIMENSION 				= new Dimension(20,20);
 	
 	public Dimension STEP_CONTINER_DIMENSION_ACTIVE 			= new Dimension(50, 200);
 	public Dimension STEP_CONTINER_DIMENSION_DONE 				= new Dimension(50, 80);
@@ -85,7 +78,7 @@ public class FileNameSettingsSubPanel extends JPanel {
 
 	public FileNameSettingsSubPanel() {
 		this.setLayout(new FlowLayout());
-		this.setMinimumSize(THIS_MINIMUM_DIMENSION);
+		this.setMinimumSize(SettingsPanel.SUB_PANEL_MINIMUM_DIMENSION);
 		
 		/* note label */
 		noteLabel.setPreferredSize(NOTE_LABEL_DIMENSION);
@@ -96,58 +89,18 @@ public class FileNameSettingsSubPanel extends JPanel {
 		
 		/* Container to make it possible for the step label to be to 
 		   the south and north of the header and the settings panels */
-		stepContiner.setLayout(new BorderLayout());
 		stepContiner.add(stepLabel, BorderLayout.NORTH );
 		stepContiner.setPreferredSize(STEP_CONTINER_DIMENSION_OFF);
 		this.add(stepContiner, BorderLayout.WEST);
 		
 		/* A panel for the Header and the sup settings panels. */
-		headerAndPanelContiner.setLayout(new BorderLayout());
 		headerAndPanelContiner.add(headerButton, BorderLayout.NORTH );
 		headerAndPanelContiner.setPreferredSize(HEADER_AND_PANEL_CONTINER_DIMENSION_OFF);
 		
 		/* Panel for the frequency input */
-		fileNamePanel.setLayout(new BorderLayout());
 		fileNamePanel.setPreferredSize(FILE_NAME_DENSITY_PANEL_DIMENSION_OFF);
-		
-		/* INPUT field for width */
-        fileNameInputTextField.setPreferredSize(INPUT_TEXT_FEILD_DIMENSION);
-        fileNameInputTextField.setDocument(new LengthRestrictedDocument(fileNameLengthLimit));
-        fileNameInputTextField.setBorder(Program.LIGHT_BLUE_BORDER);
-        fileNameInputTextField.setBackground(Program.LIGHT_BLUE_COLOR2);
-        char[] r = {'?', '\\', '/', '*', '<',':', '>','"','|','_', '-'};
-        fileNameInputTextField.addKeyListener(new InvalidCharListener(r));
         
-        fileNameInputTextField.getDocument().addDocumentListener(new DocumentListener () {
-			public void insertUpdate(DocumentEvent aEvent) {
-				checkInt();
-		    }
-		    public void removeUpdate(DocumentEvent aEvente) {
-		    	checkInt();
-		    }
-		    public void changedUpdate(DocumentEvent aEvent) {
-		    	checkInt();
-		    }
-		    public void checkInt()        
-		    {
-		    	String name = fileNameInputTextField.getText();
-		    	if (name.isEmpty())
-		    	{
-		    		SettingsPanel.setFILE_NAME_SELECTED(false);
-		    		nextButton.setEnabled(false);
-		    	}
-		    	else
-		    	{
-		    		nextButton.setEnabled(true);
-
-		    		SettingsPanel.setFILE_NAME(name);
-		    	}
-		    }
-		});
-
-		
 		/* Setting containers Layouts for the right GUI look. */
-		continer1.setLayout(new BorderLayout());
 		continer1.add(backButton, BorderLayout.WEST);
 		continer1.add(nextButton, BorderLayout.EAST);
 		
@@ -173,22 +126,45 @@ public class FileNameSettingsSubPanel extends JPanel {
 		
 		this.add(headerAndPanelContiner);
 	}
-	
+	/**
+	 * 
+	 * @return
+	 */
 	public JPanel getImputFeildsContainer() {
 		return imputFeildsContainer;
 	}
+	/**
+	 * 
+	 * @param imputFeildsContainer
+	 */
 	public void setImputFeildsContainer(JPanel imputFeildsContainer) {
 		this.imputFeildsContainer = imputFeildsContainer;
 	}
+	/**
+	 * 
+	 * @return
+	 */
 	public JPanel getInputFeildsAButtons() {
 		return inputFeildsAButtons;
 	}
+	/**
+	 * 
+	 * @param inputFeildsAButtons
+	 */
 	public void setInputFeildsAButtons(JPanel inputFeildsAButtons) {
 		this.inputFeildsAButtons = inputFeildsAButtons;
 	}
+	/**
+	 * 
+	 * @return
+	 */
 	public JPanel getInputContainer() {
 		return inputContainer;
 	}
+	/**
+	 * 
+	 * @param inputContainer
+	 */
 	public void setInputContainer(JPanel inputContainer) {
 		this.inputContainer = inputContainer;
 	}

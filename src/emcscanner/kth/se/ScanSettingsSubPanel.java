@@ -4,10 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -31,8 +27,7 @@ public class ScanSettingsSubPanel extends JPanel {
 	public static boolean HEADER_BUTTON_ENABLED = false;
 	
 	/* Strings */
-	public String HEADER_BUTTON_TOOL_TIP_TEXT 	= "Pres to scan ";
-	public String NEXT_BUTTON_TOOL_TIP_TEXT 	= "Just start the scan";
+	public String HEADER_BUTTON_TOOL_TIP_TEXT 	= "Press to scan ";
 	
 	public String STEP_TEXT_GRAY	 			= "<html> <font color = rgb(120,120,120)>Scan</font></html>";
 	public String STEP_TEXT_LIGHT_BLUE  		= "<html> <font color = rgb(100,150,255)>Scan</font></html>";
@@ -58,35 +53,13 @@ public class ScanSettingsSubPanel extends JPanel {
     private JPanel currentLevelNorthContainer = new JPanel(new BorderLayout());
     private JPanel streamingContinaer = new JPanel();
 	
-	/* Imports the different images for the different button stages. */	
-	public ImageIcon START_SCAN_ENABLED_IMAGE_ICON 	 		= new ImageIcon("image/ButtonStartScan.png");
-	public ImageIcon START_SCAN_ENABLED_PREST_IMAGE_ICON	= new ImageIcon("image/ButtonStartScanPrest.png");
-	public ImageIcon START_SCAN_DISABLED_IMAGE_ICON 		= new ImageIcon("image/ButtonScanStarted.png");
-	
-	public ImageIcon PAUSED_SCAN_ENABLED_IMAGE_ICON 		= new ImageIcon("image/ButtonPauseScan.png");
-	public ImageIcon PAUSED_SCAN_ENABLED_PREST_IMAGE_ICON	= new ImageIcon("image/ButtonPauseScanPrest.png");
-	public ImageIcon PAUSED_SCAN_DISABLED_IMAGE_ICON 		= new ImageIcon("image/ButtonPauseScanNotEnabled.png"); 
-	
-	public ImageIcon STOP_SCAN_ENABLED_IMAGE_ICON 			= new ImageIcon("image/ButtonStopScan.png");
-	public ImageIcon STOP_SCAN_ENABLED_PREST_IMAGE_ICON		= new ImageIcon("image/ButtonStopScanPrest.png");
-	public ImageIcon STOP_SCAN_DISABLED_IMAGE_ICON 			= new ImageIcon("image/ButtonStopScanNotEnabled.png");
-	
-	public ImageIcon RESTART_ENABLED_IMAGE_ICON				= new ImageIcon("image/Restart.png");
-	public ImageIcon RESTART_PREST_ENABLED_IMAGE_ICON 		= new ImageIcon("image/RestartPrest.png");
-
-	public ImageIcon RESCAN_ENABLED_IMAGE_ICON				= new ImageIcon("image/Rescan.png");
-	public ImageIcon RESCAN_PREST_ENABLED_IMAGE_ICON 		= new ImageIcon("image/RescanPrest.png");
-	
-	public ImageIcon SAVE_ENABLED_IMAGE_ICON				= new ImageIcon("image/Save.png");
-	public ImageIcon SAVE_PREST_ENABLED_IMAGE_ICON 			= new ImageIcon("image/SavePrest.png");
-	
 	/* Buttons */
 	public static HeaderButton headerButton = new HeaderButton(STAGE);
-	public static JButton startScanButton = new JButton();
-	public static JButton stopScanButton = new JButton();
-	public static JButton pauseScanButton = new JButton();
-	public static JButton rescanButton = new JButton();
-	public static JButton saveButton = new JButton();
+	public static ScanButtons startScanButton = new ScanButtons("START");
+	public static ScanButtons pauseScanButton = new ScanButtons("PAUSE");
+	public static ScanButtons stopScanButton = new ScanButtons("STOP");
+	public static ScanButtons rescanButton = new ScanButtons("RESCAN");
+	public static ScanButtons saveButton = new ScanButtons("SAVE");
 	
 	/* Labels */
 	public JLabel stepLabel = new JLabel(STEP_TEXT_GRAY);
@@ -100,88 +73,34 @@ public class ScanSettingsSubPanel extends JPanel {
 												"&nbsp [dBm]</p></html>");
 	
 	/* Dimensions */
-	public Dimension THIS_MINIMUM_DIMENSION 					= new Dimension(400, 100);
-	public Dimension HEADER_BUTTON_DIMENSION 					= new Dimension(355, 40);
-	public Dimension STEP_LABEL_DIMENSION 						= new Dimension(50,40);
+	private Dimension THIS_MINIMUM_DIMENSION 					= new Dimension(400, 100);
+	private Dimension HEADER_BUTTON_DIMENSION 					= new Dimension(355, 40);
+	private Dimension STEP_LABEL_DIMENSION 						= new Dimension(50,40);
 	
-	public Dimension STEP_CONTINER_DIMENSION_ACTIVE 			= new Dimension(50, 240);
-	public Dimension STEP_CONTINER_DIMENSION_DONE 				= new Dimension(50, 80);
-	public Dimension STEP_CONTINER_DIMENSION_OFF 				= new Dimension(50, 40);
+	private Dimension STEP_CONTINER_DIMENSION_ACTIVE 			= new Dimension(50, 240);
+	private Dimension STEP_CONTINER_DIMENSION_DONE 				= new Dimension(50, 80);
+	private Dimension STEP_CONTINER_DIMENSION_OFF 				= new Dimension(50, 40);
 	
-	public Dimension SCAN_PANEL_DIMENSION_ACTIVE 				= new Dimension(322, 200);
-	public Dimension SCAN_DENSITY_PANEL_DIMENSION_DONE 			= new Dimension(322, 40);
-	public Dimension SCAN_PANEL_DIMENSION_OFF 					= new Dimension(322, 40);
+	private Dimension SCAN_PANEL_DIMENSION_ACTIVE 				= new Dimension(322, 200);
+	private Dimension SCAN_DENSITY_PANEL_DIMENSION_DONE 		= new Dimension(322, 40);
+	private Dimension SCAN_PANEL_DIMENSION_OFF 					= new Dimension(322, 40);
 	
-	public Dimension HEADER_AND_PANEL_CONTINER_DIMENSION_ACTIVE = new Dimension(322, 240);
-	public Dimension HEADER_AND_PANEL_CONTINER_DIMENSION_DONE 	= new Dimension(322, 80);
-	public Dimension HEADER_AND_PANEL_CONTINER_DIMENSION_OFF 	= new Dimension(322, 40);
+	private Dimension HEADER_AND_PANEL_CONTINER_DIMENSION_ACTIVE= new Dimension(322, 240);
+	private Dimension HEADER_AND_PANEL_CONTINER_DIMENSION_DONE 	= new Dimension(322, 80);
+	private Dimension HEADER_AND_PANEL_CONTINER_DIMENSION_OFF 	= new Dimension(322, 40);
 	
+	/**
+	 * 
+	 */
 	public ScanSettingsSubPanel() {
 		this.setLayout(new FlowLayout());
 		this.setMinimumSize(THIS_MINIMUM_DIMENSION);
-				
-		/* Next JButton */
-		startScanButton.setOpaque(false);
-		startScanButton.setContentAreaFilled(false);
-		startScanButton.setBorderPainted(false);
-		startScanButton.setToolTipText(NEXT_BUTTON_TOOL_TIP_TEXT);
-		startScanButton.setPreferredSize(Buttons.MEDIUM_BUTTON_DIMENSION);
-		startScanButton.setEnabled(true);		
-		startScanButton.setIcon(START_SCAN_ENABLED_IMAGE_ICON);
-		startScanButton.setDisabledIcon(START_SCAN_DISABLED_IMAGE_ICON);
-		startScanButton.setPressedIcon(START_SCAN_ENABLED_PREST_IMAGE_ICON);
 		
-		/* Back on step JButton */
-		pauseScanButton.setEnabled(false);
-		pauseScanButton.setPreferredSize(Buttons.MEDIUM_BUTTON_DIMENSION);
-		pauseScanButton.setIcon(PAUSED_SCAN_ENABLED_IMAGE_ICON);
-		pauseScanButton.setDisabledIcon(PAUSED_SCAN_DISABLED_IMAGE_ICON);
-		pauseScanButton.setPressedIcon(PAUSED_SCAN_ENABLED_PREST_IMAGE_ICON);
-		pauseScanButton.setOpaque(false);
-		pauseScanButton.setContentAreaFilled(false);
-		pauseScanButton.setBorderPainted(false);
-		pauseScanButton.addActionListener(new PauseScanActionListener());
-		
-		/* Back on step JButton */
-		stopScanButton.setEnabled(false);
-		stopScanButton.setPreferredSize(Buttons.MEDIUM_BUTTON_DIMENSION);
-		stopScanButton.setIcon(STOP_SCAN_ENABLED_IMAGE_ICON);
-		stopScanButton.setDisabledIcon(STOP_SCAN_DISABLED_IMAGE_ICON);
-		stopScanButton.setPressedIcon(STOP_SCAN_ENABLED_PREST_IMAGE_ICON);
-		stopScanButton.setOpaque(false);
-		stopScanButton.setContentAreaFilled(false);
-		stopScanButton.setBorderPainted(false);
-		
-		/* Back on step JButton */
-		rescanButton.setEnabled(true);
-		rescanButton.setPreferredSize(Buttons.MEDIUM_BUTTON_DIMENSION);
-		rescanButton.setIcon(RESCAN_ENABLED_IMAGE_ICON);
-		rescanButton.setPressedIcon(RESCAN_PREST_ENABLED_IMAGE_ICON);
-		rescanButton.setOpaque(false);
-		rescanButton.setContentAreaFilled(false);
-		rescanButton.setBorderPainted(false);
-		rescanButton.addActionListener(new RescanActionListener());
-		
-		/* Back on step JButton */
-		saveButton.setEnabled(true);
-		saveButton.setPreferredSize(Buttons.MEDIUM_BUTTON_DIMENSION);
-		saveButton.setIcon(SAVE_ENABLED_IMAGE_ICON);
-		saveButton.setPressedIcon(SAVE_PREST_ENABLED_IMAGE_ICON);
-		saveButton.setOpaque(false);
-		saveButton.setContentAreaFilled(false);
-		saveButton.setBorderPainted(false);
-		saveButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				
-			}
-		});
-
 		/* Creates a Label for the step numbers. */
 		stepLabel.setPreferredSize(STEP_LABEL_DIMENSION);
-		stepContiner.setPreferredSize(STEP_CONTINER_DIMENSION_OFF);
+		stepContiner.setPreferredSize(getSTEP_CONTINER_DIMENSION_OFF());
 		/* Panel for the frequency input */
-		scanPanel.setPreferredSize(SCAN_PANEL_DIMENSION_OFF);
+		scanPanel.setPreferredSize(getSCAN_PANEL_DIMENSION_OFF());
 		currentLevelNorthContainer.setPreferredSize(new Dimension(160, 40)); // fixa 
 		currentLevelContainer.setPreferredSize(new Dimension(160, 40));// fixa 
 		
@@ -190,7 +109,7 @@ public class ScanSettingsSubPanel extends JPanel {
 		
 		/* A panel for the Header and the sup settings panels. */
 		headerAndPanelContiner.add(headerButton, BorderLayout.NORTH );
-		headerAndPanelContiner.setPreferredSize(HEADER_AND_PANEL_CONTINER_DIMENSION_OFF);
+		headerAndPanelContiner.setPreferredSize(getHEADER_AND_PANEL_CONTINER_DIMENSION_OFF());
 
 		buttonContiner1.setBackground(Color.WHITE);
 		buttonContiner2.setBackground(Color.WHITE);
@@ -212,7 +131,6 @@ public class ScanSettingsSubPanel extends JPanel {
 		getTimeNorthPanel().setBorder(Program.LIGHT_BLUE_BORDER);
 		getStreamingContinaer().setBorder(Program.LIGHT_BLUE_BORDER);
 
-		
 		/* Setting containers Layouts for the right GUI look. */
 		buttonContiner1.add(stopScanButton, BorderLayout.WEST);
 		buttonContiner1.add(pauseScanButton, BorderLayout.CENTER);
@@ -252,44 +170,223 @@ public class ScanSettingsSubPanel extends JPanel {
 
 		scanPanel.setVisible(false);
 	}
+	/**
+	 * 
+	 * @return
+	 */
 	public JPanel getTimeNorthPanel() {
 		return timeNorthPanel;
 	}
-
+	/**
+	 * 
+	 * @param timeNorthPanel
+	 */
 	public void setTimeNorthPanel(JPanel timeNorthPanel) {
 		this.timeNorthPanel = timeNorthPanel;
 	}
-
+	/**
+	 * 
+	 * @return
+	 */
 	public JPanel getStreamingContinaer() {
 		return streamingContinaer;
 	}
-
+	/**
+	 * 
+	 * @param streamingContinaer
+	 */
 	public void setStreamingContinaer(JPanel streamingContinaer) {
 		this.streamingContinaer = streamingContinaer;
 	}
-
+	/**
+	 * 
+	 * @return
+	 */
 	public JPanel getInputFeildsAButtons() {
 		return inputFeildsAButtons;
 	}
-
+	/**
+	 * 
+	 * @param inputFeildsAButtons
+	 */
 	public void setInputFeildsAButtons(JPanel inputFeildsAButtons) {
 		this.inputFeildsAButtons = inputFeildsAButtons;
 	}
-
+	/**
+	 * 
+	 * @return
+	 */
 	public JPanel getTimeNorthCeneterPanel() {
 		return timeNorthCeneterPanel;
 	}
-
+	/**
+	 * 
+	 * @param timeNorthCeneterPanel
+	 */
 	public void setTimeNorthCeneterPanel(JPanel timeNorthCeneterPanel) {
 		this.timeNorthCeneterPanel = timeNorthCeneterPanel;
 	}
-
+	/**
+	 * 
+	 * @return
+	 */
 	public JPanel getTimeNorthLablePanel() {
 		return timeNorthLablePanel;
 	}
-
+	/**
+	 * 
+	 * @param timeNorthLablePanel
+	 */
 	public void setTimeNorthLablePanel(JPanel timeNorthLablePanel) {
 		this.timeNorthLablePanel = timeNorthLablePanel;
+	}
+	/**
+	 * 
+	 * @return
+	 */
+	public Dimension getHEADER_BUTTON_DIMENSION() {
+		return HEADER_BUTTON_DIMENSION;
+	}
+	/**
+	 * 
+	 * @param hEADER_BUTTON_DIMENSION
+	 */
+	public void setHEADER_BUTTON_DIMENSION(Dimension hEADER_BUTTON_DIMENSION) {
+		HEADER_BUTTON_DIMENSION = hEADER_BUTTON_DIMENSION;
+	}
+	/**
+	 * 
+	 * @return
+	 */
+	public Dimension getSTEP_CONTINER_DIMENSION_ACTIVE() {
+		return STEP_CONTINER_DIMENSION_ACTIVE;
+	}
+	/**
+	 * 
+	 * @param sTEP_CONTINER_DIMENSION_ACTIVE
+	 */
+	public void setSTEP_CONTINER_DIMENSION_ACTIVE(
+			Dimension sTEP_CONTINER_DIMENSION_ACTIVE) {
+		STEP_CONTINER_DIMENSION_ACTIVE = sTEP_CONTINER_DIMENSION_ACTIVE;
+	}
+	/**
+	 * 
+	 * @return
+	 */
+	public Dimension getSTEP_CONTINER_DIMENSION_DONE() {
+		return STEP_CONTINER_DIMENSION_DONE;
+	}
+	/**
+	 * 
+	 * @param sTEP_CONTINER_DIMENSION_DONE
+	 */
+	public void setSTEP_CONTINER_DIMENSION_DONE(
+			Dimension sTEP_CONTINER_DIMENSION_DONE) {
+		STEP_CONTINER_DIMENSION_DONE = sTEP_CONTINER_DIMENSION_DONE;
+	}
+	/**
+	 * 
+	 * @return
+	 */
+	public Dimension getSCAN_DENSITY_PANEL_DIMENSION_DONE() {
+		return SCAN_DENSITY_PANEL_DIMENSION_DONE;
+	}
+	/**
+	 * 
+	 * @param sCAN_DENSITY_PANEL_DIMENSION_DONE
+	 */
+	public void setSCAN_DENSITY_PANEL_DIMENSION_DONE(
+			Dimension sCAN_DENSITY_PANEL_DIMENSION_DONE) {
+		SCAN_DENSITY_PANEL_DIMENSION_DONE = sCAN_DENSITY_PANEL_DIMENSION_DONE;
+	}
+	/**
+	 * 
+	 * @return
+	 */
+	public Dimension getSCAN_PANEL_DIMENSION_ACTIVE() {
+		return SCAN_PANEL_DIMENSION_ACTIVE;
+	}
+	/**
+	 * 
+	 * @param sCAN_PANEL_DIMENSION_ACTIVE
+	 */
+	public void setSCAN_PANEL_DIMENSION_ACTIVE(
+			Dimension sCAN_PANEL_DIMENSION_ACTIVE) {
+		SCAN_PANEL_DIMENSION_ACTIVE = sCAN_PANEL_DIMENSION_ACTIVE;
+	}
+	/**
+	 * 
+	 * @return
+	 */
+	public Dimension getHEADER_AND_PANEL_CONTINER_DIMENSION_ACTIVE() {
+		return HEADER_AND_PANEL_CONTINER_DIMENSION_ACTIVE;
+	}
+	/**
+	 * 
+	 * @param hEADER_AND_PANEL_CONTINER_DIMENSION_ACTIVE
+	 */
+	public void setHEADER_AND_PANEL_CONTINER_DIMENSION_ACTIVE(
+			Dimension hEADER_AND_PANEL_CONTINER_DIMENSION_ACTIVE) {
+		HEADER_AND_PANEL_CONTINER_DIMENSION_ACTIVE = hEADER_AND_PANEL_CONTINER_DIMENSION_ACTIVE;
+	}
+	/**
+	 * 
+	 * @return
+	 */
+	public Dimension getHEADER_AND_PANEL_CONTINER_DIMENSION_DONE() {
+		return HEADER_AND_PANEL_CONTINER_DIMENSION_DONE;
+	}
+	/**
+	 * 
+	 * @param hEADER_AND_PANEL_CONTINER_DIMENSION_DONE
+	 */
+	public void setHEADER_AND_PANEL_CONTINER_DIMENSION_DONE(
+			Dimension hEADER_AND_PANEL_CONTINER_DIMENSION_DONE) {
+		HEADER_AND_PANEL_CONTINER_DIMENSION_DONE = hEADER_AND_PANEL_CONTINER_DIMENSION_DONE;
+	}
+	/**
+	 * 
+	 * @return
+	 */
+	public Dimension getSCAN_PANEL_DIMENSION_OFF() {
+		return SCAN_PANEL_DIMENSION_OFF;
+	}
+	/**
+	 * 
+	 * @param sCAN_PANEL_DIMENSION_OFF
+	 */
+	public void setSCAN_PANEL_DIMENSION_OFF(Dimension sCAN_PANEL_DIMENSION_OFF) {
+		SCAN_PANEL_DIMENSION_OFF = sCAN_PANEL_DIMENSION_OFF;
+	}
+	/**
+	 * 
+	 * @return
+	 */
+	public Dimension getHEADER_AND_PANEL_CONTINER_DIMENSION_OFF() {
+		return HEADER_AND_PANEL_CONTINER_DIMENSION_OFF;
+	}
+	/**
+	 * 
+	 * @param hEADER_AND_PANEL_CONTINER_DIMENSION_OFF
+	 */
+	public void setHEADER_AND_PANEL_CONTINER_DIMENSION_OFF(
+			Dimension hEADER_AND_PANEL_CONTINER_DIMENSION_OFF) {
+		HEADER_AND_PANEL_CONTINER_DIMENSION_OFF = hEADER_AND_PANEL_CONTINER_DIMENSION_OFF;
+	}
+	/**
+	 * 
+	 * @return
+	 */
+	public Dimension getSTEP_CONTINER_DIMENSION_OFF() {
+		return STEP_CONTINER_DIMENSION_OFF;
+	}
+	/**
+	 * 
+	 * @param sTEP_CONTINER_DIMENSION_OFF
+	 */
+	public void setSTEP_CONTINER_DIMENSION_OFF(
+			Dimension sTEP_CONTINER_DIMENSION_OFF) {
+		STEP_CONTINER_DIMENSION_OFF = sTEP_CONTINER_DIMENSION_OFF;
 	}
 }
 

@@ -65,8 +65,6 @@ public class AreaSettingsSubPanel extends JPanel {
 	public JLabel areaLabel = new JLabel();
 
 	/* Dimensions */
-	public Dimension THIS_MINIMUM_DIMENSION = new Dimension(400, 100);
-
 	public Dimension STEP_CONTINER_DIMENSION_ACTIVE = new Dimension(50, 280);
 	public Dimension STEP_CONTINER_DIMENSION_DONE = new Dimension(50, 80);
 	public Dimension STEP_CONTINER_DIMENSION_OFF = new Dimension(50, 40);
@@ -83,7 +81,7 @@ public class AreaSettingsSubPanel extends JPanel {
 	
 	public AreaSettingsSubPanel() {
 		this.setLayout(new FlowLayout());
-		this.setMinimumSize(THIS_MINIMUM_DIMENSION);
+		this.setMinimumSize(SettingsPanel.SUB_PANEL_MINIMUM_DIMENSION);
 		
 		/* Creates a Label for the step numbers. */
 		stepLabel.setPreferredSize(STEP_LABEL_DIMENSION);
