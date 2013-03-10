@@ -1,5 +1,7 @@
 package emcscanner.kth.se;
 
+import java.io.IOException;
+
 public class test {
 
 	/**
@@ -7,6 +9,8 @@ public class test {
 	 */
 	public static void main(String[] args) {
 		System.out.println((int) 80 / 30);
+		
+		JParallelPort parport = new JParallelPort();
 	}
 
 }
